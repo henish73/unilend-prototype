@@ -50,7 +50,7 @@ button { cursor: pointer; }
 #screen.enter > * { animation: enter .18s ease-out; }
 @keyframes enter { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
 
-.page { display: flex; flex-direction: column; gap: 14px; width: 100%; max-width: var(--flow-width); margin: 0 auto; padding: 16px 16px 24px; flex: 1; }
+.page { --px: 16px; --pb: 24px; display: flex; flex-direction: column; gap: 14px; width: 100%; max-width: var(--flow-width); margin: 0 auto; padding: 16px var(--px) var(--pb); flex: 1; }
 .page.wide { max-width: var(--wide-width); }
 .muted { color: var(--ink-soft); }
 .small { font-size: .875rem; }
@@ -73,7 +73,7 @@ button { cursor: pointer; }
 .btn.primary { background: var(--brand); color: var(--brand-ink); box-shadow: 0 2px 6px rgba(11, 79, 67, .28); }
 .btn.quiet { border-color: transparent; background: none; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; min-height: var(--tap); }
 .btn.danger { border-color: var(--danger); color: var(--danger); }
-.actions { display: flex; flex-direction: column; gap: 8px; margin-top: auto; padding-top: 12px; position: sticky; bottom: 0; z-index: 1; margin-inline: -16px; margin-bottom: -24px; padding-inline: 16px; padding-bottom: 16px; background: linear-gradient(to bottom, rgba(244, 243, 236, 0), var(--paper) 14px); }
+.actions { display: flex; flex-direction: column; gap: 8px; margin-top: auto; padding-top: 12px; position: sticky; bottom: 0; z-index: 1; margin-inline: calc(var(--px) * -1); margin-bottom: calc(var(--pb) * -1); padding-inline: var(--px); padding-bottom: 16px; background: linear-gradient(to bottom, rgba(244, 243, 236, 0), var(--paper) 14px); }
 .actions.plain { position: static; background: none; }
 
 /* ---------- Cards and rows ---------- */
@@ -153,10 +153,12 @@ button.row:active { transform: scale(.992); }
 .viewfinder.reading .scanline { animation: none; top: 50%; }
 .scan .btn.quiet { color: #FFF; }
 .scan .hint { color: #CFE3DC; }
-.scan .actions { background: none; width: calc(100% + 32px); }
+.scan .actions { position: static; background: none; width: 100%; margin: auto 0 0; padding: 0; }
 
 /* ---------- Help chain ---------- */
 .lead { font-size: 1.5rem; line-height: 1.2; letter-spacing: -.015em; }
+.notice { display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; border-radius: var(--radius-s); background: var(--chain-tint); border: 1.5px solid var(--chain-line); color: #5E2800; }
+.notice svg { flex: none; width: 22px; height: 22px; margin-top: 1px; }
 .chain-card { background: var(--chain-tint); border: 1.5px solid var(--chain-line); border-radius: var(--radius); padding: 16px; display: flex; flex-direction: column; gap: 12px; }
 .chain { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin: 0; padding: 0; list-style: none; }
 .chain li { display: flex; align-items: center; gap: 4px; font-weight: 700; font-size: .875rem; }
@@ -219,6 +221,9 @@ details.card ul { margin: 6px 0 0; padding-left: 20px; }
 .toast-box span { flex: 1; }
 .toast-box button { pointer-events: auto; min-height: 44px; padding: 0 12px; background: none; border: 1.5px solid #FFF; border-radius: 8px; color: #FFF; font-weight: 700; }
 
+#offline { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); z-index: 6; width: max-content; max-width: calc(100% - 24px); padding: 6px 14px; border-radius: 99px; background: #5E2800; color: #FFF; font-size: .82rem; font-weight: 700; text-align: center; pointer-events: none; }
+#offline[hidden] { display: none; }
+
 /* ---------- Pointer devices ---------- */
 @media (hover: hover) {
   button.row:hover { box-shadow: var(--shadow-lift); transform: translateY(-1px); border-color: var(--line-strong); }
@@ -238,14 +243,12 @@ details.card ul { margin: 6px 0 0; padding-left: 20px; }
 
 /* ---------- Tablet ---------- */
 @media (min-width: 700px) {
-  .page { padding: 24px 24px 32px; gap: 16px; }
+  .page { --px: 24px; --pb: 32px; padding-top: 24px; gap: 16px; }
   .home-hdr { padding: 20px 24px 0; }
   .hdr.wide { padding-inline: max(24px, calc((100% - var(--wide-width)) / 2 + 24px)); }
   .chips { margin: 0; padding: 2px 0 4px; flex-wrap: wrap; overflow: visible; }
   .grid-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
   .wall { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
-  .actions { position: static; background: none; margin: 8px 0 0; padding: 0; }
-  .scan .actions { width: 100%; }
   .state { padding-top: 32px; }
   .split.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; align-items: start; }
   .split.two > .span-all { grid-column: 1 / -1; }
@@ -270,7 +273,7 @@ details.card ul { margin: 6px 0 0; padding-left: 20px; }
   .home-hdr { padding: 30px 32px 0; }
   .home-hdr h1 { font-size: 1.85rem; letter-spacing: -.02em; }
   .home-hdr .iconbtn { display: none; }
-  .page { padding: 28px 32px 40px; gap: 18px; }
+  .page { --px: 32px; --pb: 40px; padding-top: 28px; gap: 18px; }
   .page.wide { padding-top: 22px; }
   .hdr { min-height: 66px; padding-inline: max(16px, calc((100% - var(--flow-width)) / 2 + 28px)); }
   .hdr.wide { padding-inline: max(32px, calc((100% - var(--wide-width)) / 2 + 32px)); }
@@ -296,6 +299,30 @@ details.card ul { margin: 6px 0 0; padding-left: 20px; }
   .scan .page { justify-content: center; }
   .scan .actions { width: 100%; max-width: var(--flow-width); }
   #toast { left: 260px; top: 76px; }
+}
+
+/* Pin the action only where height is scarce, based on height rather than width,
+   so a phone turned sideways keeps its main button on screen. */
+@media (min-width: 700px) and (min-height: 600px) {
+  .actions { position: static; background: none; margin: 8px 0 0; padding: 0; }
+}
+
+/* ---------- Short screens: a phone in landscape ---------- */
+@media (max-height: 520px) {
+  .hdr { min-height: 48px; padding-block: 0; }
+  .tab { flex-direction: row; gap: 6px; min-height: 44px; }
+  .badge { position: static; }
+  .state { padding-top: 8px; gap: 6px; }
+  .state .mark { width: 48px; height: 48px; box-shadow: 0 0 0 5px var(--brand-tint); margin-bottom: 4px; }
+  .state .mark svg { width: 26px; height: 26px; }
+  .welcome { padding: 14px 20px; }
+  .welcome .brand { font-size: 1.5rem; }
+  .scan .page { padding-top: 6px; padding-bottom: 4px; gap: 4px; }
+  .viewfinder { width: 50dvh; padding: 12px; margin: 0; }
+  .viewfinder::before { inset: 4px; }
+  .viewfinder .qr { padding: 6px; }
+  .scanline { left: 12px; right: 12px; top: 12px; }
+  @keyframes scanline { to { top: calc(100% - 15px); } }
 }
 
 @media (prefers-reduced-motion: reduce) {

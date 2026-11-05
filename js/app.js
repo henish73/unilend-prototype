@@ -97,11 +97,14 @@
       case "requested": return { title: "Waiting for " + p + " to reply", sub: it.name };
       case "enroute": return { title: p + " is on the way to " + zone, sub: it.name };
       case "accepted": return { title: "Meet " + p + " at " + zone, sub: "Confirm the hand-off when you meet" };
-      case "active": return e.role === "borrower"
+      case "active":
+        if (e.overdue) return { title: "Overdue: " + it.name, sub: "Was due " + e.due + ". " + p + " is waiting for it" };
+        return e.role === "borrower"
         ? { title: it.name, sub: "Borrowed from " + p + " · Due " + e.due }
         : { title: it.name, sub: "Lent to " + p + " · Due back " + e.due };
       case "returned": return { title: it.name, sub: (e.role === "borrower" ? "Returned to " : "Returned by ") + p };
       case "declined": return { title: it.name, sub: "You declined " + p + "'s request" };
+      case "refused": return { title: it.name, sub: p + " couldn't lend it" };
     }
     return { title: it.name, sub: "" };
   }
@@ -153,7 +156,7 @@
       return ["incoming", "requested", "enroute", "accepted", "active"].indexOf(e.status) >= 0;
     });
     var alerts = live.map(function (e) {
-      return exchangeRow(e, e.status === "incoming" || e.status === "accepted");
+      return exchangeRow(e, e.status === "incoming" || e.status === "accepted" || e.overdue);
     }).join("");
     var chips = data.categories.map(function (c) {
       return '<button class="chip" data-act="category" data-id="' + esc(c) + '" aria-pressed="' + (ui.category === c) + '">' + esc(c) + "</button>";
@@ -248,7 +251,14 @@
     if (e.status === "active" || e.status === "returned") return redirect("/loan/" + id);
     if (e.status === "incoming" || e.status === "declined") return redirect("/incoming/" + id);
     var body;
-    if (e.status === "requested") {
+    if (e.status === "refused") {
+      var others = data.items.filter(function (i) {
+        return i.category === it.category && i.id !== e.itemId && store.get().takenItems.indexOf(i.id) < 0 && !i.goesUnavailable;
+      });
+      body = '<div class="state"><div class="mark bad">' + icon("alert") + "</div><h2>" + esc(p) + " can't lend this right now</h2><p class=\"muted\">Nothing has been recorded against you. Here are similar items.</p></div>" +
+        '<section class="list" aria-label="Similar items">' + others.map(function (i) { return itemRow(i); }).join("") + "</section>" +
+        '<div class="actions"><button class="btn quiet" data-go="/home">Back to all items</button></div>';
+    } else if (e.status === "requested") {
       body = '<div class="state"><div class="mark wait"><div class="spin" aria-hidden="true"></div></div><h2>Request sent</h2><p class="muted">Waiting for ' + esc(p) + " to reply about the " + esc(it.short) + ".</p></div>" +
         '<dl class="card kv"><dt>Pickup spot</dt><dd>' + esc(zone) + "</dd></dl>" +
         '<div class="actions"><button class="btn danger" data-act="cancelRequest" data-id="' + id + '">Cancel request</button></div>';
@@ -260,7 +270,7 @@
       body = '<div class="state"><div class="mark">' + icon("check") + "</div><h2>" + head + '</h2><p class="muted">Meet at <strong>' + esc(zone) + "</strong>" + (e.role === "borrower" ? " to pick up the " : " to hand over your ") + esc(it.short) + ".</p></div>" +
         '<dl class="card kv"><dt>Pickup spot</dt><dd>' + esc(zone) + "</dd><dt>Due back</dt><dd>" + esc(e.due) + "</dd></dl>" +
         '<div class="actions"><button class="btn primary" data-go="/scan/handoff/' + id + '">Confirm hand-off</button>' +
-        (e.role === "borrower" ? '<button class="btn quiet" data-act="cancelRequest" data-id="' + id + '">Cancel request</button>' : "") + "</div>";
+        (e.role === "borrower" ? '<button class="btn quiet" data-go="/no-show/' + id + '">' + esc(p) + " isn't here or can't meet</button>" : "") + "</div>";
     }
     return header(e.role === "borrower" ? "Your request" : "Lending to " + p, "/home") + '<div class="page">' + body + "</div>";
   };
@@ -302,8 +312,7 @@
         : "<p>You have the " + esc(it.short) + " from " + esc(e.partner) + ". Due back: " + esc(e.due) + "</p>") +
       "</div>" +
       '<div class="actions">' +
-      (lender ? '<button class="btn primary" data-go="/rewards">See what you\'ve earned</button>' : '<button class="btn primary" data-go="/loan/' + id + '">View my loan</button>') +
-      '<button class="btn" data-go="/home">Back to home</button>' +
+      (lender ? '<button class="btn primary" data-go="/home">Done</button>' : '<button class="btn primary" data-go="/loan/' + id + '">View my loan</button><button class="btn" data-go="/home">Back to home</button>') +
       '<button class="btn quiet" data-act="undoHandoff" data-id="' + id + '">Undo hand-off</button></div></div>';
   };
 
@@ -317,11 +326,14 @@
     var kv = '<dl class="kv"><dt>' + (borrower ? "Lender" : "Borrower") + "</dt><dd>" + esc(e.partner) + "</dd><dt>Meet at</dt><dd>" + esc(store.zone(e.zone).name) + "</dd>" + (e.since ? "<dt>Since</dt><dd>" + esc(e.since) + "</dd>" : "") + "<dt>" + (done ? "Status" : "Due") + "</dt><dd>" + (done ? "Returned" : esc(e.due)) + "</dd></dl>";
     var action = "";
     if (!done) {
-      action = '<div class="actions"><button class="btn primary" data-go="/scan/return/' + id + '">' + (borrower ? "Return this item" : "Confirm it came back") + "</button></div>";
+      action = '<div class="actions"><button class="btn primary" data-go="/scan/return/' + id + '">' + (borrower ? "Return this item" : "Confirm it came back") + "</button>" +
+        (e.overdue ? '<button class="btn quiet" data-act="askForMoreTime" data-id="' + id + '">Ask ' + esc(e.partner) + " for more time</button>" : "") +
+        (e.extended ? '<button class="btn quiet" data-act="undoMoreTime" data-id="' + id + '">Undo new due time</button>' : "") + "</div>";
     } else {
       action = '<div class="actions"><button class="btn" data-go="/loans">Back to loans</button></div>';
     }
-    return header(title, "/loans") + '<div class="page"><div class="card"><div class="thumb">' + icon(it.icon) + "</div><h2>" + esc(it.name) + "</h2>" + kv + "</div>" +
+    var late = e.overdue && !done ? '<div class="notice" role="status">' + icon("clock") + "<span><strong>This item is overdue.</strong> " + esc(e.partner) + " has been reminded. There is no fine, but please return it soon or ask for more time.</span></div>" : "";
+    return header(title, "/loans") + '<div class="page">' + late + '<div class="card"><div class="thumb">' + icon(it.icon) + "</div><h2>" + esc(it.name) + "</h2>" + kv + "</div>" +
       (done ? "" : '<p class="small muted">' + (borrower ? "Meet " + esc(e.partner) + " and confirm together so the return counts for both of you." : "When " + esc(e.partner) + " hands it back, confirm it here.") + "</p>") + action + "</div>";
   };
 
@@ -331,8 +343,8 @@
     if (!e) return routes.notfound();
     var it = store.item(e.itemId), borrower = e.role === "borrower";
     return header("Return confirmed", "/home") + '<div class="page"><div class="state"><div class="mark">' + icon("check") + "</div><h2>Return confirmed</h2><p>" +
-      (borrower ? esc(e.partner) + " has the " + esc(it.short) + " back. Thanks for returning it on time." : "Your " + esc(it.short) + " is back with you.") + "</p>" +
-      (borrower ? '<p class="gain">You earned ' + data.points.returnOnTime + " points</p>" : "") + "</div>" +
+      (borrower ? esc(e.partner) + " has the " + esc(it.short) + " back. " + (e.overdue ? "Thanks for bringing it back. There is no fine, and on-time points apply only to on-time returns." : "Thanks for returning it on time.") : "Your " + esc(it.short) + " is back with you.") + "</p>" +
+      (borrower && !e.overdue ? '<p class="gain">You earned ' + data.points.returnOnTime + " points</p>" : "") + "</div>" +
       '<div class="actions">' + (borrower ? '<button class="btn primary" data-go="/pass-it-on">Continue</button>' : '<button class="btn primary" data-go="/home">Back to home</button>') +
       '<button class="btn quiet" data-act="undoReturn" data-id="' + id + '">Undo return</button></div></div>';
   };
@@ -342,9 +354,18 @@
     return header("Pass it on", "/home") + '<div class="page"><h2 class="lead">Someone helped you. Who can you help next?</h2>' +
       '<div class="chain-card">' + chainHTML(true) + '<p class="chain-count">This help has travelled through ' + chainCount() + " people so far.</p></div>" +
       '<p class="muted small">Passing it on earns you ' + data.points.passItOn + " points.</p>" +
-      '<div class="actions"><button class="btn primary" data-go="/pass-it-on/offer">Offer one of my items</button>' +
-      '<button class="btn primary" data-go="/pass-it-on/answer">Answer an open request</button>' +
-      '<button class="btn quiet" data-go="/home">Not now</button></div></div>';
+      '<section class="list" aria-label="Ways to help">' +
+      '<button class="row" data-go="/pass-it-on/offer"><span class="thumb">' + icon("gift") + '</span><span class="body"><span class="title">Offer one of my items</span><span class="sub">Let classmates borrow something you own</span></span>' + icon("chev", "chev") + "</button>" +
+      '<button class="row" data-go="/pass-it-on/answer"><span class="thumb">' + icon("people") + '</span><span class="body"><span class="title">Answer an open request</span><span class="sub">See who needs something right now</span></span>' + icon("chev", "chev") + "</button></section>" +
+      '<div class="actions"><button class="btn quiet" data-go="/home">Not now</button></div></div>';
+  };
+
+  // Recovery: the other student doesn't arrive or can't meet
+  routes.noshow = function (id) {
+    var e = store.exchange(id);
+    if (!e || e.status !== "accepted") return redirect("/home");
+    return header("Can't meet", "/exchange/" + id) + '<div class="page"><div class="state"><div class="mark wait">' + icon("clock") + "</div><h2>" + esc(e.partner) + " isn't here yet</h2><p class=\"muted\">Nothing has been handed over, so nothing has been recorded. You can wait a little longer, or cancel and find another item.</p></div>" +
+      '<div class="actions"><button class="btn primary" data-go="/exchange/' + id + '">Keep waiting</button><button class="btn danger" data-act="cancelRequest" data-id="' + id + '">Cancel and find another item</button></div></div>';
   };
 
   routes.passoffer = function () {
@@ -391,6 +412,7 @@
       next = '<button class="btn primary" data-go="/home">Back to home</button>';
     } else {
       var e = store.exchange(p.exId);
+      if (!e) return redirect("/home");
       msg = e.partner + " has been told you can help. Meet at " + store.zone(e.zone).name + ".";
       next = '<button class="btn primary" data-go="' + exchangeRoute(e) + '">See the meeting</button><button class="btn" data-go="/home">Back to home</button>';
     }
@@ -425,7 +447,7 @@
       }).join("");
       return rows ? '<h2 class="section-title">' + title + '</h2><section class="list grid-list">' + rows + "</section>" : "";
     }
-    var content = group("Needs your answer", ["incoming"], true) + group("In progress", ["requested", "enroute", "accepted"]) + group("Out on loan", ["active"]) + group("Finished", ["returned", "declined"]);
+    var content = group("Needs your answer", ["incoming"], true) + group("In progress", ["requested", "enroute", "accepted"]) + group("Out on loan", ["active"]) + group("Finished", ["returned", "declined", "refused"]);
     return '<header class="hdr wide"><h1 tabindex="-1">Loans</h1></header><div class="page wide">' +
       (content || '<div class="card empty"><p>No loans yet. When you borrow or lend, it shows up here.</p><button class="btn" data-go="/home">Browse items</button></div>') + "</div>";
   };
@@ -508,7 +530,7 @@
       '<details class="card"><summary>How does borrowing work?</summary><p class="small">Find an item, choose a safe pickup spot, and send a request. When you meet, scan the other student\'s QR code. Scan again when the item goes back.</p></details>' +
       '<details class="card"><summary>Why scan twice?</summary><p class="small">One scan at pickup and one at return confirm the exchange for both students, so nobody loses track of an item.</p></details>' +
       '<details class="card"><summary>Does anyone pay?</summary><p class="small">No. Borrowing is free, and there are no deposits or fines. Lenders and borrowers earn points.</p></details>' +
-      '<div class="actions plain"><button class="btn" data-act="signOut">Sign out</button><a class="btn quiet" href="facilitator.html">Facilitator tools</a></div></div>';
+      '<div class="actions plain"><button class="btn" data-act="signOut">Sign out</button></div></div>';
   };
 
   routes.notfound = function () {
@@ -532,6 +554,7 @@
       case "request": return routes.request(p[1]);
       case "unavailable": return routes.unavailable(p[1]);
       case "exchange": return routes.exchange(p[1]);
+      case "no-show": return routes.noshow(p[1]);
       case "scan": return routes.scan(p[1], p[2]);
       case "scan-failed": return routes.scanfailed(p[1], p[2]);
       case "handoff-done": return routes.handoffdone(p[1]);
@@ -639,7 +662,8 @@
     var onIt = path === "/exchange/" + exId;
     if (onIt) {
       render();
-      toast(message);
+      // A refusal replaces the whole screen, and its heading already says this.
+      if (store.exchange(exId).status !== "refused") toast(message);
     } else {
       renderTabs(path);
       if (path === "/home" || path === "/loans") render();
@@ -724,6 +748,16 @@
       store.undoHandoff(id);
       toast("Hand-off undone");
       go("/exchange/" + id, true);
+    },
+    askForMoreTime: function (el) {
+      store.askForMoreTime(el.getAttribute("data-id"));
+      toast("Sam agreed. New due time: tomorrow at noon.");
+      render();
+    },
+    undoMoreTime: function (el) {
+      store.undoMoreTime(el.getAttribute("data-id"));
+      toast("New due time undone");
+      render();
     },
     undoReturn: function (el) {
       var id = el.getAttribute("data-id");
@@ -851,15 +885,23 @@
   window.addEventListener("hashchange", render);
 
   /* ---------- boot: ?start=t1|t2|t3&rewards=recognition|perks&fail=scan,item ---------- */
+  /* Connection status. Once loaded, the prototype keeps working, but a reload needs a connection. */
+  function showConnection() {
+    document.getElementById("offline").hidden = navigator.onLine !== false;
+  }
+  window.addEventListener("online", showConnection);
+  window.addEventListener("offline", showConnection);
+  showConnection();
+
   store.init();
   (function () {
     var q = new URLSearchParams(location.search);
     var start = q.get("start");
     var rewards = q.get("rewards");
     if (rewards !== "recognition" && rewards !== "perks") rewards = null;
-    if (start === "t1" || start === "t2" || start === "t3") {
+    if (start === "t1" || start === "t2" || start === "t3" || start === "late") {
       var fail = (q.get("fail") || "").split(",");
-      store.start(start, rewards, { scan: fail.indexOf("scan") >= 0, item: fail.indexOf("item") >= 0 });
+      store.start(start, rewards, { scan: fail.indexOf("scan") >= 0, item: fail.indexOf("item") >= 0, decline: fail.indexOf("decline") >= 0 });
       history.replaceState(null, "", location.pathname + (start === "t1" ? "#/signin" : "#/home"));
     } else if (rewards && !cfg.lockVariant) {
       store.get().variant = rewards;

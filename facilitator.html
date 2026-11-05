@@ -38,9 +38,10 @@
 
   <section>
     <h2>Recovery states (pilot and team checks)</h2>
-    <p class="soft">Leave both off for real sessions, so every participant gets the same conditions. The Jordan charger always shows "no longer available", and "Code won't scan?" always opens the failed-scan screen.</p>
+    <p class="soft">Leave these off for real sessions, so every participant gets the same conditions. The Jordan charger always shows "no longer available", and "Code won't scan?" always opens the failed-scan screen.</p>
     <label><input type="checkbox" id="fail-scan"> Make the first scan fail</label>
     <label><input type="checkbox" id="fail-item"> Make the first requested item unavailable</label>
+    <label><input type="checkbox" id="fail-decline"> Make the first request get refused</label>
   </section>
 
   <section>
@@ -53,7 +54,7 @@
   <section>
     <h2>Task 2: Return an item and see what follows</h2>
     <p class="script">"You borrowed a charger yesterday and are done with it. Give it back."</p>
-    <p class="soft" style="margin-top:8px">Starts at home with a charger on loan. Success with no hints: the return is confirmed. Observe, without prompting, whether Pass-It-On is taken. Limit: 3 minutes.</p>
+    <p class="soft" style="margin-top:8px">Starts at home with a charger on loan. Success with no hints: the return is confirmed. <strong>Stop the timer at "Return confirmed", then stay silent and keep watching until the participant says they are done.</strong> Record Pass-It-On as taken, declined or not seen. Limit: 3 minutes.</p>
     <a class="start" data-task="t2" href="index.html?start=t2">Reset and start Task 2</a>
   </section>
 
@@ -62,6 +63,12 @@
     <p class="script">"A classmate has asked to borrow your scientific calculator. Help them out. Then see what your help has earned you and do something with it."</p>
     <p class="soft" style="margin-top:8px">Starts at home with Sam's request waiting. Success with no hints: the request is accepted, the hand-off is confirmed, and one claim is completed. Limit: 3 minutes.</p>
     <a class="start" data-task="t3" href="index.html?start=t3">Reset and start Task 3</a>
+  </section>
+
+  <section>
+    <h2>Extra state (team checks and the report, not a test task)</h2>
+    <p class="soft">Shows a loan past its due time, with a reminder, a way to ask for more time, and a return with no fine. "Sam isn't here or can't meet" is always on the meeting screen in Task 1.</p>
+    <a class="start" data-task="late" href="index.html?start=late">Reset and show an overdue loan</a>
   </section>
 
   <section>
@@ -85,11 +92,13 @@
     var radios = document.querySelectorAll('input[name="variant"]');
     var failScan = document.getElementById("fail-scan");
     var failItem = document.getElementById("fail-item");
+    var failDecline = document.getElementById("fail-decline");
 
     function update() {
       var fail = [];
       if (failScan.checked) fail.push("scan");
       if (failItem.checked) fail.push("item");
+      if (failDecline.checked) fail.push("decline");
       var lines = [];
       document.querySelectorAll("a[data-task]").forEach(function (a) {
         var href = "index.html?start=" + a.getAttribute("data-task") + "&rewards=" + chosen + (fail.length ? "&fail=" + fail.join(",") : "");
@@ -112,6 +121,7 @@
     document.getElementById("locked").hidden = !cfg.lockVariant;
     failScan.addEventListener("change", update);
     failItem.addEventListener("change", update);
+    failDecline.addEventListener("change", update);
     update();
   })();
 </script>

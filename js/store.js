@@ -41,7 +41,7 @@
       takenItems: [],
       chain: ["Mei", "Sam", "You"],
       passOns: [],
-      force: { scan: false, item: false }
+      force: { scan: false, item: false, decline: false }
     };
   }
 
@@ -49,7 +49,7 @@
   function seed(task, variant, force) {
     var s = base(variant);
     s.task = task;
-    s.force = { scan: !!(force && force.scan), item: !!(force && force.item) };
+    s.force = { scan: !!(force && force.scan), item: !!(force && force.item), decline: !!(force && force.decline) };
     if (task === "t1") {
       s.email = "student@algomau.ca";
     }
@@ -66,6 +66,23 @@
         status: "active",
         due: "Today, 6 p.m.",
         since: "Yesterday, 2:30 p.m."
+      });
+    }
+    // Extra state, outside the three test tasks: a loan that has gone past its due time.
+    if (task === "late") {
+      s.signedIn = true;
+      s.email = "student@algomau.ca";
+      s.ledger.push(entry("seed-1", "Lent an umbrella last week", 15));
+      s.exchanges.push({
+        id: "ex-late",
+        itemId: "charger-sam",
+        role: "borrower",
+        partner: "Sam",
+        zone: "library",
+        status: "active",
+        overdue: true,
+        due: "Yesterday, 6 p.m.",
+        since: "Two days ago"
       });
     }
     if (task === "t3") {
@@ -136,6 +153,13 @@
       delete timers[e.id];
       var cur = ex(e.id);
       if (!cur) return;
+      if (cur.status === "requested" && state.force.decline) {
+        state.force.decline = false;
+        cur.status = "refused";
+        save();
+        api.notify(cur.partner + " can't lend it right now.", cur.id);
+        return;
+      }
       if (cur.status === "requested" || cur.status === "enroute") {
         var was = cur.status;
         cur.status = "accepted";
@@ -273,10 +297,26 @@
     confirmReturn: function (id) {
       var e = ex(id);
       e.status = "returned";
-      if (e.role === "borrower") {
+      // On-time points only. A late return costs nothing, because UniLend has no fines.
+      if (e.role === "borrower" && !e.overdue) {
         var it = itemById(e.itemId);
         state.ledger.push(entry(id + ":return", "Returned a " + it.short + " on time", data.points.returnOnTime));
       }
+      save();
+    },
+    askForMoreTime: function (id) {
+      var e = ex(id);
+      e.previousDue = e.due;
+      e.due = "Tomorrow, noon";
+      e.overdue = false;
+      e.extended = true;
+      save();
+    },
+    undoMoreTime: function (id) {
+      var e = ex(id);
+      e.due = e.previousDue;
+      e.overdue = true;
+      e.extended = false;
       save();
     },
     undoReturn: function (id) {
