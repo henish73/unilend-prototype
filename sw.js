@@ -1,7 +1,11 @@
 /* Keeps a copy of the app on the phone so a reload still works if the Wi-Fi drops.
    Network first: when online, the newest version is always fetched and stored.
-   The cached copy is used only when the network fails or takes over 4 seconds. */
-var CACHE = "unilend-v2";
+   The cached copy is used only when the network fails or takes over 4 seconds.
+   Every request asks the server whether the file changed, instead of trusting the
+   browser cache, so a release always loads as one matching set of files.
+   tools/stamp_version.py updates VERSION on each release. */
+var VERSION = "20261105153152";
+var CACHE = "unilend-" + VERSION;
 var CORE = ["./", "index.html", "facilitator.html", "css/app.css", "js/config.js", "js/rewards.js", "js/data.js", "js/store.js", "js/log.js", "js/app.js", "manifest.webmanifest", "favicon.svg", "favicon.ico", "assets/brand/logo-mark.svg"];
 
 self.addEventListener("install", function (e) {
@@ -39,7 +43,9 @@ function networkFirst(req) {
         reject(new Error("timeout"));
       }, 4000);
     });
-    return Promise.race([fetch(req), timeout]).then(function (res) {
+    // Revalidate with the server. A navigation request can't take options, so rebuild it.
+    var fresh = new Request(req.url, { cache: "no-cache", credentials: "same-origin" });
+    return Promise.race([fetch(fresh), timeout]).then(function (res) {
       if (res && res.ok) cache.put(key, res.clone());
       return res;
     }).catch(function (err) {
