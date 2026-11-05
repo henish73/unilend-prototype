@@ -77,6 +77,36 @@
     return '<ol class="chain" aria-label="Help chain: ' + esc(s.chain.join(", then ")) + '">' + nodes.join("") + "</ol>";
   }
 
+  /* Where am I in this flow? */
+  function steps(n, total, label) {
+    var bars = "";
+    for (var i = 1; i <= total; i++) bars += '<i class="' + (i <= n ? "on" : "") + '"></i>';
+    return '<div class="stepper" role="group" aria-label="Step ' + n + " of " + total + ": " + esc(label) + '"><div class="bars" aria-hidden="true">' + bars + '</div><span aria-hidden="true">Step ' + n + " of " + total + " · " + esc(label) + "</span></div>";
+  }
+
+  /* What has happened, what's happening, what's next */
+  function timeline(items) {
+    return '<ol class="timeline">' + items.map(function (x) {
+      var label = x[1] === "done" ? "Done: " : x[1] === "now" ? "Now: " : "Next: ";
+      return '<li class="' + x[1] + '"><span class="dot" aria-hidden="true">' + (x[1] === "done" ? icon("check") : "") + '</span><span class="t"><span class="visually-hidden">' + label + "</span>" + esc(x[0]) + "</span></li>";
+    }).join("") + "</ol>";
+  }
+
+  function initial() {
+    var e = store.get().email || "S";
+    return esc(e.charAt(0).toUpperCase());
+  }
+
+  function campusMap() {
+    function pin(id, x, y, label, lx) {
+      return '<g><circle class="pin pin-' + id + '" cx="' + x + '" cy="' + y + '" r="9"/><circle cx="' + x + '" cy="' + y + '" r="3.5" fill="#fff"/><text class="lbl lbl-' + id + '" x="' + (lx || x) + '" y="' + (y + 24) + '" text-anchor="middle">' + label + "</text></g>";
+    }
+    return '<svg class="map" viewBox="0 0 340 150" role="img" aria-label="Campus map showing the three pickup spots">' +
+      '<path class="path" d="M20 120 C90 110 120 70 180 75 S280 120 325 95"/><path class="path" d="M180 75 L190 20"/>' +
+      '<rect class="bld" x="30" y="22" width="80" height="46" rx="8"/><rect class="bld" x="140" y="96" width="92" height="38" rx="8"/><rect class="bld" x="236" y="16" width="70" height="42" rx="8"/>' +
+      pin("library", 70, 45, "Library") + pin("student-centre", 186, 108, "Student Centre") + pin("cafe", 271, 37, "Cafe") + "</svg>";
+  }
+
   function chainCount() {
     return store.get().chain.length;
   }
@@ -163,19 +193,19 @@
       return '<button class="chip" data-act="category" data-id="' + esc(c) + '" aria-pressed="' + (ui.category === c) + '">' + esc(c) + "</button>";
     }).join("");
     return '<header class="home-hdr"><h1 tabindex="-1"><span class="brand only-mobile">UniLend</span><span class="only-desktop">Find what you need</span></h1>' +
-      '<button class="iconbtn" data-go="/profile" aria-label="Profile and help">' + icon("user") + "</button></header>" +
+      '<button class="iconbtn" data-go="/profile" aria-label="Profile and help"><span class="avatar sm" aria-hidden="true">' + initial() + "</span></button></header>" +
       '<div class="page wide">' +
-      (alerts ? '<section class="list grid-list" aria-label="Your activity">' + alerts + "</section>" : "") +
+      (alerts ? '<h2 class="sec-head">Right now</h2><section class="list grid-list" aria-label="Your activity">' + alerts + "</section>" : "") +
       (hasClaim("priority") ? '<div class="notice good" role="status">' + icon("clock") + "<span><strong>Priority access is on.</strong> Newly listed scarce items show to you first until tomorrow, 2 p.m.</span></div>" : "") +
-      '<label class="field"><span class="small">What do you need?</span><span class="searchbox">' + icon("search") + '<input class="input" id="search" type="search" placeholder="Search chargers, textbooks, lab gear" value="' + esc(ui.query) + '" autocomplete="off"></span></label>' +
+      '<label class="field"><span class="search-label">What do you need?</span><span class="searchbox">' + icon("search") + '<input class="input" id="search" type="search" placeholder="Search chargers, textbooks, lab gear" value="' + esc(ui.query) + '" autocomplete="off"></span></label>' +
       '<div class="chips" role="group" aria-label="Categories">' + chips + "</div>" +
-      '<section id="feed" class="list grid-list" aria-label="Items and requests">' + feedHTML() + "</section>" +
+      '<div id="feed" class="col">' + feedHTML() + "</div>" +
       '<button class="chain-mini" data-go="/community">' + icon("link") + "<span>The help chain has reached " + chainCount() + " people</span>" + icon("chev", "chev") + "</button>" +
       "</div>";
   };
 
   function feedHTML() {
-    var s = store.get(), q = ui.query.trim().toLowerCase(), out = "";
+    var s = store.get(), q = ui.query.trim().toLowerCase(), out = "", items = "", nItems = 0, reqs = "", nReqs = 0;
     function matches(text) {
       return !q || text.toLowerCase().indexOf(q) >= 0;
     }
@@ -188,16 +218,20 @@
       pool.filter(function (i) {
         return (ui.category === "All" || i.category === ui.category) && matches(i.name + " " + i.category);
       }).forEach(function (i) {
-        out += itemRow(i, i.owner ? {} : { sub: "Your item · Offered to classmates" });
+        items += itemRow(i, i.owner ? {} : { sub: "Your item · Offered to classmates" });
+        nItems++;
       });
     }
     if (ui.category === "All" || ui.category === "Open requests") {
       data.openRequests.filter(function (r) {
         return s.answered.indexOf(r.id) < 0 && matches(r.need + " " + r.who);
       }).forEach(function (r) {
-        out += '<button class="row" data-go="/open-request/' + r.id + '"><span class="thumb">' + icon("people") + '</span><span class="body"><span class="title">' + esc(r.who) + " needs " + esc(r.need) + '</span><span class="sub">Open request · ' + esc(store.zone(r.zone).name) + "</span></span>" + icon("chev", "chev") + "</button>";
+        nReqs++;
+        reqs += '<button class="row" data-go="/open-request/' + r.id + '"><span class="thumb">' + icon("people") + '</span><span class="body"><span class="title">' + esc(r.who) + " needs " + esc(r.need) + '</span><span class="sub">Open request · ' + esc(store.zone(r.zone).name) + "</span></span>" + icon("chev", "chev") + "</button>";
       });
     }
+    if (items) out += '<h2 class="sec-head">Available near you <small>' + nItems + (nItems === 1 ? " item" : " items") + '</small></h2><section class="list grouped grid-list" aria-label="Available items">' + items + "</section>";
+    if (reqs) out += '<h2 class="sec-head">Classmates asking <small>' + nReqs + (nReqs === 1 ? " request" : " requests") + '</small></h2><section class="list grouped grid-list" aria-label="Open requests">' + reqs + "</section>";
     if (!out) {
       out = '<div class="card empty"><p>Nothing matches that right now.</p><button class="btn" data-act="clearSearch">Show everything</button></div>';
     }
@@ -212,9 +246,11 @@
       return header("Your item") + '<div class="page"><div class="card"><div class="thumb">' + icon(it.icon) + "</div><h2>" + esc(it.name) + '</h2><p class="muted">' + esc(it.note) + "</p></div>" +
         '<div class="actions">' + (store.get().offered.indexOf(id) >= 0 ? '<button class="btn" data-act="stopOffering" data-id="' + id + '">Stop offering this item</button>' : "") + '<button class="btn quiet" data-go="/home">Back to home</button></div></div>';
     }
-    return header("Item details") + '<div class="page"><div class="card"><div class="thumb">' + icon(it.icon) + "</div><h2>" + esc(it.name) + "</h2><p>" + esc(it.note) + "</p>" +
-      '<dl class="kv"><dt>Lender</dt><dd>' + esc(it.owner) + " · " + it.lends + " lends</dd><dt>Usually at</dt><dd>" + esc(store.zone(it.zone).name) + "</dd><dt>Return by</dt><dd>Today, 6 p.m.</dd><dt>Cost</dt><dd>Free to borrow</dd></dl>" +
-      '<p class="small muted">' + esc(it.demand) + " demand. Lender earns " + it.points + " points, and you earn " + data.points.returnOnTime + " for returning on time.</p></div>" +
+    return header("Item details") + '<div class="page"><div class="hero" aria-hidden="true">' + icon(it.icon) + "</div>" +
+      '<h2 class="item-title">' + esc(it.name) + "</h2>" +
+      '<div class="owner"><span class="avatar" aria-hidden="true">' + esc(it.owner.charAt(0)) + '</span><span><span class="who">' + esc(it.owner) + '</span><span class="meta">' + icon("check") + "Verified Algoma student · " + it.lends + " lends</span></span></div>" +
+      '<div class="facts"><div class="fact"><span>Pickup</span><strong>' + esc(store.zone(it.zone).name) + '</strong></div><div class="fact"><span>Return by</span><strong>Today, 6 p.m.</strong></div><div class="fact"><span>Cost</span><strong>Free</strong></div></div>' +
+      '<div class="card"><p>' + esc(it.note) + '</p><p class="small muted">' + esc(it.demand) + " demand. Lender earns " + it.points + " points, and you earn " + data.points.returnOnTime + " for returning on time.</p></div>" +
       '<div class="actions"><button class="btn primary" data-go="/request/' + id + '">Request this item</button></div></div>';
   };
 
@@ -225,7 +261,7 @@
     var zones = data.zones.map(function (z) {
       return '<label class="choice"><input type="radio" name="zone" value="' + z.id + '"><span><span class="title">' + esc(z.name) + '</span><span class="sub">' + esc(z.note) + "</span></span></label>";
     }).join("");
-    return header("Request item", "/item/" + id) + '<form class="page" data-submit="sendRequest" data-id="' + id + '"><p>Asking <strong>' + esc(it.owner) + "</strong> for the <strong>" + esc(it.short) + "</strong>.</p>" +
+    return header("Request item", "/item/" + id) + '<form class="page" data-submit="sendRequest" data-id="' + id + '">' + steps(1, 3, "Choose a pickup spot") + campusMap() + '<p>Asking <strong>' + esc(it.owner) + "</strong> for the <strong>" + esc(it.short) + "</strong>.</p>" +
       '<fieldset class="list zones"><legend><h2>Choose a safe pickup spot</h2></legend>' + zones + "</fieldset>" +
       (ui.requestError ? '<p class="error" role="alert">' + esc(ui.requestError) + "</p>" : "") +
       '<div class="actions"><button class="btn primary" type="submit">Send request</button></div></form>';
@@ -241,7 +277,7 @@
     });
     return header("Item unavailable") + '<div class="page"><div class="state"><div class="mark bad">' + icon("alert") + "</div><h2>This item is no longer available</h2>" +
       '<p class="muted">Another student just got the ' + esc(it.short) + ". Your request was not sent. Here are similar items.</p></div>" +
-      '<section class="list" aria-label="Similar items">' + similar.map(function (i) { return itemRow(i); }).join("") + "</section>" +
+      '<section class="list grouped" aria-label="Similar items">' + similar.map(function (i) { return itemRow(i); }).join("") + "</section>" +
       '<div class="actions"><button class="btn quiet" data-go="/home">Back to all items</button></div></div>';
   };
 
@@ -258,19 +294,22 @@
         return i.category === it.category && i.id !== e.itemId && store.get().takenItems.indexOf(i.id) < 0 && !i.goesUnavailable;
       });
       body = '<div class="state"><div class="mark bad">' + icon("alert") + "</div><h2>" + esc(p) + " can't lend this right now</h2><p class=\"muted\">Nothing has been recorded against you. Here are similar items.</p></div>" +
-        '<section class="list" aria-label="Similar items">' + others.map(function (i) { return itemRow(i); }).join("") + "</section>" +
+        '<section class="list grouped" aria-label="Similar items">' + others.map(function (i) { return itemRow(i); }).join("") + "</section>" +
         '<div class="actions"><button class="btn quiet" data-go="/home">Back to all items</button></div>';
     } else if (e.status === "requested") {
-      body = '<div class="state"><div class="mark wait"><div class="spin" aria-hidden="true"></div></div><h2>Request sent</h2><p class="muted">Waiting for ' + esc(p) + " to reply about the " + esc(it.short) + ".</p></div>" +
-        '<dl class="card kv"><dt>Pickup spot</dt><dd>' + esc(zone) + "</dd></dl>" +
+      body = steps(2, 3, "Wait for " + p) + '<div class="state"><div class="mark wait"><div class="spin" aria-hidden="true"></div></div><h2>Request sent</h2><p class="muted">Waiting for ' + esc(p) + " to reply about the " + esc(it.short) + ".</p></div>" +
+        '<div class="card">' + timeline([["Request sent", "done"], [p + " replies", "now"], ["Meet at " + zone, "next"], ["Scan " + p + "'s code to confirm", "next"]]) + "</div>" +
         '<div class="actions"><button class="btn danger" data-act="cancelRequest" data-id="' + id + '">Cancel request</button></div>';
     } else if (e.status === "enroute") {
-      body = '<div class="state"><div class="mark wait"><div class="spin" aria-hidden="true"></div></div><h2>' + esc(p) + " is on the way</h2><p class=\"muted\">Head to " + esc(zone) + ". We will tell you when " + esc(p) + " arrives.</p></div>" +
-        '<dl class="card kv"><dt>Item</dt><dd>' + esc(it.name) + "</dd><dt>Pickup spot</dt><dd>" + esc(zone) + "</dd></dl>";
+      body = steps(2, 3, "Meet " + p) + '<div class="state"><div class="mark wait"><div class="spin" aria-hidden="true"></div></div><h2>' + esc(p) + " is on the way</h2><p class=\"muted\">Head to " + esc(zone) + ". We will tell you when " + esc(p) + " arrives.</p></div>" +
+        '<div class="card">' + timeline([["You accepted", "done"], [p + " is on the way to " + zone, "now"], ["Hand over and scan to confirm", "next"]]) + "</div>";
     } else {
       var head = e.role === "borrower" ? esc(p) + " accepted your request" : esc(p) + " is here";
-      body = '<div class="state"><div class="mark">' + icon("check") + "</div><h2>" + head + '</h2><p class="muted">Meet at <strong>' + esc(zone) + "</strong>" + (e.role === "borrower" ? " to pick up the " : " to hand over your ") + esc(it.short) + ".</p></div>" +
-        '<dl class="card kv"><dt>Pickup spot</dt><dd>' + esc(zone) + "</dd><dt>Due back</dt><dd>" + esc(e.due) + "</dd></dl>" +
+      body = steps(2, 3, "Meet " + p) + '<div class="state"><div class="mark">' + icon("check") + "</div><h2>" + head + '</h2><p class="muted">Meet at <strong>' + esc(zone) + "</strong>" + (e.role === "borrower" ? " to pick up the " : " to hand over your ") + esc(it.short) + ".</p></div>" +
+        '<div class="card">' + (e.role === "borrower"
+          ? timeline([["Request sent", "done"], [p + " accepted", "done"], ["Meet at " + zone, "now"], ["Scan " + p + "'s code to confirm", "next"]])
+          : timeline([["You accepted", "done"], [p + " arrived at " + zone, "done"], ["Hand over and scan to confirm", "now"]])) +
+        '<dl class="kv"><dt>Due back</dt><dd>' + esc(e.due) + "</dd></dl></div>" +
         '<div class="actions"><button class="btn primary" data-go="/scan/handoff/' + id + '">Confirm hand-off</button>' +
         (e.role === "borrower" ? '<button class="btn quiet" data-go="/no-show/' + id + '">' + esc(p) + " isn't here or can't meet</button>" : "") + "</div>";
     }
@@ -285,7 +324,7 @@
     if (e.status !== expected) return redirect(exchangeRoute(e));
     var p = e.partner;
     return '<div class="scan">' + '<header class="hdr"><button class="iconbtn" data-act="back" data-parent="' + exchangeRoute(e) + '" aria-label="Back">' + icon("back") + '</button><h1 tabindex="-1">' + (kind === "handoff" ? "Confirm hand-off" : "Confirm return") + "</h1></header>" +
-      '<div class="page"><p><strong>Scan ' + esc(p) + "'s QR code</strong></p>" +
+      '<div class="page">' + steps(kind === "handoff" ? 3 : 2, kind === "handoff" ? 3 : 2, "Scan to confirm") + "<p><strong>Scan " + esc(p) + "'s QR code</strong></p>" +
       '<button id="viewfinder" class="viewfinder" data-act="scan" data-kind="' + kind + '" data-id="' + id + '" aria-label="Scan ' + esc(p) + "'s QR code\">" + qr(id + kind) + '<span class="scanline"></span></button>' +
       '<p class="hint small" id="scanhint">Prototype camera: tap the code to scan it.</p>' +
       '<div class="actions"><button class="btn quiet" data-go="/scan-failed/' + kind + "/" + id + '">Code won\'t scan?</button></div></div></div>';
@@ -313,6 +352,9 @@
         ? "<p>" + esc(e.partner) + " has your " + esc(it.short) + '. Due back: ' + esc(e.due) + '</p><p class="gain">You earned ' + it.points + " points</p>"
         : "<p>You have the " + esc(it.short) + " from " + esc(e.partner) + ". Due back: " + esc(e.due) + "</p>") +
       "</div>" +
+      '<div class="card">' + (lender
+        ? timeline([["Handed to " + e.partner, "done"], [e.partner + " uses it", "now"], ["It comes back by " + e.due, "next"]])
+        : timeline([["Picked up from " + e.partner, "done"], ["Use it", "now"], ["Return it by " + e.due + " at " + store.zone(e.zone).name, "next"]])) + "</div>" +
       '<div class="actions">' +
       (lender ? '<button class="btn primary" data-go="/home">Done</button>' : '<button class="btn primary" data-go="/loan/' + id + '">View my loan</button><button class="btn" data-go="/home">Back to home</button>') +
       '<button class="btn quiet" data-act="undoHandoff" data-id="' + id + '">Undo hand-off</button></div></div>';
@@ -335,7 +377,8 @@
       action = '<div class="actions"><button class="btn" data-go="/loans">Back to loans</button></div>';
     }
     var late = e.overdue && !done ? '<div class="notice" role="status">' + icon("clock") + "<span><strong>This item is overdue.</strong> " + esc(e.partner) + " has been reminded. There is no fine, but please return it soon or ask for more time.</span></div>" : "";
-    return header(title, "/loans") + '<div class="page">' + late + '<div class="card"><div class="thumb">' + icon(it.icon) + "</div><h2>" + esc(it.name) + "</h2>" + kv + "</div>" +
+    var flow = borrower && !done && !e.overdue ? steps(1, 2, "Meet " + e.partner + " to return it") : "";
+    return header(title, "/loans") + '<div class="page">' + flow + late + '<div class="card"><div class="owner"><span class="thumb">' + icon(it.icon) + "</span><h2>" + esc(it.name) + "</h2></div>" + kv + "</div>" +
       (done ? "" : '<p class="small muted">' + (borrower ? "Meet " + esc(e.partner) + " and confirm together so the return counts for both of you." : "When " + esc(e.partner) + " hands it back, confirm it here.") + "</p>") + action + "</div>";
   };
 
@@ -356,7 +399,7 @@
     return header("Pass it on", "/home") + '<div class="page"><h2 class="lead">Someone helped you. Who can you help next?</h2>' +
       '<div class="chain-card">' + chainHTML(true) + '<p class="chain-count">This help has travelled through ' + chainCount() + " people so far.</p></div>" +
       '<p class="muted small">Passing it on earns you ' + data.points.passItOn + " points.</p>" +
-      '<section class="list" aria-label="Ways to help">' +
+      '<section class="list choice-cards" aria-label="Ways to help">' +
       '<button class="row" data-go="/pass-it-on/offer"><span class="thumb">' + icon("gift") + '</span><span class="body"><span class="title">Offer one of my items</span><span class="sub">Let classmates borrow something you own</span></span>' + icon("chev", "chev") + "</button>" +
       '<button class="row" data-go="/pass-it-on/answer"><span class="thumb">' + icon("people") + '</span><span class="body"><span class="title">Answer an open request</span><span class="sub">See who needs something right now</span></span>' + icon("chev", "chev") + "</button></section>" +
       '<div class="actions"><button class="btn quiet" data-go="/home">Not now</button></div></div>';
@@ -377,7 +420,7 @@
         return e.itemId === i.id && ["enroute", "accepted", "active", "incoming"].indexOf(e.status) >= 0;
       });
     });
-    return header("Offer an item", "/pass-it-on") + '<div class="page"><p>Choose an item to offer to classmates.</p><section class="list">' +
+    return header("Offer an item", "/pass-it-on") + '<div class="page"><p>Choose an item to offer to classmates.</p><section class="list grouped">' +
       (free.length ? free.map(function (i) {
         return '<button class="row" data-act="offer" data-id="' + i.id + '"><span class="thumb">' + icon(i.icon) + '</span><span class="body"><span class="title">' + esc(i.name) + '</span><span class="sub">' + esc(i.note) + "</span></span>" + icon("chev", "chev") + "</button>";
       }).join("") : '<div class="card empty"><p>All your items are already offered or out on loan.</p><button class="btn" data-go="/pass-it-on/answer">See open requests</button></div>') +
@@ -432,7 +475,7 @@
     if (e.status === "declined") {
       return header("Request declined", "/home") + '<div class="page"><div class="state"><div class="mark wait">' + icon("check") + "</div><h2>You declined</h2><p>We let " + esc(e.partner) + ' know, and no reason is shared.</p></div><div class="actions"><button class="btn primary" data-go="/home">Back to home</button><button class="btn quiet" data-act="undoDecision" data-id="' + id + '">Undo</button></div></div>';
     }
-    return header("Borrow request") + '<div class="page"><div class="card"><div class="thumb">' + icon(it.icon) + "</div><h2>" + esc(e.partner) + " wants to borrow your " + esc(it.short) + "</h2>" +
+    return header("Borrow request") + '<div class="page">' + steps(1, 3, "Answer the request") + '<div class="card"><div class="owner"><span class="avatar" aria-hidden="true">' + esc(e.partner.charAt(0)) + '</span><span><span class="who">' + esc(e.partner) + '</span><span class="meta">' + icon("check") + "Verified Algoma student</span></span></div><h2>" + esc(e.partner) + " wants to borrow your " + esc(it.short) + "</h2>" +
       (e.message ? '<p>"' + esc(e.message) + '"</p>' : "") +
       '<dl class="kv"><dt>Meet at</dt><dd>' + esc(store.zone(e.zone).name) + "</dd><dt>Back by</dt><dd>" + esc(e.due) + "</dd><dt>You earn</dt><dd>" + it.points + " points</dd></dl></div>" +
       '<div class="actions"><button class="btn primary" data-act="accept" data-id="' + id + '">Accept</button><button class="btn" data-act="decline" data-id="' + id + '">Decline</button></div></div>';
@@ -447,7 +490,7 @@
       }).map(function (e) {
         return exchangeRow(e, alert);
       }).join("");
-      return rows ? '<h2 class="section-title">' + title + '</h2><section class="list grid-list">' + rows + "</section>" : "";
+      return rows ? '<h2 class="sec-head">' + title + '</h2><section class="list ' + (alert ? "" : "grouped ") + 'grid-list">' + rows + "</section>" : "";
     }
     var content = group("Needs your answer", ["incoming"], true) + group("In progress", ["requested", "enroute", "accepted"]) + group("Out on loan", ["active"]) + group("Finished", ["returned", "declined", "refused"]);
     return '<header class="hdr wide"><h1 tabindex="-1">Loans</h1></header><div class="page wide">' +
@@ -462,11 +505,22 @@
       return '<button class="row reward" data-act="startClaim" data-id="' + c.id + '" data-can="' + can + '"><span class="thumb">' + icon(c.icon) + '</span><span class="body"><span class="title">' + esc(c.name) + '</span><span class="sub">' + esc(c.detail) + '</span></span><span class="cost">' + c.cost + " pts</span></button>";
     }).join("");
     return '<header class="hdr wide"><h1 tabindex="-1">Points and Rewards</h1></header><div class="page wide"><div class="split two"><div class="col sticky-col">' +
-      '<div class="balance" aria-label="Your balance is ' + pts + ' points"><span>Your points</span><strong>' + pts + "</strong></div>" +
+      '<div class="balance" aria-label="Your balance is ' + pts + ' points"><span>Your points</span><strong>' + pts + "</strong>" + progressHTML(r.catalogue, pts) + "</div>" +
       '<button class="row compact" data-go="/rewards/history"><span class="body"><span class="title">Points history and past claims</span></span>' + (s.claims.length ? '<span class="pill">' + s.claims.length + " claimed</span>" : "") + icon("chev", "chev") + "</button></div><div class=\"col\">" +
-      '<h2 class="section-title">Claim a reward</h2><section class="list" aria-label="Rewards catalogue">' + catalogue + "</section>" +
+      '<h2 class="sec-head">Claim a reward</h2><section class="list grouped" aria-label="Rewards catalogue">' + catalogue + "</section>" +
       '<p class="footnote">Prototype: rewards shown here are fictional and no real prizes are given.</p></div></div></div>';
   };
+
+  function progressHTML(catalogue, pts) {
+    var next = catalogue.slice().sort(function (a, b) {
+      return a.cost - b.cost;
+    }).filter(function (c) {
+      return c.cost > pts;
+    })[0];
+    var pct = next ? Math.round((pts / next.cost) * 100) : 100;
+    var text = next ? next.cost - pts + " more points to " + next.name : "You can claim any reward below";
+    return '<div class="progress"><span>' + esc(text) + '</span><div class="bar" aria-hidden="true"><i style="width:' + pct + '%"></i></div></div>';
+  }
 
   routes.history = function () {
     var s = store.get();
@@ -560,8 +614,8 @@
   // Profile and help
   routes.profile = function () {
     var s = store.get();
-    return header("Profile and help") + '<div class="page"><div class="card"><h2>' + esc(s.email || "Student") + '</h2><p class="muted small">Verified Algoma student</p>' + (hasBadge() ? '<p><span class="pill star">' + icon("star") + "Featured Helper</span></p>" : "") + "</div>" +
-      '<h2 class="section-title">My items</h2><section class="list">' + data.myItems.map(function (i) {
+    return header("Profile and help") + '<div class="page"><div class="card"><div class="profile-head"><span class="avatar lg" aria-hidden="true">' + initial() + "</span><div><h2>" + esc(s.email || "Student") + '</h2><p class="muted small">Verified Algoma student</p>' + (hasBadge() ? '<p><span class="pill star">' + icon("star") + "Featured Helper</span></p>" : "") + "</div></div></div>" +
+      '<h2 class="sec-head">My items</h2><section class="list grouped">' + data.myItems.map(function (i) {
         return '<div class="row"><span class="thumb">' + icon(i.icon) + '</span><span class="body"><span class="title">' + esc(i.name) + '</span><span class="sub">' + (s.offered.indexOf(i.id) >= 0 ? "Offered to classmates" : "Not offered right now") + "</span></span>" +
           (s.offered.indexOf(i.id) >= 0 ? '<button class="btn fit" data-act="stopOffering" data-id="' + i.id + '">Stop</button>' : '<button class="btn fit" data-act="offer" data-id="' + i.id + '">Offer</button>') + "</div>";
       }).join("") + "</section>" +
@@ -645,8 +699,8 @@
     tabs.innerHTML = '<div class="side-brand brand only-desktop">UniLend</div>' + defs.map(function (d) {
       var cur = show[root] && root === d[0];
       var badge = d[0] === "loans" && waiting ? '<span class="badge">' + waiting + "</span>" : "";
-      return '<button class="tab" data-go="/' + d[0] + '"' + (cur ? ' aria-current="page"' : "") + (badge ? ' aria-label="' + d[1] + ", " + waiting + ' waiting"' : "") + ">" + icon(d[2]) + "<span>" + d[1] + "</span>" + badge + "</button>";
-    }).join("") + '<button class="tab push only-desktop" data-go="/profile"' + (root === "profile" ? ' aria-current="page"' : "") + ">" + icon("user") + "<span>Profile and help</span></button>";
+      return '<button class="tab" data-go="/' + d[0] + '"' + (cur ? ' aria-current="page"' : "") + (badge ? ' aria-label="' + d[1] + ", " + waiting + ' waiting"' : "") + '><span class="ico">' + icon(d[2]) + "</span><span>" + d[1] + "</span>" + badge + "</button>";
+    }).join("") + '<button class="tab push only-desktop" data-go="/profile"' + (root === "profile" ? ' aria-current="page"' : "") + '><span class="ico">' + icon("user") + "</span><span>Profile and help</span></button>";
   }
 
   function render() {
