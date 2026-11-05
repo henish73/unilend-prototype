@@ -223,6 +223,16 @@ details.card ul { margin: 6px 0 0; padding-left: 20px; }
 
 #offline { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); z-index: 6; width: max-content; max-width: calc(100% - 24px); padding: 6px 14px; border-radius: 99px; background: #5E2800; color: #FFF; font-size: .82rem; font-weight: 700; text-align: center; pointer-events: none; }
 #offline[hidden] { display: none; }
+.notice.good { background: var(--brand-tint); border-color: #9CCDBD; color: var(--brand); }
+.pill.star { display: inline-flex; align-items: center; gap: 4px; background: #FCEFC9; color: #6F4E00; vertical-align: middle; }
+.pill.star svg { width: 13px; height: 13px; }
+.wall li.mine { border-left-color: #C89400; background: #FFFBEF; }
+#panel { position: absolute; inset: 0; z-index: 10; display: flex; align-items: center; justify-content: center; padding: 16px; background: rgba(16, 32, 28, .55); }
+#panel[hidden] { display: none; }
+.panel-box { width: 100%; max-width: 420px; max-height: 100%; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding: 20px; background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow-lift); }
+.panel-tasks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.script-text { padding: 10px 12px; border-left: 4px solid var(--brand); background: var(--paper); font-size: 1.02rem; }
+select.input { appearance: auto; }
 
 /* ---------- Pointer devices ---------- */
 @media (hover: hover) {

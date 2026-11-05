@@ -76,9 +76,54 @@
     <p><code id="links"></code></p>
   </section>
 
+  <section>
+    <h2>Session log on this phone</h2>
+    <p class="soft">The app records each task run on the phone it runs on: time from Begin (or from opening a reset link) to the task's confirmation, taps, backtracks, recovery states and Pass-It-On. It supports the note-taker's sheet and does not replace it. Export it from the phone the participants used.</p>
+    <p id="log-count"></p>
+    <p style="display:flex;gap:8px;flex-wrap:wrap"><button class="start" id="log-download" type="button" style="flex:1;border:0">Download CSV</button><button class="start" id="log-show" type="button" style="flex:1;border:0;background:#46574F">Show as text</button></p>
+    <textarea id="log-text" readonly hidden style="width:100%;min-height:160px;font:12px Consolas,monospace"></textarea>
+    <p><button id="log-clear" type="button" style="min-height:44px;background:none;border:1.5px solid #A0241C;color:#A0241C;border-radius:10px;padding:0 14px;font-weight:700">Clear the log</button></p>
+    <p class="soft">Tip: on the participant's phone, press and hold the UniLend name for about a second to open a quick panel. Choose the participant and task, read the scenario, then tap Begin.</p>
+  </section>
+
   <a class="back" href="index.html">Back to the app without resetting</a>
 </main>
 <script src="js/config.js"></script>
+<script src="js/rewards.js"></script>
+<script src="js/data.js"></script>
+<script src="js/store.js"></script>
+<script src="js/log.js"></script>
+<script>
+  (function () {
+    var log = window.UNILEND_LOG;
+    function count() {
+      var n = log.runs().length;
+      document.getElementById("log-count").textContent = n + (n === 1 ? " task run recorded." : " task runs recorded.");
+    }
+    document.getElementById("log-download").addEventListener("click", function () {
+      var blob = new Blob([log.csv() + "\n"], { type: "text/csv" });
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "unilend-session-log-" + new Date().toISOString().slice(0, 10) + ".csv";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    });
+    document.getElementById("log-show").addEventListener("click", function () {
+      var t = document.getElementById("log-text");
+      t.value = log.csv();
+      t.hidden = false;
+      t.select();
+    });
+    document.getElementById("log-clear").addEventListener("click", function () {
+      if (confirm("Clear every recorded task run on this phone? Download it first if you need it.")) {
+        log.clear();
+        count();
+      }
+    });
+    count();
+  })();
+</script>
 <script>
   (function () {
     var cfg = window.UNILEND_CONFIG;

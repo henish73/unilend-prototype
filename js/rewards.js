@@ -15,21 +15,27 @@
       name: "Priority access for 24 hours",
       detail: "See newly listed scarce items before anyone else for one day.",
       cost: 60,
-      icon: "clock"
+      icon: "clock",
+      effect: "For the next 24 hours, newly listed scarce items show to you first. You'll see a note on your home screen."
     },
     {
       id: "badge",
       name: "Featured Helper badge",
-      detail: "Shows beside your name on the feed and the Kindness Wall.",
+      detail: "Shows beside your name on the leaderboard and the Kindness Wall.",
       cost: 40,
-      icon: "star"
+      icon: "star",
+      showsBadge: true,
+      effect: "Your Featured Helper badge now shows beside your name on the leaderboard and the Kindness Wall.",
+      wall: "You became a Featured Helper."
     },
     {
       id: "donate",
       name: "Donate points to a campus cause",
       detail: "Give 25 points to the student food bank's helper total.",
       cost: 25,
-      icon: "heart"
+      icon: "heart",
+      effect: "Your donation now appears on the Kindness Wall.",
+      wall: "You gave 25 points to the student food bank's helper total."
     }
   ];
 
@@ -55,14 +61,16 @@
           name: "Campus coffee voucher",
           detail: "One free coffee at the campus cafe.",
           cost: 50,
-          icon: "cup"
+          icon: "cup",
+          effect: "Show this at the campus cafe. Code: UL-CAFE-21 (fictional)."
         },
         {
           id: "bookstore",
           name: "Bookstore discount",
           detail: "10% off one bookstore purchase.",
           cost: 75,
-          icon: "tag"
+          icon: "tag",
+          effect: "Show this at the bookstore. Code: UL-BOOK-10 (fictional)."
         }
       ])
     }

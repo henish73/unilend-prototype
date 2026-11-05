@@ -3,6 +3,7 @@
   var store = window.UNILEND_STORE;
   var data = window.UNILEND_DATA;
   var cfg = window.UNILEND_CONFIG;
+  var log = window.UNILEND_LOG;
   var screen = document.getElementById("screen");
   var tabs = document.getElementById("tabs");
   var toastEl = document.getElementById("toast");
@@ -165,6 +166,7 @@
       '<button class="iconbtn" data-go="/profile" aria-label="Profile and help">' + icon("user") + "</button></header>" +
       '<div class="page wide">' +
       (alerts ? '<section class="list grid-list" aria-label="Your activity">' + alerts + "</section>" : "") +
+      (hasClaim("priority") ? '<div class="notice good" role="status">' + icon("clock") + "<span><strong>Priority access is on.</strong> Newly listed scarce items show to you first until tomorrow, 2 p.m.</span></div>" : "") +
       '<label class="field"><span class="small">What do you need?</span><span class="searchbox">' + icon("search") + '<input class="input" id="search" type="search" placeholder="Search chargers, textbooks, lab gear" value="' + esc(ui.query) + '" autocomplete="off"></span></label>' +
       '<div class="chips" role="group" aria-label="Categories">' + chips + "</div>" +
       '<section id="feed" class="list grid-list" aria-label="Items and requests">' + feedHTML() + "</section>" +
@@ -490,7 +492,9 @@
       return x.id === cid;
     })[0];
     if (!c) return redirect("/rewards");
+    var def = rewardDef(c.rewardId);
     return header("Reward claimed", "/rewards") + '<div class="page"><div class="state"><div class="mark">' + icon("check") + "</div><h2>Reward claimed</h2><p>" + esc(c.name) + '</p><p class="muted">' + c.cost + " points used. You have " + store.points() + " left.</p></div>" +
+      (def && def.effect ? '<p class="card">' + esc(def.effect) + "</p>" : "") +
       '<div class="actions"><button class="btn primary" data-go="/rewards">Back to rewards</button><button class="btn" data-go="/community">See community impact</button><button class="btn quiet" data-act="undoClaim" data-id="' + cid + '">Undo claim</button></div></div>';
   };
 
@@ -501,7 +505,7 @@
     var board = data.leaderboard[ui.board].concat([me]).sort(function (a, b) {
       return b.points - a.points;
     }).map(function (p, i) {
-      return '<li class="' + (p.me ? "me" : "") + '"><span class="rank">' + (i + 1) + '</span><span class="who">' + esc(p.name) + "</span><strong>" + p.points + "</strong></li>";
+      return '<li class="' + (p.me ? "me" : "") + '"><span class="rank">' + (i + 1) + '</span><span class="who">' + esc(p.name) + (p.me && hasBadge() ? ' <span class="pill star">' + icon("star") + "Featured Helper</span>" : "") + "</span><strong>" + p.points + "</strong></li>";
     }).join("");
     var lends = s.exchanges.filter(function (e) {
       return e.role === "lender" && (e.status === "active" || e.status === "returned");
@@ -513,15 +517,50 @@
       '<h2 class="section-title">Leaderboard</h2><div class="banner">' + icon("star") + "<span>" + esc(r.leaderboardBanner) + "</span></div>" +
       '<div class="seg" role="group" aria-label="Leaderboard period"><button data-act="board" data-id="Monthly" aria-pressed="' + (ui.board === "Monthly") + '">Monthly</button><button data-act="board" data-id="Yearly" aria-pressed="' + (ui.board === "Yearly") + '">Yearly</button></div>' +
       '<ol class="board">' + board + "</ol></div>" +
-      '<div class="col span-all"><h2 class="section-title">Kindness Wall</h2><ul class="wall">' + data.kindnessWall.map(function (k) {
+      '<div class="col span-all"><h2 class="section-title">Kindness Wall</h2><ul class="wall">' + myWall().map(function (k) {
+        return '<li class="mine">' + (hasBadge() ? '<span class="pill star">' + icon("star") + "Featured Helper</span> " : "") + esc(k) + "</li>";
+      }).join("") + data.kindnessWall.map(function (k) {
         return "<li>" + esc(k) + "</li>";
       }).join("") + "</ul></div></div></div>";
+  };
+
+  function rewardDef(id) {
+    return store.rewards().catalogue.filter(function (c) {
+      return c.id === id;
+    })[0];
+  }
+  function hasClaim(id) {
+    return store.get().claims.some(function (c) {
+      return c.rewardId === id;
+    });
+  }
+  function hasBadge() {
+    return store.get().claims.some(function (c) {
+      var d = rewardDef(c.rewardId);
+      return d && d.showsBadge;
+    });
+  }
+  /* Your own recognition, newest first: what you passed on and what you claimed */
+  function myWall() {
+    var s = store.get(), out = [];
+    s.passOns.forEach(function (p) {
+      if (p.kind === "offer") out.push("You passed help on by offering your " + store.item(p.itemId).short + ".");
+      else {
+        var req = data.openRequests.filter(function (r) { return r.id === p.reqId; })[0];
+        if (req) out.push("You passed help on by answering " + req.who + "'s request.");
+      }
+    });
+    s.claims.forEach(function (c) {
+      var d = rewardDef(c.rewardId);
+      if (d && d.wall) out.push(d.wall);
+    });
+    return out.reverse();
   };
 
   // Profile and help
   routes.profile = function () {
     var s = store.get();
-    return header("Profile and help") + '<div class="page"><div class="card"><h2>' + esc(s.email || "Student") + '</h2><p class="muted small">Verified Algoma student</p></div>' +
+    return header("Profile and help") + '<div class="page"><div class="card"><h2>' + esc(s.email || "Student") + '</h2><p class="muted small">Verified Algoma student</p>' + (hasBadge() ? '<p><span class="pill star">' + icon("star") + "Featured Helper</span></p>" : "") + "</div>" +
       '<h2 class="section-title">My items</h2><section class="list">' + data.myItems.map(function (i) {
         return '<div class="row"><span class="thumb">' + icon(i.icon) + '</span><span class="body"><span class="title">' + esc(i.name) + '</span><span class="sub">' + (s.offered.indexOf(i.id) >= 0 ? "Offered to classmates" : "Not offered right now") + "</span></span>" +
           (s.offered.indexOf(i.id) >= 0 ? '<button class="btn fit" data-act="stopOffering" data-id="' + i.id + '">Stop</button>' : '<button class="btn fit" data-act="offer" data-id="' + i.id + '">Offer</button>') + "</div>";
@@ -588,6 +627,7 @@
       render();
     } else {
       ui.depth++;
+      ui.appNav = true;
       location.hash = path;
     }
   }
@@ -636,6 +676,7 @@
     var h = screen.querySelector("h1");
     if (h) h.focus({ preventScroll: true });
     wireInputs();
+    log.view(path);
   }
 
   function wireInputs() {
@@ -684,8 +725,10 @@
 
   var actions = {
     back: function (el) {
+      log.backtrack();
       if (ui.depth > 0) {
         ui.depth--;
+        ui.appNav = true;
         history.back();
       } else {
         go(el.getAttribute("data-parent") || "/home", true);
@@ -862,9 +905,17 @@
     }
   };
 
+  /* Every tap on a control counts toward the session log (the facilitator panel does not) */
+  document.addEventListener("click", function (ev) {
+    if (ev.target.closest("#panel")) return;
+    if (ev.target.closest("button, a, input, label.choice, summary")) log.tap();
+    var act0 = ev.target.closest("[data-act]");
+    if (act0 && /^(undo|cancelRequest)/.test(act0.getAttribute("data-act"))) log.backtrack();
+  }, true);
+
   document.addEventListener("click", function (ev) {
     var el = ev.target.closest("[data-act],[data-go]");
-    if (!el) return;
+    if (!el || el.closest("#panel")) return;
     var act = el.getAttribute("data-act");
     if (act) {
       ev.preventDefault();
@@ -882,7 +933,97 @@
     forms[f.getAttribute("data-submit")](f);
   });
 
-  window.addEventListener("hashchange", render);
+  window.addEventListener("hashchange", function () {
+    if (!ui.appNav) log.backtrack();
+    ui.appNav = false;
+    render();
+  });
+
+  /* ---------- Facilitator panel: long-press the UniLend name, or open with ?panel ---------- */
+  var panel = document.getElementById("panel");
+  var SCENARIOS = {
+    t1: "It's 2 p.m., your phone is at 5% and you have a lab at 3. Get a charger from another student on campus.",
+    t2: "You borrowed a charger yesterday and are done with it. Give it back.",
+    t3: "A classmate has asked to borrow your scientific calculator. Help them out. Then see what your help has earned you and do something with it."
+  };
+  var pending = null;
+
+  function panelHTML() {
+    var s = store.get(), who = log.participant(), opts = "";
+    for (var i = 1; i <= 12; i++) {
+      var id = "P" + (i < 10 ? "0" : "") + i;
+      opts += '<option value="' + id + '"' + (id === who ? " selected" : "") + ">" + id + (i > 10 ? " (reserve)" : "") + "</option>";
+    }
+    var variant = s.variant === "perks" ? "B: adds monetary perks" : "A: recognition only";
+    if (pending) {
+      return '<div class="panel-box"><h2 id="panel-title">Task ' + pending.slice(1) + " is ready</h2>" +
+        '<p class="muted small">Read this aloud, then tap Begin and hand the phone over. Timing starts at Begin.</p>' +
+        '<p class="script-text">"' + esc(SCENARIOS[pending]) + '"</p>' +
+        '<div class="actions plain"><button class="btn primary" data-panel="begin">Begin</button><button class="btn quiet" data-panel="close">Cancel</button></div></div>';
+    }
+    return '<div class="panel-box"><h2 id="panel-title">Facilitator</h2>' +
+      '<label class="field">Participant<select class="input" id="panel-who">' + opts + "</select></label>" +
+      '<p class="small muted">Rewards: ' + variant + (cfg.lockVariant ? " (locked)" : "") + ". Choosing a task resets the app to its starting state.</p>" +
+      '<div class="panel-tasks"><button class="btn" data-panel="t1">Task 1</button><button class="btn" data-panel="t2">Task 2</button><button class="btn" data-panel="t3">Task 3</button></div>' +
+      '<div class="actions plain"><a class="btn quiet" href="facilitator.html">Full facilitator page and data export</a><button class="btn quiet" data-panel="close">Close</button></div></div>';
+  }
+  function openPanel() {
+    pending = null;
+    panel.innerHTML = panelHTML();
+    panel.hidden = false;
+    var first = panel.querySelector("select, button");
+    if (first) first.focus();
+  }
+  function closePanel() {
+    panel.hidden = true;
+    panel.innerHTML = "";
+    pending = null;
+    var h = screen.querySelector("h1");
+    if (h) h.focus({ preventScroll: true });
+  }
+  panel.addEventListener("change", function (ev) {
+    if (ev.target.id === "panel-who") log.participant(ev.target.value);
+  });
+  panel.addEventListener("click", function (ev) {
+    var b = ev.target.closest("[data-panel]");
+    if (ev.target === panel) return closePanel();
+    if (!b) return;
+    var cmd = b.getAttribute("data-panel");
+    if (cmd === "close") return closePanel();
+    if (cmd === "begin") {
+      log.start(pending, store.get().variant, "panel");
+      closePanel();
+      log.view(current());
+      return;
+    }
+    // Load the task's starting state behind the panel, so the phone is ready at Begin
+    store.start(cmd, null, {});
+    ui.signinStep = "email";
+    ui.query = "";
+    ui.category = "All";
+    ui.depth = 0;
+    history.replaceState(null, "", location.pathname + (cmd === "t1" ? "#/signin" : "#/home"));
+    render();
+    pending = cmd;
+    panel.innerHTML = panelHTML();
+    panel.querySelector("[data-panel=begin]").focus();
+  });
+  document.addEventListener("keydown", function (ev) {
+    if (ev.key === "Escape" && !panel.hidden) closePanel();
+  });
+  var pressTimer = null;
+  document.addEventListener("pointerdown", function (ev) {
+    if (!ev.target.closest(".brand")) return;
+    pressTimer = setTimeout(openPanel, 800);
+  });
+  ["pointerup", "pointerleave", "pointercancel"].forEach(function (t) {
+    document.addEventListener(t, function () {
+      clearTimeout(pressTimer);
+    });
+  });
+  document.addEventListener("contextmenu", function (ev) {
+    if (ev.target.closest(".brand")) ev.preventDefault();
+  });
 
   /* ---------- boot: ?start=t1|t2|t3&rewards=recognition|perks&fail=scan,item ---------- */
   /* Connection status. Once loaded, the prototype keeps working, but a reload needs a connection. */
@@ -893,6 +1034,8 @@
   window.addEventListener("offline", showConnection);
   showConnection();
 
+  // Read before the start link tidies the address bar
+  var wantPanel = new URLSearchParams(location.search).has("panel");
   store.init();
   (function () {
     var q = new URLSearchParams(location.search);
@@ -902,10 +1045,16 @@
     if (start === "t1" || start === "t2" || start === "t3" || start === "late") {
       var fail = (q.get("fail") || "").split(",");
       store.start(start, rewards, { scan: fail.indexOf("scan") >= 0, item: fail.indexOf("item") >= 0, decline: fail.indexOf("decline") >= 0 });
+      if (start !== "late") log.start(start, store.get().variant, "link");
       history.replaceState(null, "", location.pathname + (start === "t1" ? "#/signin" : "#/home"));
     } else if (rewards && !cfg.lockVariant) {
       store.get().variant = rewards;
     }
   })();
   render();
+  if (wantPanel) openPanel();
+
+  if ("serviceWorker" in navigator && /^https?:$/.test(location.protocol)) {
+    navigator.serviceWorker.register("sw.js").catch(function () {});
+  }
 })();
