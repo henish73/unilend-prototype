@@ -619,12 +619,27 @@
         return '<div class="row"><span class="thumb">' + icon(i.icon) + '</span><span class="body"><span class="title">' + esc(i.name) + '</span><span class="sub">' + (s.offered.indexOf(i.id) >= 0 ? "Offered to classmates" : "Not offered right now") + "</span></span>" +
           (s.offered.indexOf(i.id) >= 0 ? '<button class="btn fit" data-act="stopOffering" data-id="' + i.id + '">Stop</button>' : '<button class="btn fit" data-act="offer" data-id="' + i.id + '">Offer</button>') + "</div>";
       }).join("") + "</section>" +
-      '<h2 class="section-title">Help</h2>' +
+      '<h2 class="sec-head">Appearance</h2>' +
+      '<div class="seg theme-seg" role="group" aria-label="Appearance">' + [["auto", "Auto"], ["light", "Light"], ["dark", "Dark"]].map(function (t) {
+        return '<button data-act="theme" data-id="' + t[0] + '" aria-pressed="' + (theme() === t[0]) + '">' + t[1] + "</button>";
+      }).join("") + "</div>" +
+      '<p class="small muted">Auto follows your phone\'s setting.</p>' +
+      '<h2 class="sec-head">Help</h2>' +
       '<details class="card"><summary>How does borrowing work?</summary><p class="small">Find an item, choose a safe pickup spot, and send a request. When you meet, scan the other student\'s QR code. Scan again when the item goes back.</p></details>' +
       '<details class="card"><summary>Why scan twice?</summary><p class="small">One scan at pickup and one at return confirm the exchange for both students, so nobody loses track of an item.</p></details>' +
       '<details class="card"><summary>Does anyone pay?</summary><p class="small">No. Borrowing is free, and there are no deposits or fines. Lenders and borrowers earn points.</p></details>' +
       '<div class="actions plain"><button class="btn" data-act="signOut">Sign out</button></div></div>';
   };
+
+  /* Appearance: auto (follow the phone), light or dark. Kept apart from the task state, so a reset keeps it. */
+  function theme() {
+    try {
+      var t = localStorage.getItem("unilend.theme");
+      return t === "light" || t === "dark" ? t : "auto";
+    } catch (e) {
+      return document.documentElement.getAttribute("data-theme") || "auto";
+    }
+  }
 
   routes.notfound = function () {
     return header("Not found") + '<div class="page"><div class="state"><div class="mark bad">' + icon("alert") + '</div><h2>We couldn\'t find that</h2></div><div class="actions"><button class="btn primary" data-go="/home">Back to home</button></div></div>';
@@ -899,6 +914,16 @@
       store.undoClaim(el.getAttribute("data-id"));
       toast("Claim undone. Points returned.");
       go("/rewards", true);
+    },
+    theme: function (el) {
+      var t = el.getAttribute("data-id");
+      try {
+        if (t === "auto") localStorage.removeItem("unilend.theme");
+        else localStorage.setItem("unilend.theme", t);
+      } catch (e) {}
+      if (t === "auto") document.documentElement.removeAttribute("data-theme");
+      else document.documentElement.setAttribute("data-theme", t);
+      render();
     },
     board: function (el) {
       ui.board = el.getAttribute("data-id");
