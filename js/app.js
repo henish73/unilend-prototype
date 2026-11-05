@@ -43,7 +43,7 @@
   };
 
   function icon(name, cls) {
-    return '<svg class="' + (cls || "") + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (ICONS[name] || "") + "</svg>";
+    return '<svg class="i-' + name + " " + (cls || "") + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (ICONS[name] || "") + "</svg>";
   }
 
   function header(title, parent) {
@@ -126,24 +126,24 @@
   // 1. Sign-in with campus email (simulated verification)
   routes.signin = function () {
     var s = store.get(), r = store.rewards();
-    var top = '<div class="welcome"><span class="brand">UniLend</span><p>' + esc(r.welcomeLine) + "</p></div>";
+    var top = '<div class="welcome"><span class="brand">UniLend</span><p class="line">' + esc(r.welcomeLine) + '</p><ul class="perks-free"><li>' + icon("check") + "Only verified Algoma students</li><li>" + icon("check") + "Safe, public pickup spots</li><li>" + icon("check") + "Free to borrow, with no fines</li></ul></div>";
     if (ui.signinStep === "code") {
-      return top + '<form class="page" data-submit="verify">' +
+      return '<div class="auth">' + top + '<form class="page" data-submit="verify">' +
         '<h1 tabindex="-1">Check your campus email</h1>' +
         '<p class="muted">We sent a 4-digit code to <strong>' + esc(s.email) + "</strong>.</p>" +
         '<label class="field">Verification code<input class="input" id="code" inputmode="numeric" autocomplete="one-time-code" maxlength="4" value="' + esc(cfg.demoCode) + '"></label>' +
         (ui.signinError ? '<p class="error" role="alert">' + esc(ui.signinError) + "</p>" : "") +
         '<p class="small muted">Prototype: no email is sent, and the code is filled in for you.</p>' +
         '<div class="actions"><button class="btn primary" type="submit">Verify and continue</button>' +
-        '<button class="btn quiet" type="button" data-act="signinBack">Use a different email</button></div></form>';
+        '<button class="btn quiet" type="button" data-act="signinBack">Use a different email</button></div></form></div>';
     }
-    return top + '<form class="page" data-submit="sendCode">' +
+    return '<div class="auth">' + top + '<form class="page" data-submit="sendCode">' +
       '<h1 tabindex="-1">Sign in</h1>' +
       '<p class="muted">UniLend is only for verified Algoma students.</p>' +
       '<label class="field">Campus email<input class="input" id="email" type="email" autocomplete="email" value="' + esc(s.email) + '" placeholder="you@algomau.ca"></label>' +
       (ui.signinError ? '<p class="error" role="alert">' + esc(ui.signinError) + "</p>" : "") +
       '<div class="actions"><button class="btn primary" type="submit">Send verification code</button></div>' +
-      '<p class="footnote">Prototype for a course project. All people and items are fictional.</p></form>';
+      '<p class="footnote">Prototype for a course project. All people and items are fictional.</p></form></div>';
   };
 
   // 2. Home feed with categories and search
@@ -158,13 +158,13 @@
     var chips = data.categories.map(function (c) {
       return '<button class="chip" data-act="category" data-id="' + esc(c) + '" aria-pressed="' + (ui.category === c) + '">' + esc(c) + "</button>";
     }).join("");
-    return '<header class="home-hdr"><h1 tabindex="-1" class="brand">UniLend</h1>' +
+    return '<header class="home-hdr"><h1 tabindex="-1"><span class="brand only-mobile">UniLend</span><span class="only-desktop">Find what you need</span></h1>' +
       '<button class="iconbtn" data-go="/profile" aria-label="Profile and help">' + icon("user") + "</button></header>" +
-      '<div class="page">' +
-      (alerts ? '<section class="list" aria-label="Your activity">' + alerts + "</section>" : "") +
-      '<label class="field"><span class="small">What do you need?</span><input class="input" id="search" type="search" placeholder="Search items" value="' + esc(ui.query) + '" autocomplete="off"></label>' +
+      '<div class="page wide">' +
+      (alerts ? '<section class="list grid-list" aria-label="Your activity">' + alerts + "</section>" : "") +
+      '<label class="field"><span class="small">What do you need?</span><span class="searchbox">' + icon("search") + '<input class="input" id="search" type="search" placeholder="Search chargers, textbooks, lab gear" value="' + esc(ui.query) + '" autocomplete="off"></span></label>' +
       '<div class="chips" role="group" aria-label="Categories">' + chips + "</div>" +
-      '<section id="feed" class="list" aria-label="Items and requests">' + feedHTML() + "</section>" +
+      '<section id="feed" class="list grid-list" aria-label="Items and requests">' + feedHTML() + "</section>" +
       '<button class="chain-mini" data-go="/community">' + icon("link") + "<span>The help chain has reached " + chainCount() + " people</span>" + icon("chev", "chev") + "</button>" +
       "</div>";
   };
@@ -221,7 +221,7 @@
       return '<label class="choice"><input type="radio" name="zone" value="' + z.id + '"><span><span class="title">' + esc(z.name) + '</span><span class="sub">' + esc(z.note) + "</span></span></label>";
     }).join("");
     return header("Request item", "/item/" + id) + '<form class="page" data-submit="sendRequest" data-id="' + id + '"><p>Asking <strong>' + esc(it.owner) + "</strong> for the <strong>" + esc(it.short) + "</strong>.</p>" +
-      '<fieldset class="list" style="border:0;padding:0;margin:0"><legend><h2 style="margin-bottom:8px">Choose a safe pickup spot</h2></legend>' + zones + "</fieldset>" +
+      '<fieldset class="list zones"><legend><h2>Choose a safe pickup spot</h2></legend>' + zones + "</fieldset>" +
       (ui.requestError ? '<p class="error" role="alert">' + esc(ui.requestError) + "</p>" : "") +
       '<div class="actions"><button class="btn primary" type="submit">Send request</button></div></form>';
   };
@@ -276,7 +276,7 @@
       '<div class="page"><p><strong>Scan ' + esc(p) + "'s QR code</strong></p>" +
       '<button id="viewfinder" class="viewfinder" data-act="scan" data-kind="' + kind + '" data-id="' + id + '" aria-label="Scan ' + esc(p) + "'s QR code\">" + qr(id + kind) + '<span class="scanline"></span></button>' +
       '<p class="hint small" id="scanhint">Prototype camera: tap the code to scan it.</p>' +
-      '<div class="actions" style="width:100%"><button class="btn quiet" data-go="/scan-failed/' + kind + "/" + id + '">Code won\'t scan?</button></div></div></div>';
+      '<div class="actions"><button class="btn quiet" data-go="/scan-failed/' + kind + "/" + id + '">Code won\'t scan?</button></div></div></div>';
   };
 
   // 12b. Recovery: scan failed
@@ -339,7 +339,7 @@
 
   // 8. Pass-It-On prompt and chain counter
   routes.passiton = function () {
-    return header("Pass it on", "/home") + '<div class="page"><h2 style="font-size:1.4rem;line-height:1.2">Someone helped you. Who can you help next?</h2>' +
+    return header("Pass it on", "/home") + '<div class="page"><h2 class="lead">Someone helped you. Who can you help next?</h2>' +
       '<div class="chain-card">' + chainHTML(true) + '<p class="chain-count">This help has travelled through ' + chainCount() + " people so far.</p></div>" +
       '<p class="muted small">Passing it on earns you ' + data.points.passItOn + " points.</p>" +
       '<div class="actions"><button class="btn primary" data-go="/pass-it-on/offer">Offer one of my items</button>' +
@@ -423,10 +423,10 @@
       }).map(function (e) {
         return exchangeRow(e, alert);
       }).join("");
-      return rows ? '<h2 class="section-title">' + title + '</h2><section class="list">' + rows + "</section>" : "";
+      return rows ? '<h2 class="section-title">' + title + '</h2><section class="list grid-list">' + rows + "</section>" : "";
     }
     var content = group("Needs your answer", ["incoming"], true) + group("In progress", ["requested", "enroute", "accepted"]) + group("Out on loan", ["active"]) + group("Finished", ["returned", "declined"]);
-    return '<header class="hdr" style="padding-left:16px"><h1 tabindex="-1">Loans</h1></header><div class="page">' +
+    return '<header class="hdr wide"><h1 tabindex="-1">Loans</h1></header><div class="page wide">' +
       (content || '<div class="card empty"><p>No loans yet. When you borrow or lend, it shows up here.</p><button class="btn" data-go="/home">Browse items</button></div>') + "</div>";
   };
 
@@ -437,11 +437,11 @@
       var can = pts >= c.cost;
       return '<button class="row reward" data-act="startClaim" data-id="' + c.id + '" data-can="' + can + '"><span class="thumb">' + icon(c.icon) + '</span><span class="body"><span class="title">' + esc(c.name) + '</span><span class="sub">' + esc(c.detail) + '</span></span><span class="cost">' + c.cost + " pts</span></button>";
     }).join("");
-    return '<header class="hdr" style="padding-left:16px"><h1 tabindex="-1">Points and Rewards</h1></header><div class="page">' +
+    return '<header class="hdr wide"><h1 tabindex="-1">Points and Rewards</h1></header><div class="page wide"><div class="split two"><div class="col sticky-col">' +
       '<div class="balance" aria-label="Your balance is ' + pts + ' points"><span>Your points</span><strong>' + pts + "</strong></div>" +
-      '<button class="row" style="min-height:56px" data-go="/rewards/history"><span class="body"><span class="title">Points history and past claims</span></span>' + (s.claims.length ? '<span class="pill">' + s.claims.length + " claimed</span>" : "") + icon("chev", "chev") + "</button>" +
+      '<button class="row compact" data-go="/rewards/history"><span class="body"><span class="title">Points history and past claims</span></span>' + (s.claims.length ? '<span class="pill">' + s.claims.length + " claimed</span>" : "") + icon("chev", "chev") + "</button></div><div class=\"col\">" +
       '<h2 class="section-title">Claim a reward</h2><section class="list" aria-label="Rewards catalogue">' + catalogue + "</section>" +
-      '<p class="footnote">Prototype: rewards shown here are fictional and no real prizes are given.</p></div>';
+      '<p class="footnote">Prototype: rewards shown here are fictional and no real prizes are given.</p></div></div></div>';
   };
 
   routes.history = function () {
@@ -484,16 +484,16 @@
     var lends = s.exchanges.filter(function (e) {
       return e.role === "lender" && (e.status === "active" || e.status === "returned");
     }).length;
-    return '<header class="hdr" style="padding-left:16px"><h1 tabindex="-1">Community Impact</h1></header><div class="page">' +
+    return '<header class="hdr wide"><h1 tabindex="-1">Community Impact</h1></header><div class="page wide"><div class="split two"><div class="col">' +
       '<div class="chain-card"><h2>Your help chain</h2>' + chainHTML() + '<p class="chain-count">' + chainCount() + " people so far.</p>" +
       '<button class="btn" data-go="/pass-it-on">Keep it going</button></div>' +
-      '<div class="stats"><div class="stat"><strong>' + (imp.itemsShared + lends) + '</strong><span>items shared this term</span></div><div class="stat"><strong>' + (imp.classmatesHelped + lends) + '</strong><span>classmates helped</span></div><div class="stat"><strong>' + imp.helpChains + '</strong><span>active help chains</span></div></div>' +
+      '<div class="stats"><div class="stat"><strong>' + (imp.itemsShared + lends) + '</strong><span>items shared this term</span></div><div class="stat"><strong>' + (imp.classmatesHelped + lends) + '</strong><span>classmates helped</span></div><div class="stat"><strong>' + imp.helpChains + '</strong><span>active help chains</span></div></div></div><div class="col">' +
       '<h2 class="section-title">Leaderboard</h2><div class="banner">' + icon("star") + "<span>" + esc(r.leaderboardBanner) + "</span></div>" +
       '<div class="seg" role="group" aria-label="Leaderboard period"><button data-act="board" data-id="Monthly" aria-pressed="' + (ui.board === "Monthly") + '">Monthly</button><button data-act="board" data-id="Yearly" aria-pressed="' + (ui.board === "Yearly") + '">Yearly</button></div>' +
-      '<ol class="board">' + board + "</ol>" +
-      '<h2 class="section-title">Kindness Wall</h2><ul class="wall">' + data.kindnessWall.map(function (k) {
+      '<ol class="board">' + board + "</ol></div>" +
+      '<div class="col span-all"><h2 class="section-title">Kindness Wall</h2><ul class="wall">' + data.kindnessWall.map(function (k) {
         return "<li>" + esc(k) + "</li>";
-      }).join("") + "</ul></div>";
+      }).join("") + "</ul></div></div></div>";
   };
 
   // Profile and help
@@ -502,13 +502,13 @@
     return header("Profile and help") + '<div class="page"><div class="card"><h2>' + esc(s.email || "Student") + '</h2><p class="muted small">Verified Algoma student</p></div>' +
       '<h2 class="section-title">My items</h2><section class="list">' + data.myItems.map(function (i) {
         return '<div class="row"><span class="thumb">' + icon(i.icon) + '</span><span class="body"><span class="title">' + esc(i.name) + '</span><span class="sub">' + (s.offered.indexOf(i.id) >= 0 ? "Offered to classmates" : "Not offered right now") + "</span></span>" +
-          (s.offered.indexOf(i.id) >= 0 ? '<button class="btn" style="width:auto;min-height:44px" data-act="stopOffering" data-id="' + i.id + '">Stop</button>' : '<button class="btn" style="width:auto;min-height:44px" data-act="offer" data-id="' + i.id + '">Offer</button>') + "</div>";
+          (s.offered.indexOf(i.id) >= 0 ? '<button class="btn fit" data-act="stopOffering" data-id="' + i.id + '">Stop</button>' : '<button class="btn fit" data-act="offer" data-id="' + i.id + '">Offer</button>') + "</div>";
       }).join("") + "</section>" +
       '<h2 class="section-title">Help</h2>' +
       '<details class="card"><summary>How does borrowing work?</summary><p class="small">Find an item, choose a safe pickup spot, and send a request. When you meet, scan the other student\'s QR code. Scan again when the item goes back.</p></details>' +
       '<details class="card"><summary>Why scan twice?</summary><p class="small">One scan at pickup and one at return confirm the exchange for both students, so nobody loses track of an item.</p></details>' +
       '<details class="card"><summary>Does anyone pay?</summary><p class="small">No. Borrowing is free, and there are no deposits or fines. Lenders and borrowers earn points.</p></details>' +
-      '<div class="actions"><button class="btn" data-act="signOut">Sign out</button><a class="btn quiet" href="facilitator.html">Facilitator tools</a></div></div>';
+      '<div class="actions plain"><button class="btn" data-act="signOut">Sign out</button><a class="btn quiet" href="facilitator.html">Facilitator tools</a></div></div>';
   };
 
   routes.notfound = function () {
@@ -571,7 +571,7 @@
 
   function renderTabs(path) {
     var root = path.split("/")[1] || "home";
-    var show = { home: 1, loans: 1, rewards: 1, community: 1 };
+    var show = { home: 1, loans: 1, rewards: 1, community: 1, profile: 1 };
     var inFlow = !store.get().signedIn || root === "scan";
     tabs.hidden = inFlow;
     if (inFlow) return;
@@ -579,11 +579,11 @@
       return e.status === "incoming" || e.status === "accepted";
     }).length;
     var defs = [["home", "Home", "home"], ["loans", "Loans", "swap"], ["rewards", "Rewards", "gift"], ["community", "Community", "people"]];
-    tabs.innerHTML = defs.map(function (d) {
+    tabs.innerHTML = '<div class="side-brand brand only-desktop">UniLend</div>' + defs.map(function (d) {
       var cur = show[root] && root === d[0];
       var badge = d[0] === "loans" && waiting ? '<span class="badge">' + waiting + "</span>" : "";
       return '<button class="tab" data-go="/' + d[0] + '"' + (cur ? ' aria-current="page"' : "") + (badge ? ' aria-label="' + d[1] + ", " + waiting + ' waiting"' : "") + ">" + icon(d[2]) + "<span>" + d[1] + "</span>" + badge + "</button>";
-    }).join("");
+    }).join("") + '<button class="tab push only-desktop" data-go="/profile"' + (root === "profile" ? ' aria-current="page"' : "") + ">" + icon("user") + "<span>Profile and help</span></button>";
   }
 
   function render() {
@@ -604,6 +604,8 @@
       history.replaceState(null, "", "#" + to);
       return render();
     }
+    screen.classList.toggle("enter", path !== ui.lastPath);
+    ui.lastPath = path;
     screen.innerHTML = html;
     screen.scrollTop = 0;
     renderTabs(path);
