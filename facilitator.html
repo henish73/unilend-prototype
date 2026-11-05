@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en-CA">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>UniLend Facilitator Tools</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root { --ink:#10201C; --soft:#46574F; --line:#CFD3C8; --brand:#0B4F43; --paper:#F7F5EF; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; color-scheme: light; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--paper); color:var(--ink); line-height:1.45; }
+    main { max-width:640px; margin:0 auto; padding:20px 16px 48px; display:flex; flex-direction:column; gap:16px; }
+    h1 { margin:0; font-size:1.5rem; } h2 { margin:0 0 8px; font-size:1.05rem; }
+    section { background:#FFF; border:1px solid var(--line); border-radius:12px; padding:14px; }
+    p { margin:0 0 8px; }
+    label { display:flex; align-items:center; gap:10px; min-height:44px; }
+    input { width:20px; height:20px; accent-color:var(--brand); }
+    .start { display:flex; align-items:center; justify-content:center; min-height:52px; margin-top:8px; padding:8px 14px; background:var(--brand); color:#FFF; font-weight:700; text-decoration:none; border-radius:10px; text-align:center; }
+    .script { padding:10px 12px; margin:8px 0 0; background:var(--paper); border-left:4px solid var(--brand); }
+    .soft { color:var(--soft); font-size:.9rem; }
+    code { word-break:break-all; font-size:.82rem; }
+    a.back { color:var(--brand); font-weight:600; min-height:44px; display:inline-flex; align-items:center; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>UniLend facilitator tools</h1>
+  <p class="soft">For the test team only. Each link below resets the prototype to that task's starting state on the device that opens it. Open it on the participant's phone before handing the phone over.</p>
+
+  <section>
+    <h2>Rewards variant for this round</h2>
+    <p class="soft">Use one variant for all 10 participants. This is a build decision, not an experiment.</p>
+    <label><input type="radio" name="variant" value="recognition"> A: recognition only (default)</label>
+    <label><input type="radio" name="variant" value="perks"> B: adds monetary perks</label>
+    <p id="locked" class="soft" hidden>Locked in js/config.js after the freeze.</p>
+  </section>
+
+  <section>
+    <h2>Recovery states (pilot and team checks)</h2>
+    <p class="soft">Leave both off for real sessions, so every participant gets the same conditions. The Jordan charger always shows "no longer available", and "Code won't scan?" always opens the failed-scan screen.</p>
+    <label><input type="checkbox" id="fail-scan"> Make the first scan fail</label>
+    <label><input type="checkbox" id="fail-item"> Make the first requested item unavailable</label>
+  </section>
+
+  <section>
+    <h2>Task 1: Borrow an item</h2>
+    <p class="script">"It's 2 p.m., your phone is at 5% and you have a lab at 3. Get a charger from another student on campus."</p>
+    <p class="soft" style="margin-top:8px">Starts at sign-in. Success with no hints: a pickup spot is chosen and the hand-off is confirmed. Limit: 3 minutes.</p>
+    <a class="start" data-task="t1" href="index.html?start=t1">Reset and start Task 1</a>
+  </section>
+
+  <section>
+    <h2>Task 2: Return an item and see what follows</h2>
+    <p class="script">"You borrowed a charger yesterday and are done with it. Give it back."</p>
+    <p class="soft" style="margin-top:8px">Starts at home with a charger on loan. Success with no hints: the return is confirmed. Observe, without prompting, whether Pass-It-On is taken. Limit: 3 minutes.</p>
+    <a class="start" data-task="t2" href="index.html?start=t2">Reset and start Task 2</a>
+  </section>
+
+  <section>
+    <h2>Task 3: Lend an item and look at what you have earned</h2>
+    <p class="script">"A classmate has asked to borrow your scientific calculator. Help them out. Then see what your help has earned you and do something with it."</p>
+    <p class="soft" style="margin-top:8px">Starts at home with Sam's request waiting. Success with no hints: the request is accepted, the hand-off is confirmed, and one claim is completed. Limit: 3 minutes.</p>
+    <a class="start" data-task="t3" href="index.html?start=t3">Reset and start Task 3</a>
+  </section>
+
+  <section>
+    <h2>Links for the current settings</h2>
+    <p><code id="links"></code></p>
+  </section>
+
+  <a class="back" href="index.html">Back to the app without resetting</a>
+</main>
+<script src="js/config.js"></script>
+<script>
+  (function () {
+    var cfg = window.UNILEND_CONFIG;
+    var chosen = cfg.rewards;
+    try {
+      var saved = JSON.parse(localStorage.getItem("unilend.v1"));
+      if (saved && saved.variant) chosen = saved.variant;
+    } catch (e) {}
+    if (cfg.lockVariant) chosen = cfg.rewards;
+
+    var radios = document.querySelectorAll('input[name="variant"]');
+    var failScan = document.getElementById("fail-scan");
+    var failItem = document.getElementById("fail-item");
+
+    function update() {
+      var fail = [];
+      if (failScan.checked) fail.push("scan");
+      if (failItem.checked) fail.push("item");
+      var lines = [];
+      document.querySelectorAll("a[data-task]").forEach(function (a) {
+        var href = "index.html?start=" + a.getAttribute("data-task") + "&rewards=" + chosen + (fail.length ? "&fail=" + fail.join(",") : "");
+        a.setAttribute("href", href);
+        lines.push(new URL(href, location.href).href);
+      });
+      document.getElementById("links").innerHTML = lines.map(function (l) {
+        return l.replace(/&/g, "&amp;");
+      }).join("<br><br>");
+    }
+
+    radios.forEach(function (r) {
+      r.checked = r.value === chosen;
+      r.disabled = cfg.lockVariant;
+      r.addEventListener("change", function () {
+        chosen = r.value;
+        update();
+      });
+    });
+    document.getElementById("locked").hidden = !cfg.lockVariant;
+    failScan.addEventListener("change", update);
+    failItem.addEventListener("change", update);
+    update();
+  })();
+</script>
+</body>
+</html>
