@@ -2,6 +2,9 @@
 window.UNILEND_DATA = {
   categories: ["All", "Tech & Chargers", "Textbooks & Notes", "Lab Gear", "Adapters", "Everyday", "Open requests"],
 
+  // Pictures in assets/avatars, one per person. "You" is the participant.
+  avatars: { Sam: "avatar-sam", Mei: "avatar-mei", Jordan: "avatar-jordan", Noor: "avatar-noor", Diego: "avatar-diego", Priya: "avatar-priya", Alex: "avatar-alex", You: "avatar-user" },
+
   zones: [
     { id: "library", name: "Library front desk", note: "Staffed until 9 p.m. Two-minute walk." },
     { id: "student-centre", name: "Student Centre lounge", note: "Busy and well lit. Four-minute walk." },
@@ -10,20 +13,20 @@ window.UNILEND_DATA = {
 
   // Items other students offer. `goesUnavailable` drives the recovery state.
   items: [
-    { id: "charger-sam", name: "Phone charger (USB-C and Lightning)", short: "phone charger", category: "Tech & Chargers", owner: "Sam", icon: "bolt", demand: "High", points: 25, zone: "library", lends: 14, note: "Two-in-one cable with a wall plug. Works with most phones." },
-    { id: "charger-jordan", name: "Fast phone charger (USB-C)", short: "fast phone charger", category: "Tech & Chargers", owner: "Jordan", icon: "bolt", demand: "High", points: 25, zone: "student-centre", lends: 6, note: "30W wall plug and a one-metre cable.", goesUnavailable: true },
-    { id: "laptop-mei", name: "Laptop charger (65W USB-C)", short: "laptop charger", category: "Tech & Chargers", owner: "Mei", icon: "bolt", demand: "High", points: 25, zone: "library", lends: 9, note: "Fits most newer laptops." },
-    { id: "hdmi-noor", name: "USB-C to HDMI adapter", short: "HDMI adapter", category: "Adapters", owner: "Noor", icon: "plug", demand: "Medium", points: 15, zone: "cafe", lends: 4, note: "Good for a short presentation." },
-    { id: "text-diego", name: "Intro to Psychology textbook", short: "psychology textbook", category: "Textbooks & Notes", owner: "Diego", icon: "book", demand: "Medium", points: 15, zone: "library", lends: 3, note: "Latest edition. Light highlighting." },
-    { id: "coat-priya", name: "Chemistry lab coat (medium)", short: "lab coat", category: "Lab Gear", owner: "Priya", icon: "flask", demand: "Medium", points: 15, zone: "student-centre", lends: 7, note: "Clean and ready for lab." },
-    { id: "umbrella-mei", name: "Compact umbrella", short: "umbrella", category: "Everyday", owner: "Mei", icon: "umbrella", demand: "Medium", points: 15, zone: "cafe", lends: 5, note: "Folds down to fit a backpack." }
+    { id: "charger-sam", img: "phone-charger", name: "Phone charger (USB-C and Lightning)", short: "phone charger", category: "Tech & Chargers", owner: "Sam", icon: "bolt", demand: "High", points: 25, zone: "library", lends: 14, note: "Two-in-one cable with a wall plug. Works with most phones." },
+    { id: "charger-jordan", img: "fast-charger", name: "Fast phone charger (USB-C)", short: "fast phone charger", category: "Tech & Chargers", owner: "Jordan", icon: "bolt", demand: "High", points: 25, zone: "student-centre", lends: 6, note: "30W wall plug and a one-metre cable.", goesUnavailable: true },
+    { id: "laptop-mei", img: "laptop-charger", name: "Laptop charger (65W USB-C)", short: "laptop charger", category: "Tech & Chargers", owner: "Mei", icon: "bolt", demand: "High", points: 25, zone: "library", lends: 9, note: "Fits most newer laptops." },
+    { id: "hdmi-noor", img: "hdmi-adapter", name: "USB-C to HDMI adapter", short: "HDMI adapter", category: "Adapters", owner: "Noor", icon: "plug", demand: "Medium", points: 15, zone: "cafe", lends: 4, note: "Good for a short presentation." },
+    { id: "text-diego", img: "psychology-textbook", name: "Intro to Psychology textbook", short: "psychology textbook", category: "Textbooks & Notes", owner: "Diego", icon: "book", demand: "Medium", points: 15, zone: "library", lends: 3, note: "Latest edition. Light highlighting." },
+    { id: "coat-priya", img: "lab-coat", name: "Chemistry lab coat (medium)", short: "lab coat", category: "Lab Gear", owner: "Priya", icon: "flask", demand: "Medium", points: 15, zone: "student-centre", lends: 7, note: "Clean and ready for lab." },
+    { id: "umbrella-mei", img: "umbrella", name: "Compact umbrella", short: "umbrella", category: "Everyday", owner: "Mei", icon: "umbrella", demand: "Medium", points: 15, zone: "cafe", lends: 5, note: "Folds down to fit a backpack." }
   ],
 
   // Items the participant owns.
   myItems: [
-    { id: "calc-me", name: "Scientific calculator", short: "scientific calculator", category: "Tech & Chargers", icon: "calc", demand: "High", points: 25, note: "Approved for exams." },
-    { id: "hdmi-me", name: "HDMI adapter", short: "HDMI adapter", category: "Adapters", icon: "plug", demand: "Medium", points: 15, note: "USB-C to HDMI." },
-    { id: "umbrella-me", name: "Spare umbrella", short: "spare umbrella", category: "Everyday", icon: "umbrella", demand: "Medium", points: 15, note: "Full size." }
+    { id: "calc-me", img: "scientific-calculator", name: "Scientific calculator", short: "scientific calculator", category: "Tech & Chargers", icon: "calc", demand: "High", points: 25, note: "Approved for exams." },
+    { id: "hdmi-me", img: "hdmi-adapter", name: "HDMI adapter", short: "HDMI adapter", category: "Adapters", icon: "plug", demand: "Medium", points: 15, note: "USB-C to HDMI." },
+    { id: "umbrella-me", img: "spare-umbrella", name: "Spare umbrella", short: "spare umbrella", category: "Everyday", icon: "umbrella", demand: "Medium", points: 15, note: "Full size." }
   ],
 
   // Requests other students have posted to the feed.

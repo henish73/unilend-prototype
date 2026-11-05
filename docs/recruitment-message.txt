@@ -1,0 +1,24 @@
+Draft. Not sent. Fill in the date and edit before sharing. Don't include the prototype link.
+
+INVITATION
+
+Hi, our group in COSC 2596 is testing the design of a phone app for lending items between students, and we're looking for participants. It takes about 20 minutes on campus on [date]. We're testing the design, not you, and there's no payment. You need to be an Algoma student aged 18 or older with a smartphone. Could you answer five short questions so we can book a time?
+
+SCREENER
+
+1. Are you currently enrolled at Algoma University?
+2. Which year are you in?
+3. Which phone do you use?
+4. In the past term, have you borrowed or lent an item (charger, calculator, textbook) with another student?
+5. Is there anything we should adjust so you can use a phone app comfortably?
+
+Before booking, also confirm that they are 18 or older and have not seen the prototype.
+
+REMINDER (the day before)
+
+Hi, a reminder that your UniLend session is tomorrow at [time] in [room]. It takes about 20 minutes. If you can't make it, please tell us so we can offer the time to someone else. Thanks.
+
+NO-SHOW RULE
+
+If someone has not arrived 5 minutes after their start time, the next reserve takes the slot.
+If both reserves are used, book more sessions on campus until 10 are complete.

@@ -1,0 +1,127 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none">
+  <defs>
+    <linearGradient id="og-bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0F5B4B"/>
+      <stop offset="50%" stop-color="#0A4438"/>
+      <stop offset="100%" stop-color="#072A23"/>
+    </linearGradient>
+    <radialGradient id="og-glow" cx="950" cy="200" r="450" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#9CCDBD" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#0F5B4B" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="og-spark" cx="200" cy="500" r="350" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FF9E4A" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#0F5B4B" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="og-card-shadow" x="-60" y="-40" width="500" height="540" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="24" stdDeviation="28" flood-color="#000000" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- Background with ambient glow -->
+  <rect width="1200" height="630" fill="url(#og-bg)"/>
+  <rect width="1200" height="630" fill="url(#og-glow)"/>
+  <rect width="1200" height="630" fill="url(#og-spark)"/>
+
+  <!-- Campus decorative grid lines -->
+  <g stroke="rgba(255,255,255,0.06)" stroke-width="1.5">
+    <line x1="80" y1="0" x2="80" y2="630"/>
+    <line x1="240" y1="0" x2="240" y2="630"/>
+    <line x1="400" y1="0" x2="400" y2="630"/>
+    <line x1="0" y1="120" x2="1200" y2="120"/>
+    <line x1="0" y1="320" x2="1200" y2="320"/>
+    <line x1="0" y1="520" x2="1200" y2="520"/>
+  </g>
+
+  <!-- Brand badge at top left -->
+  <g transform="translate(80, 80)">
+    <rect width="56" height="56" rx="16" fill="#FFFFFF"/>
+    <!-- U-Loop mini -->
+    <path d="M18 18 C18 34 22 41 28 41 C34 41 38 34 38 18" stroke="#0F5B4B" stroke-width="5" stroke-linecap="round" fill="none"/>
+    <circle cx="38" cy="20" r="3" fill="#FF9E4A"/>
+    <text x="74" y="38" font-family="system-ui, sans-serif" font-weight="800" font-size="34" letter-spacing="-0.5" fill="#FFFFFF">Uni<tspan fill="#9CCDBD">Lend</tspan></text>
+  </g>
+
+  <!-- Algoma Student Verified Pill -->
+  <g transform="translate(350, 84)">
+    <rect width="270" height="48" rx="24" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+    <circle cx="26" cy="24" r="10" fill="#9CCDBD"/>
+    <path d="M22 24 L25 27 L31 20" stroke="#0A4438" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="46" y="30" font-family="system-ui, sans-serif" font-weight="600" font-size="16" fill="#FFFFFF">Algoma University Verified</text>
+  </g>
+
+  <!-- Headline & Subheadline -->
+  <g transform="translate(80, 240)">
+    <text font-family="system-ui, -apple-system, sans-serif" font-weight="800" font-size="54" letter-spacing="-1.5" fill="#FFFFFF">
+      Borrow what you need.<tspan x="0" y="66">Share what you have.</tspan>
+    </text>
+    <text y="128" font-family="system-ui, -apple-system, sans-serif" font-weight="400" font-size="24" fill="#D6ECE4" letter-spacing="-0.2">
+      Zero cost. Safe campus pickup spots.<tspan x="0" y="160">Free to borrow with no late fines.</tspan>
+    </text>
+  </g>
+
+  <!-- Key Statistics Pills at bottom left -->
+  <g transform="translate(80, 480)">
+    <!-- Stat 1 -->
+    <rect width="180" height="74" rx="18" fill="rgba(0,0,0,0.24)" stroke="rgba(255,255,255,0.14)"/>
+    <text x="24" y="34" font-family="system-ui, sans-serif" font-weight="800" font-size="28" fill="#FF9E4A">312+</text>
+    <text x="24" y="56" font-family="system-ui, sans-serif" font-weight="500" font-size="14" fill="#E2F0EA">Items Shared</text>
+    
+    <!-- Stat 2 -->
+    <g transform="translate(200, 0)">
+      <rect width="190" height="74" rx="18" fill="rgba(0,0,0,0.24)" stroke="rgba(255,255,255,0.14)"/>
+      <text x="24" y="34" font-family="system-ui, sans-serif" font-weight="800" font-size="28" fill="#9CCDBD">148</text>
+      <text x="24" y="56" font-family="system-ui, sans-serif" font-weight="500" font-size="14" fill="#E2F0EA">Classmates Helped</text>
+    </g>
+
+    <!-- Stat 3 -->
+    <g transform="translate(410, 0)">
+      <rect width="170" height="74" rx="18" fill="rgba(0,0,0,0.24)" stroke="rgba(255,255,255,0.14)"/>
+      <text x="24" y="34" font-family="system-ui, sans-serif" font-weight="800" font-size="28" fill="#FFFFFF">100%</text>
+      <text x="24" y="56" font-family="system-ui, sans-serif" font-weight="500" font-size="14" fill="#E2F0EA">Student Owned</text>
+    </g>
+  </g>
+
+  <!-- Mock App Card on Right -->
+  <g transform="translate(740, 110)" filter="url(#og-card-shadow)">
+    <rect width="380" height="430" rx="36" fill="#F7F6F2"/>
+    <!-- App Header inside mock -->
+    <g transform="translate(28, 28)">
+      <text font-family="system-ui, sans-serif" font-weight="800" font-size="20" fill="#14211D">Available Right Now</text>
+      <text y="24" font-family="system-ui, sans-serif" font-weight="500" font-size="13" fill="#4A5852">Wishart Library &amp; Student Centre</text>
+    </g>
+    <!-- Item 1 Card -->
+    <g transform="translate(28, 90)">
+      <rect width="324" height="84" rx="18" fill="#FFFFFF" stroke="#E4E3DC"/>
+      <rect x="12" y="12" width="60" height="60" rx="14" fill="#FCF0CC"/>
+      <!-- Bolt icon -->
+      <path d="M42 24 L34 44 H44 L40 60 L54 38 H44 Z" fill="#6F4E00"/>
+      <text x="86" y="36" font-family="system-ui, sans-serif" font-weight="700" font-size="16" fill="#14211D">Phone charger</text>
+      <text x="86" y="56" font-family="system-ui, sans-serif" font-weight="500" font-size="13" fill="#4A5852">Library · 2 min walk</text>
+      <rect x="250" y="26" width="60" height="32" rx="16" fill="#0F5B4B"/>
+      <text x="264" y="47" font-family="system-ui, sans-serif" font-weight="700" font-size="13" fill="#FFFFFF">Take</text>
+    </g>
+    <!-- Item 2 Card -->
+    <g transform="translate(28, 190)">
+      <rect width="324" height="84" rx="18" fill="#FFFFFF" stroke="#E4E3DC"/>
+      <rect x="12" y="12" width="60" height="60" rx="14" fill="#E0EBFA"/>
+      <!-- Plug/HDMI -->
+      <path d="M37 28 V36 M47 28 V36 M33 36 H51 V42 C51 48 46 52 42 52 C38 52 33 48 33 42 Z M42 52 V58" stroke="#174A86" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <text x="86" y="36" font-family="system-ui, sans-serif" font-weight="700" font-size="16" fill="#14211D">HDMI adapter</text>
+      <text x="86" y="56" font-family="system-ui, sans-serif" font-weight="500" font-size="13" fill="#4A5852">Campus cafe · Noor</text>
+      <rect x="250" y="26" width="60" height="32" rx="16" fill="#0F5B4B"/>
+      <text x="264" y="47" font-family="system-ui, sans-serif" font-weight="700" font-size="13" fill="#FFFFFF">Take</text>
+    </g>
+    <!-- Item 3 Card -->
+    <g transform="translate(28, 290)">
+      <rect width="324" height="84" rx="18" fill="#FFFFFF" stroke="#E4E3DC"/>
+      <rect x="12" y="12" width="60" height="60" rx="14" fill="#ECE6F8"/>
+      <!-- Book icon -->
+      <path d="M32 30 H42 C45 30 47 32 47 35 V54 C45 52 42 52 38 52 H32 Z M58 30 H48 C45 30 43 32 43 35 V54 C45 52 48 52 52 52 H58 Z" stroke="#4B2E8A" stroke-width="2.5" fill="none"/>
+      <text x="86" y="36" font-family="system-ui, sans-serif" font-weight="700" font-size="16" fill="#14211D">Psychology textbook</text>
+      <text x="86" y="56" font-family="system-ui, sans-serif" font-weight="500" font-size="13" fill="#4A5852">Student Centre · Diego</text>
+      <rect x="250" y="26" width="60" height="32" rx="16" fill="#0F5B4B"/>
+      <text x="264" y="47" font-family="system-ui, sans-serif" font-weight="700" font-size="13" fill="#FFFFFF">Take</text>
+    </g>
+  </g>
+</svg>

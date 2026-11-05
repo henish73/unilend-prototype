@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 320" fill="none">
+  <defs>
+    <linearGradient id="brick-body" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2C3833"/>
+      <stop offset="100%" stop-color="#14211D"/>
+    </linearGradient>
+    <filter id="lap-shadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#14211D" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+
+  <ellipse cx="200" cy="275" rx="150" ry="20" fill="#14211D" fill-opacity="0.1"/>
+
+  <!-- Large Power Brick -->
+  <g filter="url(#lap-shadow)" transform="translate(70, 70)">
+    <rect width="120" height="150" rx="20" fill="url(#brick-body)"/>
+    <rect x="3" y="3" width="114" height="144" rx="17" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
+    <!-- Foldable AC prongs -->
+    <rect x="45" y="-14" width="10" height="18" rx="2" fill="#B9BEB4"/>
+    <rect x="65" y="-14" width="10" height="18" rx="2" fill="#B9BEB4"/>
+    <!-- Specs plate -->
+    <rect x="25" y="40" width="70" height="50" rx="8" fill="rgba(255,255,255,0.05)"/>
+    <text x="60" y="65" font-family="system-ui, sans-serif" font-weight="800" font-size="18" fill="#FFFFFF" text-anchor="middle">65W</text>
+    <text x="60" y="80" font-family="system-ui, sans-serif" font-weight="600" font-size="10" fill="#9CCDBD" text-anchor="middle">USB-C Power Delivery</text>
+    <!-- LED indicator light -->
+    <circle cx="60" cy="120" r="5" fill="#4DAF98"/>
+  </g>
+
+  <!-- Thick Heavy Gauge Cable to Laptop -->
+  <path d="M190 145 C250 145, 290 170, 270 220 C250 260, 200 240, 220 200 C240 160, 310 160, 330 110" 
+        stroke="#4A5852" stroke-width="16" stroke-linecap="round" fill="none" filter="url(#lap-shadow)"/>
+  
+  <!-- Sleek Aluminum USB-C End with Cable Strap -->
+  <g filter="url(#lap-shadow)" transform="translate(315, 60)">
+    <rect x="0" y="20" width="22" height="40" rx="6" fill="#B9BEB4"/>
+    <rect x="3" y="2" width="16" height="20" rx="4" fill="#E4E3DC"/>
+    <rect x="6" y="6" width="10" height="12" rx="2" fill="#14211D"/>
+    <!-- Cable strain relief collar -->
+    <rect x="-4" y="55" width="30" height="10" rx="4" fill="#14211D"/>
+  </g>
+
+  <!-- Category Pill -->
+  <g transform="translate(130, 20)">
+    <rect width="140" height="30" rx="15" fill="#FCF0CC"/>
+    <text x="70" y="20" font-family="system-ui, sans-serif" font-weight="700" font-size="12" fill="#6F4E00" text-anchor="middle">⚡ Laptop Power 65W</text>
+  </g>
+</svg>

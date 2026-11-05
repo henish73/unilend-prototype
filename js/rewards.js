@@ -12,6 +12,7 @@
   var recognitionCatalogue = [
     {
       id: "priority",
+      img: "reward-priority",
       name: "Priority access for 24 hours",
       detail: "See newly listed scarce items before anyone else for one day.",
       cost: 60,
@@ -20,6 +21,7 @@
     },
     {
       id: "badge",
+      img: "reward-badge",
       name: "Featured Helper badge",
       detail: "Shows beside your name on the leaderboard and the Kindness Wall.",
       cost: 40,
@@ -30,6 +32,7 @@
     },
     {
       id: "donate",
+      img: "reward-donate",
       name: "Donate points to a campus cause",
       detail: "Give 25 points to the student food bank's helper total.",
       cost: 25,
@@ -58,6 +61,7 @@
       catalogue: recognitionCatalogue.concat([
         {
           id: "coffee",
+          img: "reward-coffee",
           name: "Campus coffee voucher",
           detail: "One free coffee at the campus cafe.",
           cost: 50,
@@ -66,6 +70,7 @@
         },
         {
           id: "bookstore",
+          img: "reward-bookstore",
           name: "Bookstore discount",
           detail: "10% off one bookstore purchase.",
           cost: 75,

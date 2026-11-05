@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 90" fill="none">
+  <defs>
+    <linearGradient id="shield-bg" x1="0" y1="0" x2="60" y2="60" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0F5B4B"/>
+      <stop offset="100%" stop-color="#0A4438"/>
+    </linearGradient>
+  </defs>
+  <rect x="0.75" y="0.75" width="398.5" height="88.5" rx="20" fill="#FFFFFF" stroke="#E4E3DC" stroke-width="1.5"/>
+  <!-- Crest Shield -->
+  <g transform="translate(18, 15)">
+    <path d="M30 4 L54 14 V34 C54 48 44 56 30 60 C16 56 6 48 6 34 V14 Z" fill="url(#shield-bg)"/>
+    <path d="M30 8 L50 16 V34 C50 45 42 52 30 55 C18 52 10 45 10 34 V16 Z" stroke="#9CCDBD" stroke-width="1.5" fill="none"/>
+    <path d="M22 32 L28 38 L38 24" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="88" y="38" font-family="system-ui, sans-serif" font-weight="800" font-size="16" fill="#14211D">Verified Algoma Network</text>
+  <text x="88" y="58" font-family="system-ui, sans-serif" font-weight="500" font-size="13" fill="#4A5852">Only registered students can lend &amp; borrow</text>
+</svg>

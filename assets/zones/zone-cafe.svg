@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 220" fill="none">
+  <defs>
+    <linearGradient id="cafe-bg" x1="0" y1="0" x2="340" y2="220" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FCEEDF"/>
+      <stop offset="100%" stop-color="#F8E5DE"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="340" height="220" rx="24" fill="url(#cafe-bg)"/>
+  <rect x="2" y="2" width="336" height="216" rx="22" stroke="#EBC59D" stroke-width="2"/>
+
+  <!-- Cafe Counter Illustration -->
+  <g transform="translate(50, 45)">
+    <!-- Wooden bar counter -->
+    <rect x="20" y="70" width="200" height="55" rx="10" fill="#6F4E00"/>
+    <rect x="15" y="62" width="210" height="12" rx="4" fill="#9A4300"/>
+
+    <!-- Espresso Machine -->
+    <rect x="40" y="24" width="55" height="40" rx="6" fill="#14211D"/>
+    <rect x="45" y="28" width="45" height="15" rx="3" fill="#B9BEB4"/>
+    <circle cx="55" cy="50" r="4" fill="#FF8000"/>
+    <circle cx="70" cy="50" r="4" fill="#4DAF98"/>
+
+    <!-- Fresh Pastry Display Cloche -->
+    <ellipse cx="145" cy="62" rx="25" ry="8" fill="#B9BEB4"/>
+    <path d="M125 62 C125 40 165 40 165 62 Z" fill="#FFFFFF" fill-opacity="0.6" stroke="#B9BEB4"/>
+    <circle cx="145" cy="38" r="4" fill="#9A4300"/>
+    <!-- Croissant inside -->
+    <path d="M135 60 C138 52 152 52 155 60 Z" fill="#FF9E4A"/>
+
+    <!-- Hanging chalkboard menu -->
+    <rect x="80" y="2" width="80" height="20" rx="3" fill="#14211D"/>
+    <line x1="88" y1="8" x2="152" y2="8" stroke="#FFFFFF" stroke-width="1.5"/>
+    <line x1="88" y1="14" x2="135" y2="14" stroke="#FFE082" stroke-width="1.5"/>
+  </g>
+
+  <!-- Distance Pill -->
+  <g transform="translate(195, 20)">
+    <rect width="125" height="28" rx="14" fill="#FFFFFF" stroke="#EBC59D"/>
+    <text x="62" y="18" font-family="system-ui, sans-serif" font-weight="700" font-size="12" fill="#9A4300" text-anchor="middle">🚶 3 min walk</text>
+  </g>
+</svg>

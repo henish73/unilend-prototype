@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 320" fill="none">
+  <defs>
+    <linearGradient id="spare-wood" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#8C4E1A"/>
+      <stop offset="100%" stop-color="#542B0A"/>
+    </linearGradient>
+    <filter id="spare-shadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="14" stdDeviation="16" flood-color="#14211D" flood-opacity="0.14"/>
+    </filter>
+  </defs>
+
+  <ellipse cx="200" cy="275" rx="140" ry="16" fill="#14211D" fill-opacity="0.08"/>
+
+  <!-- Full Size Walking Umbrella Diagonal -->
+  <g filter="url(#spare-shadow)" transform="translate(60, 50)">
+    <!-- Steel Shaft -->
+    <line x1="50" y1="210" x2="260" y2="35" stroke="#3A4641" stroke-width="10" stroke-linecap="round"/>
+    
+    <!-- Metal Tip / Ferrule -->
+    <path d="M260 35 L280 20 L275 15 Z" fill="#B9BEB4"/>
+
+    <!-- Tightly Rolled Long Navy Canopy -->
+    <path d="M70 195 L245 50 L255 60 L80 205 Z" fill="#14211D"/>
+    <!-- Gold Tip Cup and Tie Bands -->
+    <rect x="135" y="130" width="12" height="24" rx="3" transform="rotate(-40 135 130)" fill="#FF9E4A"/>
+    <rect x="195" y="80" width="12" height="24" rx="3" transform="rotate(-40 195 80)" fill="#FF9E4A"/>
+
+    <!-- Classic Curved J-Hook Wood Handle -->
+    <path d="M50 210 C40 220 20 225 10 210 C0 195 10 175 30 175" 
+          stroke="url(#spare-wood)" stroke-width="16" stroke-linecap="round" fill="none"/>
+    <!-- Gold engraved collar band -->
+    <rect x="42" y="202" width="16" height="10" rx="2" transform="rotate(-45 42 202)" fill="#FF9E4A"/>
+  </g>
+
+  <g transform="translate(130, 20)">
+    <rect width="140" height="30" rx="15" fill="#E5E8F7"/>
+    <text x="70" y="20" font-family="system-ui, sans-serif" font-weight="700" font-size="12" fill="#2F3A86" text-anchor="middle">☂️ Full Size Umbrella</text>
+  </g>
+</svg>

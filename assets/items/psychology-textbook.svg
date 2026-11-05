@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 320" fill="none">
+  <defs>
+    <linearGradient id="book-cover" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4B2E8A"/>
+      <stop offset="100%" stop-color="#2D1A56"/>
+    </linearGradient>
+    <filter id="book-shadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#14211D" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+
+  <ellipse cx="205" cy="275" rx="135" ry="18" fill="#14211D" fill-opacity="0.1"/>
+
+  <!-- Textbook Body -->
+  <g filter="url(#book-shadow)" transform="translate(110, 50)">
+    <!-- Page block shadow & thickness -->
+    <path d="M15 15 H195 V225 H15 Z" fill="#F7F6F2"/>
+    <path d="M195 15 H210 V225 H195 Z" fill="#E4E3DC"/>
+    <!-- Page edges lines -->
+    <line x1="198" y1="18" x2="198" y2="222" stroke="#B9BEB4" stroke-width="1.5"/>
+    <line x1="203" y1="18" x2="203" y2="222" stroke="#B9BEB4" stroke-width="1.5"/>
+    <line x1="207" y1="18" x2="207" y2="222" stroke="#B9BEB4" stroke-width="1.5"/>
+
+    <!-- Hardcover Front -->
+    <rect width="195" height="230" rx="12" fill="url(#book-cover)"/>
+    <!-- Embossed Spine ridge -->
+    <rect x="0" y="0" width="22" height="230" rx="6" fill="#38206C"/>
+    <line x1="22" y1="0" x2="22" y2="230" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>
+
+    <!-- Book Title & Artwork -->
+    <g transform="translate(40, 35)">
+      <text font-family="Georgia, serif" font-weight="700" font-size="18" fill="#FCF0CC" textLength="138" lengthAdjust="spacingAndGlyphs">INTRODUCTION</text>
+      <text y="24" font-family="Georgia, serif" font-weight="700" font-size="18" fill="#FCF0CC" textLength="138" lengthAdjust="spacingAndGlyphs">TO PSYCHOLOGY</text>
+      <text y="48" font-family="system-ui, sans-serif" font-weight="600" font-size="11" fill="#D6ECE4" letter-spacing="0.5" textLength="138" lengthAdjust="spacingAndGlyphs">12TH CANADIAN EDITION</text>
+      
+      <!-- Brain Illustration motif -->
+      <g transform="translate(10, 65)">
+        <circle cx="50" cy="40" r="36" fill="rgba(255,255,255,0.08)"/>
+        <!-- Stylized neural branches -->
+        <path d="M30 40 C30 20 50 20 50 40 C50 20 70 20 70 40 C70 60 50 60 50 40 C50 60 30 60 30 40 Z" 
+              stroke="#FF9E4A" stroke-width="3" stroke-linecap="round" fill="none"/>
+        <circle cx="50" cy="40" r="5" fill="#FFFFFF"/>
+      </g>
+    </g>
+
+    <!-- Algoma Campus Library Sticker -->
+    <g transform="translate(90, 180)">
+      <rect width="90" height="36" rx="6" fill="#FFFFFF" stroke="#E4E3DC"/>
+      <text x="8" y="16" font-family="system-ui, sans-serif" font-weight="800" font-size="9" fill="#0F5B4B">ALGOMA UNIV</text>
+      <text x="8" y="28" font-family="system-ui, sans-serif" font-weight="600" font-size="8" fill="#4A5852">PSYC 1106 · RESERVE</text>
+    </g>
+
+    <!-- Golden Ribbon Bookmark -->
+    <path d="M90 220 L90 250 L100 240 L110 250 L110 220 Z" fill="#FF9E4A"/>
+  </g>
+
+  <!-- Tag Pill -->
+  <g transform="translate(130, 15)">
+    <rect width="140" height="30" rx="15" fill="#ECE6F8"/>
+    <text x="70" y="20" font-family="system-ui, sans-serif" font-weight="700" font-size="12" fill="#4B2E8A" text-anchor="middle">📚 Textbooks &amp; Notes</text>
+  </g>
+</svg>

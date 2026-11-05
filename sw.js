@@ -1,8 +1,8 @@
 /* Keeps a copy of the app on the phone so a reload still works if the Wi-Fi drops.
    Network first: when online, the newest version is always fetched and stored.
    The cached copy is used only when the network fails or takes over 4 seconds. */
-var CACHE = "unilend-v1";
-var CORE = ["./", "index.html", "facilitator.html", "css/app.css", "js/config.js", "js/rewards.js", "js/data.js", "js/store.js", "js/log.js", "js/app.js"];
+var CACHE = "unilend-v2";
+var CORE = ["./", "index.html", "facilitator.html", "css/app.css", "js/config.js", "js/rewards.js", "js/data.js", "js/store.js", "js/log.js", "js/app.js", "manifest.webmanifest", "favicon.svg", "favicon.ico", "assets/brand/logo-mark.svg"];
 
 self.addEventListener("install", function (e) {
   e.waitUntil(caches.open(CACHE).then(function (c) {

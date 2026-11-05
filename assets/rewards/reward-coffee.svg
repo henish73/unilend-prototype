@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 220" fill="none">
+  <defs>
+    <linearGradient id="coffee-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#9A4300"/>
+      <stop offset="100%" stop-color="#6F4E00"/>
+    </linearGradient>
+    <filter id="ticket-shadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#14211D" flood-opacity="0.14"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#ticket-shadow)" transform="translate(20, 20)">
+    <!-- Ticket Coupon Background with notch cutouts -->
+    <path d="M0 20 C0 9 9 0 20 0 H300 C311 0 320 9 320 20 V75 C308 75 300 83 300 90 C300 97 308 105 320 105 V160 C320 171 311 180 300 180 H20 C9 180 0 171 0 160 V105 C12 105 20 97 20 90 C20 83 12 75 0 75 Z" 
+          fill="#FFFDF7" stroke="#EBC59D" stroke-width="2"/>
+
+    <!-- Left Branding Column -->
+    <rect x="0" y="0" width="85" height="180" rx="18" fill="url(#coffee-grad)"/>
+    <!-- Coffee Cup Graphic -->
+    <g transform="translate(18, 55)" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" fill="none">
+      <!-- Cup body -->
+      <path d="M6 18 H38 V40 C38 48 30 54 22 54 C14 54 6 48 6 40 Z" fill="#FFFFFF" fill-opacity="0.2"/>
+      <!-- Handle -->
+      <path d="M38 24 H44 C48 24 48 34 44 34 H38"/>
+      <!-- Steam -->
+      <path d="M14 6 C14 2 18 2 18 -2 M24 6 C24 2 28 2 28 -2"/>
+      <!-- Saucer line -->
+      <line x1="2" y1="60" x2="44" y2="60"/>
+    </g>
+
+    <!-- Ticket Perforation Line -->
+    <line x1="85" y1="12" x2="85" y2="168" stroke="#EBC59D" stroke-width="2" stroke-dasharray="6 6"/>
+
+    <!-- Ticket Content on Right -->
+    <g transform="translate(105, 30)">
+      <text font-family="system-ui, sans-serif" font-weight="800" font-size="11" letter-spacing="1" fill="#9A4300">CAMPUS CAFE VOUCHER</text>
+      <text y="30" font-family="system-ui, sans-serif" font-weight="900" font-size="22" fill="#14211D">Free Coffee / Tea</text>
+      <text y="52" font-family="system-ui, sans-serif" font-weight="500" font-size="13" fill="#4A5852">Valid at Algoma Campus Cafe</text>
+
+      <!-- Barcode / Redemption Code Box -->
+      <g transform="translate(0, 68)">
+        <rect width="195" height="42" rx="8" fill="#FCEEDF" stroke="#EBC59D"/>
+        <text x="12" y="26" font-family="'Courier New', monospace" font-weight="800" font-size="16" fill="#9A4300">UL-CAFE-21</text>
+        <rect x="140" y="8" width="44" height="26" rx="4" fill="#0F5B4B"/>
+        <text x="162" y="25" font-family="system-ui, sans-serif" font-weight="700" font-size="11" fill="#FFFFFF" text-anchor="middle">50 pts</text>
+      </g>
+    </g>
+  </g>
+</svg>
