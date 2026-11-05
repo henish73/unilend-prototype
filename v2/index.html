@@ -112,15 +112,13 @@
           </div>
         </div>
 
-        <!-- Quick Account Switcher (Testing & Facilitation) -->
+        <!-- Active Credential Status -->
         <div style="margin-top:16px; background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:14px;">
-          <h2 style="font-size:0.95rem; font-weight:800; margin-bottom:6px;">Switch Active Account (Auth RBAC)</h2>
-          <p style="color:var(--soft); font-size:0.82rem; margin-bottom:10px;">Select a profile to test student workflows vs locked admin access:</p>
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-            <button class="secondary-btn btn-quick-switch" data-acc="student" style="font-size:0.82rem; min-height:36px; padding:0 8px;">Alex (Student)</button>
-            <button class="secondary-btn btn-quick-switch" data-acc="sam" style="font-size:0.82rem; min-height:36px; padding:0 8px;">Sam (Peer Lender)</button>
-            <button class="secondary-btn btn-quick-switch" data-acc="facilitator" style="font-size:0.82rem; min-height:36px; padding:0 8px; border-color:#2C5E50; color:#2C5E50;">Test Facilitator</button>
-            <button class="secondary-btn btn-quick-switch" data-acc="admin" style="font-size:0.82rem; min-height:36px; padding:0 8px; border-color:var(--danger); color:var(--danger);">Campus Admin</button>
+          <h2 style="font-size:0.95rem; font-weight:800; margin-bottom:6px;">Campus Credentials &amp; Session</h2>
+          <div style="font-size:0.85rem; color:var(--soft); display:flex; flex-direction:column; gap:4px;">
+            <div>Signed-in identity: <strong id="profile-auth-email" style="color:var(--ink);">p01@algomau.ca</strong></div>
+            <div>Account privilege: <strong id="profile-auth-role" style="color:var(--brand);">Verified Student (RBAC)</strong></div>
+            <div>Session status: <span style="color:#0B4F43; font-weight:700;">Active &bull; Authenticated</span></div>
           </div>
         </div>
 
@@ -195,19 +193,18 @@
         <input type="email" id="auth-email-input" required class="search-input" style="width:100%;" placeholder="username@algomau.ca">
       </div>
       <div>
-        <label style="font-size:0.85rem; font-weight:700; display:block; margin-bottom:4px;">Passcode / Password</label>
-        <input type="password" id="auth-pass-input" class="search-input" style="width:100%;" placeholder="••••••••">
+        <label style="font-size:0.85rem; font-weight:700; display:block; margin-bottom:4px;">Campus Password</label>
+        <input type="password" id="auth-pass-input" required class="search-input" style="width:100%;" placeholder="Enter your password">
       </div>
       <button type="submit" class="primary-btn" style="margin-top:6px;">Sign In with Algoma ID</button>
     </form>
 
     <div style="border-top:1px solid var(--line); margin-top:16px; padding-top:14px;">
-      <p style="font-size:0.78rem; font-weight:700; color:var(--soft); margin-bottom:8px;">One-Tap Sign-In for Testing:</p>
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
-        <button class="secondary-btn btn-modal-switch" data-acc="student" style="font-size:0.8rem; min-height:34px; padding:0 6px;">Student (P01)</button>
-        <button class="secondary-btn btn-modal-switch" data-acc="sam" style="font-size:0.8rem; min-height:34px; padding:0 6px;">Sam (Lender)</button>
-        <button class="secondary-btn btn-modal-switch" data-acc="facilitator" style="font-size:0.8rem; min-height:34px; padding:0 6px;">Facilitator</button>
-        <button class="secondary-btn btn-modal-switch" data-acc="admin" style="font-size:0.8rem; min-height:34px; padding:0 6px; color:var(--danger); border-color:var(--danger);">Admin</button>
+      <div style="font-size:0.75rem; color:var(--soft); line-height:1.45;">
+        <strong style="color:var(--ink);">Evaluation Credentials:</strong><br>
+        &bull; <strong>Student:</strong> <code>p01@algomau.ca</code> / <code>StudentP01#2026</code><br>
+        &bull; <strong>Admin:</strong> <code>admin@algomau.ca</code> / <code>AlgomaAdmin2026!</code><br>
+        &bull; <strong>Facilitator:</strong> <code>facilitator@algomau.ca</code> / <code>Facilitator2026!</code>
       </div>
     </div>
   </div>

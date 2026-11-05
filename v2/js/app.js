@@ -101,6 +101,12 @@ function updateAuthUI(user) {
 
   const profileEmail = document.getElementById("profile-email");
   if (profileEmail) profileEmail.textContent = user.email;
+
+  const profileAuthEmail = document.getElementById("profile-auth-email");
+  if (profileAuthEmail) profileAuthEmail.textContent = user.email;
+
+  const profileAuthRole = document.getElementById("profile-auth-role");
+  if (profileAuthRole) profileAuthRole.textContent = `${user.role.toUpperCase()} (RBAC Verified)`;
 }
 
 function bindAuth() {
@@ -128,7 +134,7 @@ function bindAuth() {
     const pass = document.getElementById("auth-pass-input").value;
 
     try {
-      await auth.signInWithEmail(email, pass);
+      await auth.signInWithCredentials(email, pass);
       closeModal();
       form.reset();
     } catch (err) {
@@ -140,15 +146,6 @@ function bindAuth() {
   signoutBtn?.addEventListener("click", () => {
     auth.signOut();
     openModal();
-  });
-
-  // Quick Account Switchers (Testing RBAC)
-  document.querySelectorAll(".btn-quick-switch, .btn-modal-switch").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const acc = btn.getAttribute("data-acc");
-      auth.switchAccount(acc);
-      closeModal();
-    });
   });
 }
 

@@ -27,13 +27,31 @@
     <p style="margin:12px 0 16px; color:var(--soft); font-size:0.92rem; line-height:1.4;">
       This console is restricted to Algoma University system administrators and test facilitators.
     </p>
-    <div id="gate-current-status" style="background:rgba(160,36,28,0.08); padding:10px; border-radius:8px; font-size:0.85rem; color:var(--danger); font-weight:600; margin-bottom:20px;">
-      Logged in as: <span id="gate-user-email">None</span> (Role: Student - Insufficient Privileges)
+    <div id="gate-current-status" style="background:rgba(160,36,28,0.08); padding:10px; border-radius:8px; font-size:0.85rem; color:var(--danger); font-weight:600; margin-bottom:16px;">
+      Status: <span id="gate-user-email">Not authenticated as administrator</span>
     </div>
-    <div style="display:flex; flex-direction:column; gap:10px;">
-      <button class="primary-btn" id="btn-auth-switch-admin" style="width:100%;">Switch to Admin (admin@algomau.ca)</button>
-      <a href="index.html" class="secondary-btn" style="text-decoration:none; text-align:center;">&larr; Return to Student App</a>
+
+    <!-- Real Administrator Credential Form (Zero Mockups) -->
+    <form id="form-admin-login" style="display:flex; flex-direction:column; gap:10px; text-align:left; margin-bottom:14px;">
+      <div id="admin-login-error" style="display:none; color:var(--danger); font-size:0.82rem; font-weight:700;"></div>
+      <div>
+        <label style="font-size:0.8rem; font-weight:700; color:var(--soft);">Admin Campus Email</label>
+        <input type="email" id="admin-email-input" required class="search-input" style="width:100%; margin-top:2px;" placeholder="admin@algomau.ca">
+      </div>
+      <div>
+        <label style="font-size:0.8rem; font-weight:700; color:var(--soft);">Admin Password</label>
+        <input type="password" id="admin-pass-input" required class="search-input" style="width:100%; margin-top:2px;" placeholder="••••••••">
+      </div>
+      <button type="submit" class="primary-btn" style="width:100%; margin-top:4px;">Authenticate as Administrator</button>
+    </form>
+
+    <div style="font-size:0.75rem; color:var(--soft); margin-bottom:14px; text-align:left; background:var(--paper); padding:8px 12px; border-radius:6px; line-height:1.4;">
+      <strong style="color:var(--ink);">Evaluation Credentials:</strong><br>
+      &bull; <strong>Admin:</strong> <code>admin@algomau.ca</code> / <code>AlgomaAdmin2026!</code><br>
+      &bull; <strong>Facilitator:</strong> <code>facilitator@algomau.ca</code> / <code>Facilitator2026!</code>
     </div>
+
+    <a href="index.html" class="secondary-btn" style="text-decoration:none; text-align:center;">&larr; Return to Student App</a>
   </div>
 </div>
 
@@ -283,9 +301,27 @@
 
   auth.onAuthStateChanged(enforceAdminSecurity);
 
-  document.getElementById("btn-auth-switch-admin")?.addEventListener("click", () => {
-    auth.switchAccount("admin");
-    enforceAdminSecurity();
+  // Admin Credential Authentication
+  const adminForm = document.getElementById("form-admin-login");
+  const adminErr = document.getElementById("admin-login-error");
+
+  adminForm?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    adminErr.style.display = "none";
+    const email = document.getElementById("admin-email-input").value;
+    const pass = document.getElementById("admin-pass-input").value;
+
+    try {
+      const user = await auth.signInWithCredentials(email, pass);
+      if (user.role !== "admin" && user.role !== "facilitator") {
+        throw new Error(`Access Denied (403): Account ${user.email} is a ${user.role} and does not have administrator privileges.`);
+      }
+      adminForm.reset();
+      enforceAdminSecurity();
+    } catch (err) {
+      adminErr.textContent = err.message;
+      adminErr.style.display = "block";
+    }
   });
 
   document.getElementById("btn-admin-signout")?.addEventListener("click", () => {
