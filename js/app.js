@@ -103,7 +103,7 @@
     return r.img ? pic("assets/rewards/" + r.img + ".svg") : icon(r.icon);
   }
   function face(name, size) {
-    var f = data.avatars[name];
+    var f = name === "You" ? (store.get().avatar || data.avatars["You"]) : data.avatars[name];
     if (f) return '<img class="avatar ' + (size || "") + '" src="assets/avatars/' + f + '.svg" alt="" decoding="async">';
     return '<span class="avatar ' + (size || "") + '" aria-hidden="true">' + esc((name === "You" ? store.get().email || "S" : name).charAt(0).toUpperCase()) + "</span>";
   }
@@ -228,7 +228,7 @@
     if (ui.category !== "Open requests") {
       var pool = data.items.filter(function (i) {
         return s.takenItems.indexOf(i.id) < 0;
-      }).concat(data.myItems.filter(function (i) {
+      }).concat(store.myItems().filter(function (i) {
         return s.offered.indexOf(i.id) >= 0;
       }));
       pool.filter(function (i) {
@@ -327,10 +327,35 @@
           : timeline([["You accepted", "done"], [p + " arrived at " + zone, "done"], ["Hand over and scan to confirm", "now"]])) +
         '<dl class="kv"><dt>Due back</dt><dd>' + esc(e.due) + "</dd></dl></div>" +
         '<div class="actions"><button class="btn primary" data-go="/scan/handoff/' + id + '">Confirm hand-off</button>' +
-        (e.role === "borrower" ? '<button class="btn quiet" data-go="/no-show/' + id + '">' + esc(p) + " isn't here or can't meet</button>" : "") + "</div>";
+        (e.role === "borrower" ? '<button class="btn quiet" data-go="/no-show/' + id + '">' + esc(p) + " isn't here or can't meet</button>" : "") + "</div>" +
+        chatCard(id, p);
     }
     return header(e.role === "borrower" ? "Your request" : "Lending to " + p, "/home") + '<div class="page">' + body + "</div>";
   };
+
+  function chatCard(id, p) {
+    var msgs = store.getMessages(id);
+    return '<div class="card chat-card">' +
+      '<h2 style="font-size:1.05rem;margin:0 0 4px;">Quick chat with ' + esc(p) + '</h2>' +
+      '<div class="chat-thread" aria-label="Messages with ' + esc(p) + '">' +
+      (msgs.length ? msgs.map(function (m) {
+        var isMe = m.from === "You";
+        return '<div class="msg-bubble ' + (isMe ? "me" : "partner") + '">' +
+          '<strong>' + esc(m.from) + ':</strong> ' + esc(m.text) +
+        '</div>';
+      }).join("") : '<p class="small muted">Coordinate where you are sitting or what you are wearing.</p>') +
+      '</div>' +
+      '<div class="chat-chips">' +
+        '<button type="button" class="btn fit" data-act="quickMsg" data-id="' + id + '" data-msg="I\'m by the front desk">By front desk</button>' +
+        '<button type="button" class="btn fit" data-act="quickMsg" data-id="' + id + '" data-msg="Sitting in the lounge area">In lounge</button>' +
+        '<button type="button" class="btn fit" data-act="quickMsg" data-id="' + id + '" data-msg="Wearing a green jacket">Wearing green</button>' +
+      '</div>' +
+      '<form class="chat-form" data-submit="sendCustomChat" data-id="' + id + '">' +
+        '<input type="text" name="chatText" placeholder="Type a message..." aria-label="Message to ' + esc(p) + '" autocomplete="off">' +
+        '<button type="submit" class="btn fit">Send</button>' +
+      '</form>' +
+    '</div>';
+  }
 
   // 5 and 7. Simulated QR scan (hand-off and return)
   routes.scan = function (kind, id) {
@@ -431,7 +456,7 @@
 
   routes.passoffer = function () {
     var s = store.get();
-    var free = data.myItems.filter(function (i) {
+    var free = store.myItems().filter(function (i) {
       return s.offered.indexOf(i.id) < 0 && !s.exchanges.some(function (e) {
         return e.itemId === i.id && ["enroute", "accepted", "active", "incoming"].indexOf(e.status) >= 0;
       });
@@ -630,10 +655,26 @@
   // Profile and help
   routes.profile = function () {
     var s = store.get();
-    return header("Profile and help") + '<div class="page"><div class="card"><div class="profile-head">' + face("You", "lg") + "<div><h2>" + esc(s.email || "Student") + '</h2><p class="muted small">Verified Algoma student</p>' + (hasBadge() ? '<p><span class="pill star">' + icon("star") + "Featured Helper</span></p>" : "") + "</div></div></div>" +
-      '<h2 class="sec-head">My items</h2><section class="list grouped">' + data.myItems.map(function (i) {
-        return '<div class="row"><span class="thumb">' + itemPic(i) + '</span><span class="body"><span class="title">' + esc(i.name) + '</span><span class="sub">' + (s.offered.indexOf(i.id) >= 0 ? "Offered to classmates" : "Not offered right now") + "</span></span>" +
-          (s.offered.indexOf(i.id) >= 0 ? '<button class="btn fit" data-act="stopOffering" data-id="' + i.id + '">Stop</button>' : '<button class="btn fit" data-act="offer" data-id="' + i.id + '">Offer</button>') + "</div>";
+    var allMy = store.myItems();
+    var avatars = ["avatar-user", "avatar-sam", "avatar-jordan", "avatar-mei", "avatar-noor", "avatar-diego", "avatar-priya", "avatar-alex"];
+    var currentAv = s.avatar || "avatar-user";
+    var avPicker = '<div class="card"><details><summary>Change avatar</summary><div class="avatar-grid" role="group" aria-label="Choose your avatar">' +
+      avatars.map(function (av) {
+        var isSel = currentAv === av;
+        var label = av.replace("avatar-", "");
+        return '<button type="button" class="avatar-btn' + (isSel ? " selected" : "") + '" data-act="pickAvatar" data-av="' + av + '" aria-pressed="' + isSel + '">' +
+          '<img class="avatar md" src="assets/avatars/' + av + '.svg" alt="">' +
+          '<span>' + esc(label.charAt(0).toUpperCase() + label.slice(1)) + '</span>' +
+        '</button>';
+      }).join("") + '</div></details></div>';
+
+    return header("Profile and help") + '<div class="page"><div class="card"><div class="profile-head">' + face("You", "lg") + "<div><h2>" + esc(s.email || "Student") + '</h2><p class="muted small">Verified Algoma student · 100% on-time</p>' + (hasBadge() ? '<p><span class="pill star">' + icon("star") + "Featured Helper</span></p>" : "") + "</div></div></div>" +
+      avPicker +
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;"><h2 class="sec-head" style="margin:0;">My items</h2><button class="btn fit" data-go="/list-item">+ List item</button></div>' +
+      '<section class="list grouped">' + allMy.map(function (i) {
+        var isOff = s.offered.indexOf(i.id) >= 0;
+        return '<div class="row"><span class="thumb">' + itemPic(i) + '</span><span class="body"><span class="title">' + esc(i.name) + '</span><span class="sub">' + (isOff ? "Offered to classmates" : "Not offered right now") + "</span></span>" +
+          (isOff ? '<button class="btn fit" data-act="stopOffering" data-id="' + i.id + '">Stop</button>' : '<button class="btn fit" data-act="offer" data-id="' + i.id + '">Offer</button>') + "</div>";
       }).join("") + "</section>" +
       '<h2 class="sec-head">Appearance</h2>' +
       '<div class="seg theme-seg" role="group" aria-label="Appearance">' + [["auto", "Auto"], ["light", "Light"], ["dark", "Dark"]].map(function (t) {
@@ -645,6 +686,58 @@
       '<details class="card"><summary>Why scan twice?</summary><p class="small">One scan at pickup and one at return confirm the exchange for both students, so nobody loses track of an item.</p></details>' +
       '<details class="card"><summary>Does anyone pay?</summary><p class="small">No. Borrowing is free, and there are no deposits or fines. Lenders and borrowers earn points.</p></details>' +
       '<div class="actions plain"><button class="btn" data-act="signOut">Sign out</button></div></div>';
+  };
+
+  routes.listItem = function () {
+    return header("List an item", "/profile") + '<div class="page">' +
+      '<form class="card" data-submit="submitListItem">' +
+        '<h2 style="margin:0 0 4px;">List an item to share</h2>' +
+        '<p class="muted small" style="margin-bottom:12px;">Lend to verified Algoma students. Free with no late fines.</p>' +
+        '<label class="field"><span class="label">Item name</span>' +
+          '<input class="input" id="item-name" required placeholder="e.g. TI-84 Plus, Laptop charger, Lab coat" autocomplete="off">' +
+        '</label>' +
+        '<label class="field"><span class="label">Category</span>' +
+          '<select class="input" id="item-cat">' +
+            data.categories.filter(function (c) { return c !== "All" && c !== "Open requests"; }).map(function (c) {
+              return '<option value="' + esc(c) + '">' + esc(c) + '</option>';
+            }).join("") +
+          '</select>' +
+        '</label>' +
+        '<div class="field"><span class="label">Choose an illustration</span>' +
+          '<div class="item-pic-seg" role="group" aria-label="Choose an illustration">' +
+            [
+              ["phone-charger", "Phone charger"],
+              ["fast-charger", "Fast charger"],
+              ["laptop-charger", "Laptop charger"],
+              ["hdmi-adapter", "HDMI adapter"],
+              ["psychology-textbook", "Textbook"],
+              ["lab-coat", "Lab coat"],
+              ["umbrella", "Umbrella"],
+              ["scientific-calculator", "Calculator"]
+            ].map(function (p, idx) {
+              return '<label style="display:flex;align-items:center;gap:4px;font-size:.8rem;cursor:pointer;background:var(--surface-2);padding:6px;border-radius:8px;">' +
+                '<input type="radio" name="item-pic" value="' + p[0] + '"' + (idx === 0 ? " checked" : "") + '> ' +
+                esc(p[1]) +
+              '</label>';
+            }).join("") +
+          '</div>' +
+        '</div>' +
+        '<label class="field"><span class="label">Preferred pickup spot</span>' +
+          '<select class="input" id="item-zone">' +
+            data.zones.map(function (z) {
+              return '<option value="' + esc(z.id) + '">' + esc(z.name) + ' (' + esc(z.note) + ')</option>';
+            }).join("") +
+          '</select>' +
+        '</label>' +
+        '<label class="field"><span class="label">Notes / details</span>' +
+          '<input class="input" id="item-note" placeholder="e.g. Good condition, clean and ready." autocomplete="off">' +
+        '</label>' +
+        '<div class="actions">' +
+          '<button type="submit" class="btn primary">Publish item</button>' +
+          '<button type="button" class="btn quiet" data-go="/profile">Cancel</button>' +
+        '</div>' +
+      '</form>' +
+    '</div>';
   };
 
   /* Appearance: auto (follow the phone), light or dark. Kept apart from the task state, so a reset keeps it. */
@@ -697,6 +790,7 @@
       case "claimed": return routes.claimed(p[1]);
       case "community": return routes.community();
       case "profile": return routes.profile();
+      case "list-item": return routes.listItem();
     }
     return routes.notfound();
   }
@@ -949,10 +1043,54 @@
       store.signOut();
       ui.signinStep = "email";
       render();
+    },
+    pickAvatar: function (el) {
+      store.setAvatar(el.getAttribute("data-av"));
+      toast("Avatar updated");
+      render();
+    },
+    quickMsg: function (el) {
+      var id = el.getAttribute("data-id");
+      var msg = el.getAttribute("data-msg");
+      store.sendMessage(id, msg);
+      render();
+    },
+    deleteItem: function (el) {
+      var id = el.getAttribute("data-id");
+      store.removeItem(id);
+      toast("Item removed from your listings");
+      render();
     }
   };
 
   var forms = {
+    submitListItem: function (form) {
+      var name = document.getElementById("item-name").value.trim();
+      var cat = document.getElementById("item-cat").value;
+      var zone = document.getElementById("item-zone").value;
+      var note = document.getElementById("item-note").value.trim() || "Clean and ready to lend on campus.";
+      var checkedPic = form.querySelector('input[name="item-pic"]:checked');
+      var picVal = checkedPic ? checkedPic.value : "phone-charger";
+      store.addItem({
+        name: name,
+        category: cat,
+        zone: zone,
+        note: note,
+        img: picVal,
+        lendable: true
+      });
+      toast("Item listed! It is now offered to classmates.");
+      go("/profile");
+    },
+    sendCustomChat: function (form) {
+      var input = form.querySelector('input[name="chatText"]');
+      var text = input ? input.value.trim() : "";
+      var id = form.getAttribute("data-id");
+      if (!text || !id) return;
+      store.sendMessage(id, text);
+      input.value = "";
+      render();
+    },
     sendCode: function () {
       var email = document.getElementById("email").value.trim().toLowerCase();
       if (!/^[^@\s]+@algomau\.ca$/.test(email)) {

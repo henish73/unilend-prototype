@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <defs>
+    <linearGradient id="av-bg" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FCF0CC"/>
+      <stop offset="100%" stop-color="#EBC59D"/>
+    </linearGradient>
+    <filter id="av-shadow" x="0" y="0" width="200" height="200" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#14211D" flood-opacity="0.14"/>
+    </filter>
+  </defs>
+
+  <circle cx="100" cy="100" r="96" fill="url(#av-bg)"/>
+  <circle cx="100" cy="100" r="94" stroke="rgba(255,255,255,0.25)" stroke-width="4"/>
+
+  <!-- Bust / Shoulders -->
+  <g filter="url(#av-shadow)">
+    <!-- Clothing / Hoodie -->
+    <path d="M40 185 C40 145 65 135 100 135 C135 135 160 145 160 185 Z" fill="#0F5B4B"/>
+    <!-- Collar line -->
+    <path d="M85 135 C95 150 105 150 115 135" stroke="rgba(255,255,255,0.4)" stroke-width="3" fill="none"/>
+
+    <!-- Neck -->
+    <rect x="90" y="115" width="20" height="25" rx="6" fill="#F5C396"/>
+
+    <!-- Head -->
+    <ellipse cx="100" cy="95" rx="38" ry="44" fill="#F5C396"/>
+
+    <!-- Facial Features -->
+    <!-- Eyes -->
+    <circle cx="86" cy="95" r="4.5" fill="#14211D"/>
+    <circle cx="114" cy="95" r="4.5" fill="#14211D"/>
+    <circle cx="87.5" cy="93.5" r="1.5" fill="#FFFFFF"/>
+    <circle cx="115.5" cy="93.5" r="1.5" fill="#FFFFFF"/>
+
+    <!-- Gentle Friendly Smile -->
+    <path d="M90 112 C95 120 105 120 110 112" stroke="#14211D" stroke-width="3" stroke-linecap="round" fill="none"/>
+
+    <!-- Custom Hair -->
+    <path d="M62 85 C62 55 138 55 138 85 Z" fill="#9A4300"/>
+
+    <!-- Custom Accessories (glasses, headphones, beanie, etc.) -->
+    <!-- Beanie -->
+   <path d="M58 80 C58 45 142 45 142 80 H58 Z" fill="#0A4438"/>
+   <rect x="54" y="74" width="92" height="14" rx="6" fill="#0F5B4B"/>
+   <circle cx="100" cy="42" r="8" fill="#FF9E4A"/>
+  </g>
+</svg>

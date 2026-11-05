@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" fill="none">
+  <defs>
+    <linearGradient id="prio-gold" x1="0" y1="0" x2="300" y2="300" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFC837"/>
+      <stop offset="50%" stop-color="#FF9E4A"/>
+      <stop offset="100%" stop-color="#9A4300"/>
+    </linearGradient>
+    <filter id="prio-shadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="#9A4300" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#prio-shadow)" transform="translate(150, 150)">
+    <!-- Golden Gear / Sunburst rim -->
+    <circle cx="0" cy="0" r="110" fill="url(#prio-gold)"/>
+    <circle cx="0" cy="0" r="96" fill="#14211D"/>
+    <circle cx="0" cy="0" r="88" stroke="#FFC837" stroke-width="2" stroke-dasharray="6 4" fill="none"/>
+
+    <!-- Clock dial -->
+    <!-- Hour markers -->
+    <circle cx="0" cy="-70" r="4" fill="#FFC837"/>
+    <circle cx="70" cy="0" r="4" fill="#FFC837"/>
+    <circle cx="0" cy="70" r="4" fill="#FFC837"/>
+    <circle cx="-70" cy="0" r="4" fill="#FFC837"/>
+
+    <!-- Clock hands (24h priority) -->
+    <path d="M0 0 L0 -45" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round"/>
+    <path d="M0 0 L32 -20" stroke="#FF9E4A" stroke-width="6" stroke-linecap="round"/>
+    <circle cx="0" cy="0" r="10" fill="#FFC837"/>
+
+    <!-- Wings of Speed -->
+    <path d="M-85 -10 C-125 -40 -110 -80 -80 -70 C-95 -50 -80 -30 -65 -20" stroke="#FFC837" stroke-width="4" fill="#FFC837" fill-opacity="0.3"/>
+    <path d="M85 -10 C125 -40 110 -80 80 -70 C95 -50 80 -30 65 -20" stroke="#FFC837" stroke-width="4" fill="#FFC837" fill-opacity="0.3"/>
+
+    <!-- 24H Banner Pill at bottom -->
+    <g transform="translate(-45, 45)">
+      <rect width="90" height="28" rx="14" fill="#FF9E4A"/>
+      <text x="45" y="19" font-family="system-ui, sans-serif" font-weight="900" font-size="14" fill="#14211D" text-anchor="middle">24 HOURS</text>
+    </g>
+  </g>
+</svg>

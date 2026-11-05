@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 320" fill="none">
+  <defs>
+    <linearGradient id="charger-body" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#E4E3DC"/>
+    </linearGradient>
+    <linearGradient id="cable-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3C4843"/>
+      <stop offset="100%" stop-color="#14211D"/>
+    </linearGradient>
+    <filter id="item-shadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="#14211D" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+  <!-- Ground Shadow -->
+  <ellipse cx="200" cy="275" rx="140" ry="18" fill="#14211D" fill-opacity="0.08"/>
+
+  <!-- Wall Plug Adapter Brick -->
+  <g filter="url(#item-shadow)" transform="translate(60, 90)">
+    <!-- Plug prongs -->
+    <rect x="18" y="-20" width="10" height="26" rx="3" fill="#B9BEB4"/>
+    <rect x="42" y="-20" width="10" height="26" rx="3" fill="#B9BEB4"/>
+    <!-- Cube body -->
+    <rect width="70" height="90" rx="16" fill="url(#charger-body)" stroke="#B9BEB4" stroke-width="2"/>
+    <!-- USB-C Port -->
+    <rect x="22" y="70" width="26" height="8" rx="4" fill="#14211D"/>
+    <rect x="25" y="72" width="20" height="4" rx="2" fill="#FCF0CC"/>
+    <!-- 20W text label -->
+    <text x="35" y="45" font-family="system-ui, sans-serif" font-weight="700" font-size="12" fill="#6B7871" text-anchor="middle">20W PD</text>
+  </g>
+
+  <!-- Coiled Braided Cable -->
+  <path d="M95 180 C95 240, 160 250, 200 240 C250 230, 290 260, 290 200 C290 140, 210 130, 190 170 C175 200, 220 220, 260 190 C290 170, 320 140, 320 100" 
+        stroke="url(#cable-grad)" stroke-width="12" stroke-linecap="round" fill="none" filter="url(#item-shadow)"/>
+
+  <!-- 2-in-1 Connector Head -->
+  <g filter="url(#item-shadow)" transform="translate(295, 45)">
+    <!-- Main strain relief -->
+    <rect x="16" y="55" width="18" height="24" rx="6" fill="#14211D"/>
+    <!-- Aluminum body -->
+    <rect x="13" y="20" width="24" height="40" rx="6" fill="#E4E3DC" stroke="#B9BEB4" stroke-width="1.5"/>
+    <!-- USB-C tip -->
+    <rect x="17" y="2" width="16" height="20" rx="4" fill="#B9BEB4"/>
+    <rect x="20" y="6" width="10" height="12" rx="2" fill="#14211D"/>
+    
+    <!-- Attached Lightning Dongle with tether -->
+    <path d="M13 36 C-10 36 -10 65 5 70" stroke="#4A5852" stroke-width="4" stroke-linecap="round" fill="none"/>
+    <rect x="-16" y="50" width="20" height="30" rx="5" fill="#E4E3DC" stroke="#B9BEB4" stroke-width="1"/>
+    <rect x="-13" y="38" width="14" height="14" rx="2" fill="#B9BEB4"/>
+    <!-- 8 gold contact pins -->
+    <line x1="-11" y1="42" x2="-3" y2="42" stroke="#FF9E4A" stroke-width="2"/>
+    <line x1="-11" y1="46" x2="-3" y2="46" stroke="#FF9E4A" stroke-width="2"/>
+  </g>
+
+  <!-- Verified Category Pill -->
+  <g transform="translate(140, 20)">
+    <rect width="120" height="30" rx="15" fill="#FCF0CC"/>
+    <path d="M154 35 L149 46 H155 L152 55 L161 42 H155 Z" fill="#6F4E00" transform="translate(0, -20) scale(0.7)"/>
+    <text x="165" y="20" font-family="system-ui, sans-serif" font-weight="700" font-size="12" fill="#6F4E00">Tech &amp; Chargers</text>
+  </g>
+</svg>

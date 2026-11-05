@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <defs>
+    <linearGradient id="av-bg" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#E2F0EA"/>
+      <stop offset="100%" stop-color="#A8D7C5"/>
+    </linearGradient>
+    <filter id="av-shadow" x="0" y="0" width="200" height="200" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#14211D" flood-opacity="0.14"/>
+    </filter>
+  </defs>
+
+  <circle cx="100" cy="100" r="96" fill="url(#av-bg)"/>
+  <circle cx="100" cy="100" r="94" stroke="rgba(255,255,255,0.25)" stroke-width="4"/>
+
+  <!-- Bust / Shoulders -->
+  <g filter="url(#av-shadow)">
+    <!-- Clothing / Hoodie -->
+    <path d="M40 185 C40 145 65 135 100 135 C135 135 160 145 160 185 Z" fill="#0A4438"/>
+    <!-- Collar line -->
+    <path d="M85 135 C95 150 105 150 115 135" stroke="rgba(255,255,255,0.4)" stroke-width="3" fill="none"/>
+
+    <!-- Neck -->
+    <rect x="90" y="115" width="20" height="25" rx="6" fill="#BD8353"/>
+
+    <!-- Head -->
+    <ellipse cx="100" cy="95" rx="38" ry="44" fill="#BD8353"/>
+
+    <!-- Facial Features -->
+    <!-- Eyes -->
+    <circle cx="86" cy="95" r="4.5" fill="#14211D"/>
+    <circle cx="114" cy="95" r="4.5" fill="#14211D"/>
+    <circle cx="87.5" cy="93.5" r="1.5" fill="#FFFFFF"/>
+    <circle cx="115.5" cy="93.5" r="1.5" fill="#FFFFFF"/>
+
+    <!-- Gentle Friendly Smile -->
+    <path d="M90 112 C95 120 105 120 110 112" stroke="#14211D" stroke-width="3" stroke-linecap="round" fill="none"/>
+
+    <!-- Custom Hair -->
+    <!-- Sleek dark ponytail -->
+   <path d="M64 85 C64 50 136 50 136 85 Z" fill="#141416"/>
+   <path d="M125 70 C155 70 165 105 160 130 C155 120 145 105 135 90 Z" fill="#141416"/>
+
+    <!-- Custom Accessories (glasses, headphones, beanie, etc.) -->
+    <!-- Stud earrings -->
+   <circle cx="61" cy="100" r="3.5" fill="#FF9E4A"/>
+   <circle cx="139" cy="100" r="3.5" fill="#FF9E4A"/>
+  </g>
+</svg>

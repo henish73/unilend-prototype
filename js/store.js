@@ -33,6 +33,9 @@
       task: "t1",
       signedIn: false,
       email: "",
+      avatar: "avatar-user",
+      customItems: [],
+      messages: {},
       ledger: [entry("welcome", "Welcome to UniLend", 20)],
       exchanges: [],
       claims: [],
@@ -107,7 +110,8 @@
   }
 
   function itemById(id) {
-    var all = data.items.concat(data.myItems);
+    var custom = (state && state.customItems) || [];
+    var all = data.items.concat(data.myItems).concat(custom);
     for (var i = 0; i < all.length; i++) if (all[i].id === id) return all[i];
     return null;
   }
@@ -409,6 +413,89 @@
       });
       dropLedger(cid);
       save();
+    },
+
+    myItems: function () {
+      var custom = (state && state.customItems) || [];
+      return data.myItems.concat(custom);
+    },
+
+    addItem: function (item) {
+      if (!state.customItems) state.customItems = [];
+      var id = "item-" + Date.now();
+      var newItem = {
+        id: id,
+        img: item.img || "phone-charger",
+        name: item.name,
+        short: item.short || item.name.toLowerCase(),
+        category: item.category || "Everyday",
+        icon: item.icon || "bolt",
+        demand: "Medium",
+        points: item.points || 15,
+        zone: item.zone || "library",
+        note: item.note || "Clean and ready to lend on campus.",
+        owner: "You",
+        lends: 0
+      };
+      state.customItems.push(newItem);
+      if (item.lendable) {
+        state.offered.push(id);
+      }
+      save();
+      return newItem;
+    },
+
+    removeItem: function (id) {
+      if (state.customItems) {
+        state.customItems = state.customItems.filter(function (it) { return it.id !== id; });
+      }
+      state.offered = state.offered.filter(function (i) { return i !== id; });
+      save();
+    },
+
+    setAvatar: function (av) {
+      state.avatar = av;
+      save();
+    },
+
+    sendMessage: function (exchangeId, text) {
+      if (!state.messages) state.messages = {};
+      if (!state.messages[exchangeId]) state.messages[exchangeId] = [];
+      var msg = {
+        id: "msg-" + Date.now(),
+        from: "You",
+        text: text,
+        time: "Just now"
+      };
+      state.messages[exchangeId].push(msg);
+      save();
+
+      var e = ex(exchangeId);
+      var partner = e ? e.partner : "Partner";
+      setTimeout(function () {
+        if (!state) return;
+        if (!state.messages) state.messages = {};
+        if (!state.messages[exchangeId]) state.messages[exchangeId] = [];
+        var replies = [
+          "Got it! See you there in a minute.",
+          "Sounds good, I'm waiting near the front.",
+          "Thanks for the heads up! See you soon.",
+          "Perfect, I'm wearing a dark jacket."
+        ];
+        var replyText = replies[Math.floor(Math.random() * replies.length)];
+        state.messages[exchangeId].push({
+          id: "msg-reply-" + Date.now(),
+          from: partner,
+          text: replyText,
+          time: "Just now"
+        });
+        save();
+      }, 1000);
+      return msg;
+    },
+
+    getMessages: function (exchangeId) {
+      return (state && state.messages && state.messages[exchangeId]) || [];
     }
   };
 

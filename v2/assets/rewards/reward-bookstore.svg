@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 220" fill="none">
+  <defs>
+    <linearGradient id="bookstore-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4B2E8A"/>
+      <stop offset="100%" stop-color="#2D1A56"/>
+    </linearGradient>
+    <filter id="book-ticket-shadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#14211D" flood-opacity="0.14"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#book-ticket-shadow)" transform="translate(20, 20)">
+    <path d="M0 20 C0 9 9 0 20 0 H300 C311 0 320 9 320 20 V75 C308 75 300 83 300 90 C300 97 308 105 320 105 V160 C320 171 311 180 300 180 H20 C9 180 0 171 0 160 V105 C12 105 20 97 20 90 C20 83 12 75 0 75 Z" 
+          fill="#FFFDF7" stroke="#D3C2F0" stroke-width="2"/>
+
+    <!-- Left Column -->
+    <rect x="0" y="0" width="85" height="180" rx="18" fill="url(#bookstore-grad)"/>
+    <!-- Book tag graphic -->
+    <g transform="translate(20, 50)" fill="#FFFFFF">
+      <text font-family="system-ui, sans-serif" font-weight="900" font-size="34" text-anchor="middle" x="22" y="32">10%</text>
+      <text font-family="system-ui, sans-serif" font-weight="700" font-size="13" text-anchor="middle" x="22" y="52">OFF</text>
+    </g>
+
+    <line x1="85" y1="12" x2="85" y2="168" stroke="#D3C2F0" stroke-width="2" stroke-dasharray="6 6"/>
+
+    <g transform="translate(105, 30)">
+      <text font-family="system-ui, sans-serif" font-weight="800" font-size="11" letter-spacing="1" fill="#4B2E8A">BOOKSTORE DISCOUNT</text>
+      <text y="30" font-family="system-ui, sans-serif" font-weight="900" font-size="22" fill="#14211D">10% Off Any Book</text>
+      <text y="52" font-family="system-ui, sans-serif" font-weight="500" font-size="13" fill="#4A5852">Algoma University Bookstore</text>
+
+      <g transform="translate(0, 68)">
+        <rect width="195" height="42" rx="8" fill="#ECE6F8" stroke="#D3C2F0"/>
+        <text x="12" y="26" font-family="'Courier New', monospace" font-weight="800" font-size="16" fill="#4B2E8A">UL-BOOK-10</text>
+        <rect x="140" y="8" width="44" height="26" rx="4" fill="#0F5B4B"/>
+        <text x="162" y="25" font-family="system-ui, sans-serif" font-weight="700" font-size="11" fill="#FFFFFF" text-anchor="middle">75 pts</text>
+      </g>
+    </g>
+  </g>
+</svg>

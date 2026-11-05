@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en-CA">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>UniLend Admin &amp; Facilitator Console</title>
+  <link rel="icon" href="favicon.ico" sizes="48x48">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/app.css">
+  <style>
+    .admin-nav { display:flex; gap:8px; border-bottom:1px solid var(--line); padding:10px 16px; background:var(--card); overflow-x:auto; }
+    .admin-tab { background:none; border:none; padding:8px 14px; font-weight:700; color:var(--soft); cursor:pointer; border-radius:6px; font-size:0.9rem; }
+    .admin-tab.active { background:var(--brand); color:#FFF; }
+    .metric-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:12px; margin-bottom:20px; }
+    .metric-card { background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:16px; }
+    .metric-val { font-size:1.6rem; font-weight:800; color:var(--brand); margin-top:4px; }
+  </style>
+</head>
+<body style="background:var(--paper);">
+
+<div class="app-container" style="max-width:1100px;">
+
+  <!-- Admin Header -->
+  <header class="app-header">
+    <div style="display:flex; align-items:center; gap:10px;">
+      <a href="index.html" class="brand-wrap">
+        <img src="assets/brand/logo-mark.svg" alt="Mark">
+        <span class="brand-text">UniLend</span>
+      </a>
+      <span class="admin-badge">Admin &bull; Facilitator</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <a href="index.html" class="secondary-btn" style="min-height:36px; font-size:0.85rem; padding:0 12px; text-decoration:none;">&larr; Student App</a>
+    </div>
+  </header>
+
+  <!-- Admin Nav -->
+  <nav class="admin-nav">
+    <button class="admin-tab active" data-pane="dash">Dashboard</button>
+    <button class="admin-tab" data-pane="scenarios">Scenario Templates</button>
+    <button class="admin-tab" data-pane="partner">Partner Console (Wizard-of-Oz)</button>
+    <button class="admin-tab" data-pane="study">Study Mode &amp; Logging</button>
+  </nav>
+
+  <!-- Content Panes -->
+  <main style="padding:20px 16px;">
+
+    <!-- Dashboard Pane -->
+    <div id="pane-dash" class="admin-section">
+      <div class="metric-grid">
+        <div class="metric-card">
+          <div style="font-size:0.85rem; color:var(--soft); font-weight:700;">Active Exchanges</div>
+          <div class="metric-val" id="met-active">3</div>
+        </div>
+        <div class="metric-card">
+          <div style="font-size:0.85rem; color:var(--soft); font-weight:700;">Total Lends Today</div>
+          <div class="metric-val" id="met-lends">18</div>
+        </div>
+        <div class="metric-card">
+          <div style="font-size:0.85rem; color:var(--soft); font-weight:700;">Active Chain Nodes</div>
+          <div class="metric-val" id="met-chains">7</div>
+        </div>
+        <div class="metric-card">
+          <div style="font-size:0.85rem; color:var(--soft); font-weight:700;">Overdue Loans</div>
+          <div class="metric-val" style="color:var(--danger);" id="met-overdue">0</div>
+        </div>
+      </div>
+
+      <div style="background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:18px;">
+        <h2 style="font-size:1.15rem; font-weight:800; margin-bottom:12px;">Live Campus Exchanges</h2>
+        <table style="width:100%; border-collapse:collapse; font-size:0.9rem;">
+          <thead>
+            <tr style="text-align:left; border-bottom:1px solid var(--line); color:var(--soft);">
+              <th style="padding:8px 0;">Item</th>
+              <th>Borrower</th>
+              <th>Lender</th>
+              <th>Spot</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="dash-exchanges-tbody">
+            <tr style="border-bottom:1px solid var(--line);">
+              <td style="padding:10px 0; font-weight:700;">Phone charger (USB-C)</td>
+              <td>Participant (You)</td>
+              <td>Sam</td>
+              <td>Wishart Library</td>
+              <td><span class="item-status-tag">ACTIVE</span></td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--line);">
+              <td style="padding:10px 0; font-weight:700;">Scientific calculator</td>
+              <td>Sam</td>
+              <td>Participant (You)</td>
+              <td>Student Centre</td>
+              <td><span class="item-status-tag">REQUESTED</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Scenarios Pane -->
+    <div id="pane-scenarios" class="admin-section" style="display:none;">
+      <div style="margin-bottom:16px;">
+        <h2 style="font-size:1.25rem; font-weight:800;">Scenario Templates (Instant Reset &lt; 1s)</h2>
+        <p style="color:var(--soft); font-size:0.9rem; margin-top:4px;">Inject starting test conditions for any participant phone before handing it over.</p>
+      </div>
+
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:14px;">
+        <div class="metric-card">
+          <h3 style="font-size:1.05rem; font-weight:800;">Task 1: Fresh Participant</h3>
+          <p style="font-size:0.85rem; color:var(--soft); margin:6px 0 14px;">Signed-in student with 15 points. Ready to search and borrow.</p>
+          <button class="primary-btn btn-apply-sc" data-sc="t1" style="width:100%;">Apply T1 Starting State</button>
+        </div>
+
+        <div class="metric-card">
+          <h3 style="font-size:1.05rem; font-weight:800;">Task 2: Active Loan to Return</h3>
+          <p style="font-size:0.85rem; color:var(--soft); margin:6px 0 14px;">Borrowed charger from Sam yesterday, due in 4 hours.</p>
+          <button class="primary-btn btn-apply-sc" data-sc="t2" style="width:100%;">Apply T2 Starting State</button>
+        </div>
+
+        <div class="metric-card">
+          <h3 style="font-size:1.05rem; font-weight:800;">Task 3: Incoming Request</h3>
+          <p style="font-size:0.85rem; color:var(--soft); margin:6px 0 14px;">Sam requested scientific calculator, ready to accept and hand off.</p>
+          <button class="primary-btn btn-apply-sc" data-sc="t3" style="width:100%;">Apply T3 Starting State</button>
+        </div>
+
+        <div class="metric-card">
+          <h3 style="font-size:1.05rem; font-weight:800;">Scenario: Overdue Loan</h3>
+          <p style="font-size:0.85rem; color:var(--soft); margin:6px 0 14px;">Past due time with no fine and 1-tap extension.</p>
+          <button class="primary-btn btn-apply-sc" data-sc="late" style="width:100%;">Apply Overdue State</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Partner Console (Wizard of Oz) -->
+    <div id="pane-partner" class="admin-section" style="display:none;">
+      <h2 style="font-size:1.25rem; font-weight:800; margin-bottom:6px;">Partner Console (Wizard-of-Oz)</h2>
+      <p style="color:var(--soft); font-size:0.9rem; margin-bottom:16px;">Control demo accounts (Sam, Mei, Jordan) in real time while a participant tests the app.</p>
+
+      <div style="background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:16px; display:flex; flex-direction:column; gap:12px;">
+        <div>
+          <label style="font-size:0.85rem; font-weight:700;">Act as Demo Account:</label>
+          <select id="partner-select-actor" class="search-input" style="width:100%; margin-top:4px;">
+            <option value="Sam">Sam (Phone Charger Lender)</option>
+            <option value="Mei">Mei (Adapter Lender)</option>
+            <option value="Jordan">Jordan (Laptop Charger)</option>
+          </select>
+        </div>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="secondary-btn" id="btn-quick-accept">1-Tap: Accept Pending Request</button>
+          <button class="secondary-btn" id="btn-quick-arrived">1-Tap: "I've Arrived at Spot"</button>
+          <button class="secondary-btn" id="btn-quick-confirm">1-Tap: Confirm Hand-off</button>
+        </div>
+
+        <div>
+          <label style="font-size:0.85rem; font-weight:700;">Send Direct Message to Participant:</label>
+          <div style="display:flex; gap:8px; margin-top:4px;">
+            <input type="text" id="partner-custom-msg" class="search-input" style="flex:1;" placeholder="e.g. I am sitting near the window wearing a red scarf">
+            <button class="primary-btn" id="btn-send-partner-msg">Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Study Mode Pane -->
+    <div id="pane-study" class="admin-section" style="display:none;">
+      <h2 style="font-size:1.25rem; font-weight:800; margin-bottom:6px;">Study Configuration &amp; Logging</h2>
+      <p style="color:var(--soft); font-size:0.9rem; margin-bottom:16px;">Configure rewards variant (A vs B) and download study metrics.</p>
+
+      <div style="background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:16px; display:flex; flex-direction:column; gap:14px;">
+        <div>
+          <label style="font-weight:700; font-size:0.95rem;">Active Rewards Variant:</label>
+          <div style="display:flex; gap:16px; margin-top:8px;">
+            <label style="display:flex; align-items:center; gap:8px;">
+              <input type="radio" name="var-radio" value="recognition" checked> Variant A (Recognition Only)
+            </label>
+            <label style="display:flex; align-items:center; gap:8px;">
+              <input type="radio" name="var-radio" value="perks"> Variant B (Monetary Perks)
+            </label>
+          </div>
+        </div>
+
+        <div style="border-top:1px solid var(--line); padding-top:14px;">
+          <h3 style="font-size:1rem; font-weight:800; margin-bottom:8px;">Export Study Session Log</h3>
+          <p style="color:var(--soft); font-size:0.85rem; margin-bottom:10px;">Downloads timestamps, taps, backtracks, and Pass-It-On conversion data.</p>
+          <button class="primary-btn" id="btn-export-csv" style="display:inline-flex;">Download Session CSV</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+</div>
+
+<script type="module">
+  import { api } from "./js/data/api.js";
+
+  // Tab Switching
+  document.querySelectorAll(".admin-tab").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".admin-tab").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      const target = btn.getAttribute("data-pane");
+      document.querySelectorAll(".admin-section").forEach(sec => sec.style.display = "none");
+      document.getElementById("pane-" + target).style.display = "block";
+    });
+  });
+
+  // Apply Scenarios
+  document.querySelectorAll(".btn-apply-sc").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const sc = btn.getAttribute("data-sc");
+      api.applyScenario(sc);
+      alert("Applied " + sc.toUpperCase() + " scenario state! Open the student app to inspect.");
+    });
+  });
+
+  // Variant Switcher
+  document.querySelectorAll('input[name="var-radio"]').forEach((radio) => {
+    radio.addEventListener("change", (e) => {
+      api.setVariant(e.target.value);
+    });
+  });
+
+  // Partner Console Actions
+  document.getElementById("btn-quick-accept")?.addEventListener("click", () => {
+    const state = api.get();
+    if (state.incomingRequests.length > 0) {
+      api.acceptRequest(state.incomingRequests[0].id);
+      alert("Accepted pending request!");
+    } else {
+      alert("No pending incoming requests to accept.");
+    }
+  });
+
+  document.getElementById("btn-quick-arrived")?.addEventListener("click", () => {
+    const actor = document.getElementById("partner-select-actor").value;
+    const state = api.get();
+    const ex = state.activeLoans[0] || state.incomingRequests[0];
+    if (ex) {
+      api.sendMessage(ex.id, `Hi! I've arrived at ${ex.spotName}.`);
+      alert("Sent arrival message as " + actor);
+    }
+  });
+
+  document.getElementById("btn-send-partner-msg")?.addEventListener("click", () => {
+    const text = document.getElementById("partner-custom-msg").value.trim();
+    if (!text) return;
+    const state = api.get();
+    const ex = state.activeLoans[0] || state.incomingRequests[0];
+    if (ex) {
+      api.sendMessage(ex.id, text);
+      document.getElementById("partner-custom-msg").value = "";
+      alert("Message sent!");
+    }
+  });
+
+  // Export CSV
+  document.getElementById("btn-export-csv")?.addEventListener("click", () => {
+    const csvContent = "participant_id,variant,task,time_sec,taps,pass_it_on\nP01,A,T1,45.2,8,not_seen\nP02,A,T2,38.1,6,taken\nP03,A,T3,52.4,7,taken\n";
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `unilend-v2-study-log-${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+  });
+</script>
+</body>
+</html>
+

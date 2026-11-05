@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200" fill="none">
+  <g transform="translate(60, 40)">
+    <!-- Cloud with local checkmark -->
+    <path d="M40 70 C25 70 12 58 12 42 C12 28 22 18 35 16 C42 4 58 -2 72 3 C84 7 92 18 94 28 C102 28 110 35 110 44 C110 54 102 62 92 62 H40" 
+          fill="#E2F0EA" stroke="#0F5B4B" stroke-width="3"/>
+    <!-- Slash bar with reconnect checkmark -->
+    <circle cx="115" cy="65" r="16" fill="#0F5B4B"/>
+    <path d="M109 65 L113 69 L122 60" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="160" y="145" font-family="system-ui, sans-serif" font-weight="700" font-size="16" fill="#14211D" text-anchor="middle">Working completely offline</text>
+  <text x="160" y="165" font-family="system-ui, sans-serif" font-weight="500" font-size="13" fill="#4A5852" text-anchor="middle">Changes will sync once you reconnect to campus Wi-Fi</text>
+</svg>

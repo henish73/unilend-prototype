@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en-CA">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="UniLend v2: Algoma University Student Peer-Lending Platform">
+  <meta name="theme-color" content="#0B4F43">
+  <title>UniLend Campus v2 - Algoma University</title>
+
+  <link rel="icon" href="favicon.ico" sizes="48x48">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<div class="app-container">
+
+  <!-- Header -->
+  <header class="app-header">
+    <a href="#" class="brand-wrap" id="brand-home">
+      <img src="assets/brand/logo-mark.svg" alt="UniLend Mark">
+      <span class="brand-text">UniLend</span>
+    </a>
+    <div class="header-actions">
+      <div class="points-pill" id="header-points">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <span id="user-points-val">40 pts</span>
+      </div>
+      <button class="avatar-badge-btn" id="avatar-btn" aria-label="Open profile avatar picker">
+        <img id="user-avatar-img" src="assets/avatars/avatar-user.svg" alt="Avatar">
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content (Two-pane desktop / single-pane mobile) -->
+  <main class="app-main">
+
+    <!-- Master Pane (Feed / Tabs) -->
+    <section class="pane-master" id="master-pane">
+      
+      <!-- Browse Feed View -->
+      <div id="view-feed" class="feed-content">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <h1 style="font-size:1.4rem; font-weight:800;">Campus Lending</h1>
+          <button class="primary-btn" id="btn-open-list" style="min-height:38px; font-size:0.88rem; padding:0 12px;">+ List Item</button>
+        </div>
+
+        <div class="search-bar">
+          <input type="text" id="feed-search" class="search-input" placeholder="Search chargers, books, lab coats…">
+        </div>
+
+        <div class="category-chips" id="cat-chips">
+          <button class="chip-btn active" data-cat="all">All Items</button>
+          <button class="chip-btn" data-cat="chargers">Chargers</button>
+          <button class="chip-btn" data-cat="cables">Adapters</button>
+          <button class="chip-btn" data-cat="books">Textbooks</button>
+          <button class="chip-btn" data-cat="calculators">Calculators</button>
+        </div>
+
+        <div id="item-list-container" style="display:flex; flex-direction:column; gap:12px;">
+          <!-- Dynamically injected items -->
+        </div>
+      </div>
+
+      <!-- Activity & Loans View -->
+      <div id="view-activity" class="feed-content" style="display:none;">
+        <h1 style="font-size:1.4rem; font-weight:800;">My Exchanges</h1>
+        
+        <div id="active-loans-list" style="display:flex; flex-direction:column; gap:14px; margin-top:8px;">
+          <!-- Active loans -->
+        </div>
+
+        <div style="margin-top:24px;">
+          <h2 style="font-size:1.1rem; font-weight:700; margin-bottom:12px;">Points History</h2>
+          <div id="ledger-history-list" style="display:flex; flex-direction:column; gap:8px;">
+            <!-- Ledger rows -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Rewards Shop View -->
+      <div id="view-rewards" class="feed-content" style="display:none;">
+        <h1 style="font-size:1.4rem; font-weight:800;">Rewards &amp; Impact</h1>
+        <p style="color:var(--soft); font-size:0.9rem;">Turn your peer assistance into campus recognition and community impact.</p>
+        
+        <div id="rewards-list-container" style="display:flex; flex-direction:column; gap:12px; margin-top:12px;">
+          <!-- Rewards -->
+        </div>
+      </div>
+
+      <!-- Profile View -->
+      <div id="view-profile" class="feed-content" style="display:none;">
+        <h1 style="font-size:1.4rem; font-weight:800;">Student Profile</h1>
+        
+        <div style="background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:16px; display:flex; align-items:center; gap:16px;">
+          <img id="profile-avatar-large" src="assets/avatars/avatar-user.svg" style="width:64px; height:64px; border-radius:50%;" alt="Avatar">
+          <div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <h2 style="font-size:1.2rem; font-weight:800;" id="profile-name">Student Participant</h2>
+              <span style="background:rgba(11,79,67,0.1); color:var(--brand); font-size:0.75rem; font-weight:700; padding:2px 6px; border-radius:4px;">Verified</span>
+            </div>
+            <p style="color:var(--soft); font-size:0.85rem;">Algoma University &bull; COSC 2596</p>
+          </div>
+        </div>
+
+        <div style="margin-top:16px;">
+          <h2 style="font-size:1.05rem; font-weight:700; margin-bottom:10px;">Choose Avatar</h2>
+          <div id="avatar-grid-picker" style="display:grid; grid-template-columns:repeat(4, 1fr); gap:10px;">
+            <!-- Injected avatars -->
+          </div>
+        </div>
+
+        <div style="margin-top:24px; display:flex; flex-direction:column; gap:10px;">
+          <a href="admin.html" class="secondary-btn" style="text-decoration:none; text-align:center;">Open Admin &amp; Facilitator Console</a>
+          <a href="assets.html" class="secondary-btn" style="text-decoration:none; text-align:center;">View Visual Design System &amp; Assets</a>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Detail Pane (Selected Item, Active Exchange, or Chat) -->
+    <section class="pane-detail" id="detail-pane">
+      <div id="detail-content" class="detail-view">
+        <div style="text-align:center; padding:48px 16px; color:var(--soft);">
+          <img src="assets/illustrations/scan-qr.svg" alt="Select" style="max-width:180px; margin-bottom:16px;">
+          <h3 style="color:var(--ink); font-size:1.15rem; font-weight:700;">Select an item or active exchange</h3>
+          <p style="font-size:0.9rem; margin-top:4px;">View live loan status, campus pickup directions, and real-time messaging.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Mobile Navigation Bar -->
+  <nav class="mobile-tabs" aria-label="Mobile Navigation">
+    <button class="tab-btn active" data-tab="feed">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Browse</span>
+    </button>
+    <button class="tab-btn" data-tab="activity">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span>Activity</span>
+    </button>
+    <button class="tab-btn" data-tab="rewards">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      <span>Rewards</span>
+    </button>
+    <button class="tab-btn" data-tab="profile">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>Profile</span>
+    </button>
+  </nav>
+
+</div>
+
+<!-- Modal: List Item Flow -->
+<div id="modal-list-item" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:200; align-items:center; justify-content:center; padding:16px;">
+  <div style="background:var(--card); width:100%; max-width:480px; border-radius:var(--radius); padding:20px; max-height:90vh; overflow-y:auto;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+      <h2 style="font-size:1.25rem; font-weight:800;">List an Item to Lend</h2>
+      <button id="close-list-modal" style="background:none; border:none; font-size:1.5rem; cursor:pointer;">&times;</button>
+    </div>
+    <form id="form-create-item" style="display:flex; flex-direction:column; gap:14px;">
+      <div>
+        <label style="font-size:0.85rem; font-weight:700; display:block; margin-bottom:4px;">Item Title</label>
+        <input type="text" id="new-item-title" required class="search-input" style="width:100%;" placeholder="e.g. TI-84 Plus CE Graphing Calculator">
+      </div>
+      <div>
+        <label style="font-size:0.85rem; font-weight:700; display:block; margin-bottom:4px;">Category</label>
+        <select id="new-item-cat" class="search-input" style="width:100%;">
+          <option value="chargers">Chargers &amp; Power</option>
+          <option value="cables">Cables &amp; Adapters</option>
+          <option value="books">Textbooks</option>
+          <option value="calculators">Calculators</option>
+          <option value="lab">Lab Equipment</option>
+          <option value="general">General Campus</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:0.85rem; font-weight:700; display:block; margin-bottom:4px;">Condition</label>
+        <select id="new-item-cond" class="search-input" style="width:100%;">
+          <option value="Like new">Like new</option>
+          <option value="Good" selected>Good condition</option>
+          <option value="Fair">Fair (functional)</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:0.85rem; font-weight:700; display:block; margin-bottom:4px;">Preferred Safe Pickup Spot</label>
+        <select id="new-item-spot" class="search-input" style="width:100%;">
+          <option value="library">Wishart Library Front Desk</option>
+          <option value="student_centre">Student Centre Lounge</option>
+          <option value="cafe">Morning Star Cafe</option>
+        </select>
+      </div>
+      <button type="submit" class="primary-btn" style="margin-top:8px;">Post Item to Campus</button>
+    </form>
+  </div>
+</div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
+

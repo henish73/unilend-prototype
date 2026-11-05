@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 220" fill="none">
+  <defs>
+    <linearGradient id="chain-link-g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0F5B4B"/>
+      <stop offset="100%" stop-color="#0A4438"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Connective Path Line -->
+  <path d="M60 110 H400" stroke="#9CCDBD" stroke-width="8" stroke-dasharray="12 8"/>
+
+  <!-- Node 1: Mei -->
+  <g transform="translate(60, 110)">
+    <circle cx="0" cy="0" r="32" fill="url(#chain-link-g)" stroke="#FFFFFF" stroke-width="4"/>
+    <text y="6" font-family="system-ui, sans-serif" font-weight="800" font-size="18" fill="#FFFFFF" text-anchor="middle">M</text>
+    <text y="50" font-family="system-ui, sans-serif" font-weight="700" font-size="13" fill="#14211D" text-anchor="middle">Mei</text>
+  </g>
+
+  <!-- Node 2: Sam -->
+  <g transform="translate(170, 110)">
+    <circle cx="0" cy="0" r="32" fill="url(#chain-link-g)" stroke="#FFFFFF" stroke-width="4"/>
+    <text y="6" font-family="system-ui, sans-serif" font-weight="800" font-size="18" fill="#FFFFFF" text-anchor="middle">S</text>
+    <text y="50" font-family="system-ui, sans-serif" font-weight="700" font-size="13" fill="#14211D" text-anchor="middle">Sam</text>
+  </g>
+
+  <!-- Node 3: You (Highlighted in Warm Orange) -->
+  <g transform="translate(280, 110)">
+    <circle cx="0" cy="0" r="36" fill="#FF9E4A" stroke="#FFFFFF" stroke-width="5"/>
+    <text y="6" font-family="system-ui, sans-serif" font-weight="900" font-size="18" fill="#14211D" text-anchor="middle">You</text>
+    <text y="54" font-family="system-ui, sans-serif" font-weight="800" font-size="13" fill="#9A4300" text-anchor="middle">Current</text>
+  </g>
+
+  <!-- Node 4: Next Classmate -->
+  <g transform="translate(390, 110)">
+    <circle cx="0" cy="0" r="32" fill="#E2F0EA" stroke="#0F5B4B" stroke-width="3" stroke-dasharray="6 4"/>
+    <text y="8" font-family="system-ui, sans-serif" font-weight="800" font-size="22" fill="#0F5B4B" text-anchor="middle">?</text>
+    <text y="50" font-family="system-ui, sans-serif" font-weight="700" font-size="13" fill="#4A5852" text-anchor="middle">Next</text>
+  </g>
+
+  <!-- Top Banner -->
+  <g transform="translate(130, 20)">
+    <rect width="200" height="34" rx="17" fill="#0F5B4B"/>
+    <text x="100" y="22" font-family="system-ui, sans-serif" font-weight="700" font-size="13" fill="#FFFFFF" text-anchor="middle">🔗 Help Chain: 4 People</text>
+  </g>
+</svg>

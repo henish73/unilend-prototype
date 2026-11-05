@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 220" fill="none">
+  <defs>
+    <linearGradient id="sc-bg" x1="0" y1="0" x2="340" y2="220" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FCF0CC"/>
+      <stop offset="100%" stop-color="#FCEEDF"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="340" height="220" rx="24" fill="url(#sc-bg)"/>
+  <rect x="2" y="2" width="336" height="216" rx="22" stroke="#EBC59D" stroke-width="2"/>
+
+  <!-- Comfortable Lounge Sofa Illustration -->
+  <g transform="translate(60, 45)">
+    <!-- Sofa backrest -->
+    <rect x="15" y="40" width="190" height="50" rx="16" fill="#0F5B4B"/>
+    <!-- Cushions -->
+    <rect x="25" y="65" width="80" height="35" rx="8" fill="#146E5B"/>
+    <rect x="115" y="65" width="80" height="35" rx="8" fill="#146E5B"/>
+    <!-- Armrests -->
+    <rect x="5" y="55" width="20" height="45" rx="8" fill="#0A4438"/>
+    <rect x="195" y="55" width="20" height="45" rx="8" fill="#0A4438"/>
+    <!-- Legs -->
+    <rect x="25" y="100" width="8" height="15" rx="2" fill="#9A4300"/>
+    <rect x="187" y="100" width="8" height="15" rx="2" fill="#9A4300"/>
+
+    <!-- Coffee table with laptop -->
+    <ellipse cx="110" cy="120" rx="45" ry="12" fill="#FFFFFF" stroke="#E4E3DC" stroke-width="2"/>
+    <rect x="95" y="112" width="25" height="14" rx="2" fill="#14211D"/>
+
+    <!-- Lighting plant decoration -->
+    <path d="M225 110 C225 75 245 65 245 50" stroke="#0F5B4B" stroke-width="3" fill="none"/>
+    <circle cx="245" cy="50" r="10" fill="#9CCDBD"/>
+  </g>
+
+  <!-- Distance Pill -->
+  <g transform="translate(195, 20)">
+    <rect width="125" height="28" rx="14" fill="#FFFFFF" stroke="#EBC59D"/>
+    <text x="62" y="18" font-family="system-ui, sans-serif" font-weight="700" font-size="12" fill="#9A4300" text-anchor="middle">🚶 4 min walk</text>
+  </g>
+</svg>

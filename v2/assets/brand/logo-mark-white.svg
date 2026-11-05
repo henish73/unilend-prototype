@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <linearGradient id="g-brand" x1="64" y1="64" x2="448" y2="448" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0F5B4B"/>
+      <stop offset="100%" stop-color="#0A4438"/>
+    </linearGradient>
+    <linearGradient id="g-mid" x1="120" y1="120" x2="400" y2="400" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#9CCDBD"/>
+      <stop offset="100%" stop-color="#4DAF98"/>
+    </linearGradient>
+    <linearGradient id="g-warm" x1="300" y1="80" x2="420" y2="200" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FF9E4A"/>
+      <stop offset="100%" stop-color="#9A4300"/>
+    </linearGradient>
+    <filter id="shadow" x="-256" y="-256" width="512" height="512" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#14211D" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+
+  <!-- Background tile -->
+  <rect width="512" height="512" rx="128" fill="#16201D"/>
+  <rect x="8" y="8" width="496" height="496" rx="120" stroke="rgba(255,255,255,0.12)" stroke-width="4"/>
+
+  <!-- Interlocking Lending Loop forming U -->
+  <g filter="url(#shadow)" transform="translate(256,256)">
+    <!-- Left loop -->
+    <path d="M-110 -100 C-110 50 -70 120 0 120 C70 120 110 50 110 -100" 
+          stroke="#79C7B4" stroke-width="44" stroke-linecap="round" fill="none"/>
+    <!-- Overlapping inner ribbon / lending hand clasp -->
+    <path d="M-75 -30 C-75 60 -40 85 0 85 C40 85 75 60 75 -30" 
+          stroke="url(#g-mid)" stroke-width="26" stroke-linecap="round" fill="none"/>
+    <!-- Exchange arrows connecting the tops -->
+    <path d="M-110 -100 L-135 -70 M-110 -100 L-85 -70" 
+          stroke="#79C7B4" stroke-width="36" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M110 -100 L135 -130 M110 -100 L85 -130" 
+          stroke="#79C7B4" stroke-width="36" stroke-linecap="round" stroke-linejoin="round"/>
+    
+    <!-- Spark of kindness / shared trust in top right -->
+    <circle cx="105" cy="-80" r="18" fill="url(#g-warm)"/>
+    <path d="M105 -115 L105 -45 M70 -80 L140 -80" stroke="#FF9E4A" stroke-width="8" stroke-linecap="round"/>
+  </g>
+</svg>

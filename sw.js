@@ -4,7 +4,7 @@
    Every request asks the server whether the file changed, instead of trusting the
    browser cache, so a release always loads as one matching set of files.
    tools/stamp_version.py updates VERSION on each release. */
-var VERSION = "20261105153152";
+var VERSION = "20261105154058";
 var CACHE = "unilend-" + VERSION;
 var CORE = ["./", "index.html", "facilitator.html", "css/app.css", "js/config.js", "js/rewards.js", "js/data.js", "js/store.js", "js/log.js", "js/app.js", "manifest.webmanifest", "favicon.svg", "favicon.ico", "assets/brand/logo-mark.svg"];
 

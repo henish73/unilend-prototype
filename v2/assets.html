@@ -1,0 +1,1146 @@
+<!doctype html>
+<html lang="en-CA">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UniLend — Brand Assets &amp; Graphic System</title>
+  <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <style>
+    :root {
+      --bg: #F7F6F2;
+      --surface: #FFFFFF;
+      --surface-2: #EFEEE8;
+      --ink: #14211D;
+      --ink-2: #4A5852;
+      --line: #E4E3DC;
+      --brand: #0F5B4B;
+      --brand-strong: #0A4438;
+      --brand-soft: #E2F0EA;
+      --brand-mid: #9CCDBD;
+      --warm: #9A4300;
+      --warm-soft: #FCEEDF;
+      --gold: #6F4E00;
+      --gold-soft: #FCF0CC;
+      --r-m: 16px;
+      --r-s: 10px;
+    }
+    [data-theme="dark"] {
+      --bg: #0F1513;
+      --surface: #16201D;
+      --surface-2: #1F2C28;
+      --ink: #E8EFEA;
+      --ink-2: #9DB0A6;
+      --line: #293832;
+      --brand: #4DAF98;
+      --brand-soft: #1B362F;
+      --warm: #FF9E4A;
+      --warm-soft: #382414;
+      --gold: #FFD166;
+      --gold-soft: #332810;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.5;
+      padding: 0 0 64px 0;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+    header.hero {
+      background: var(--surface);
+      border-bottom: 1px solid var(--line);
+      padding: 32px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+    }
+    .hero-wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .brand-title {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-decoration: none;
+      color: inherit;
+    }
+    .brand-title img {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+    }
+    .brand-title h1 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+    .brand-title span {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--ink-2);
+      font-weight: 500;
+    }
+    .actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    button, .btn {
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: var(--r-s);
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--ink);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+    button:hover, .btn:hover {
+      background: var(--surface-2);
+    }
+    .btn.primary {
+      background: var(--brand);
+      color: #FFFFFF;
+      border-color: var(--brand);
+    }
+    .btn.primary:hover {
+      opacity: 0.92;
+    }
+    main {
+      max-width: 1200px;
+      margin: 32px auto 0;
+      padding: 0 20px;
+    }
+    /* Filter Bar */
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 12px;
+      margin-bottom: 28px;
+    }
+    .filter-btn {
+      white-space: nowrap;
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 0.85rem;
+      background: var(--surface);
+      color: var(--ink-2);
+      border: 1px solid var(--line);
+    }
+    .filter-btn.active {
+      background: var(--brand);
+      color: #FFF;
+      border-color: var(--brand);
+    }
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      margin: 32px 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-desc {
+      font-size: 0.95rem;
+      color: var(--ink-2);
+      margin-bottom: 18px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 20px;
+      margin-bottom: 36px;
+    }
+    .grid.wide {
+      grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--r-m);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+    }
+    .preview-box {
+      background: var(--surface-2);
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 200px;
+      border-bottom: 1px solid var(--line);
+      position: relative;
+    }
+    .preview-box.dark-bg {
+      background: #0F1513;
+    }
+    .preview-box img, .preview-box object {
+      max-width: 100%;
+      max-height: 180px;
+      object-fit: contain;
+    }
+    .card-body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .card-meta {
+      font-size: 0.8rem;
+      color: var(--ink-2);
+      margin-bottom: 12px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .card-meta span {
+      background: var(--surface-2);
+      padding: 2px 8px;
+      border-radius: 6px;
+      border: 1px solid var(--line);
+    }
+    .card-desc {
+      font-size: 0.88rem;
+      color: var(--ink-2);
+      margin-bottom: 16px;
+      flex: 1;
+    }
+    .card-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: auto;
+    }
+    .card-actions a, .card-actions button {
+      flex: 1;
+      justify-content: center;
+      font-size: 0.8rem;
+      padding: 6px 10px;
+    }
+    .toast-msg {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #14211D;
+      color: #FFF;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.2s ease;
+      pointer-events: none;
+      z-index: 1000;
+    }
+    .toast-msg.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .palette {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 12px;
+      margin-bottom: 40px;
+    }
+    .swatch {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--surface);
+    }
+    .swatch-color {
+      height: 54px;
+    }
+    .swatch-info {
+      padding: 8px;
+      font-size: 0.78rem;
+    }
+    .swatch-info strong {
+      display: block;
+      font-size: 0.82rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="hero">
+    <div class="hero-wrap">
+      <a href="index.html" class="brand-title">
+        <img src="assets/icons/favicon.svg" alt="UniLend Logo">
+        <div>
+          <h1>UniLend Asset Library</h1>
+          <span>Algoma University Campus Peer Lending &middot; Production Assets</span>
+        </div>
+      </a>
+      <div class="actions">
+        <button id="themeToggle" aria-label="Toggle dark/light appearance">🌓 Theme</button>
+        <a href="index.html" class="btn">Launch Prototype &rarr;</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Filter Tabs -->
+    <div class="filter-bar">
+      <button class="filter-btn active" data-filter="all">All Assets</button>
+      <button class="filter-btn" data-filter="brand">Brand &amp; Logo</button>
+      <button class="filter-btn" data-filter="icons">PWA &amp; App Icons</button>
+      <button class="filter-btn" data-filter="items">Item Illustrations</button>
+      <button class="filter-btn" data-filter="avatars">Student Avatars</button>
+      <button class="filter-btn" data-filter="rewards">Rewards &amp; Badges</button>
+      <button class="filter-btn" data-filter="zones">Campus Zones</button>
+      <button class="filter-btn" data-filter="illustrations">Flow Graphics</button>
+    </div>
+
+    <!-- 1. BRAND & LOGO -->
+    <section class="asset-group" data-group="brand">
+      <div class="section-title">✨ Brand &amp; Identity</div>
+      <p class="section-desc">Primary wordmarks, emblems, trust badges, and OpenGraph social banner cards.</p>
+      
+      <div class="grid wide">
+        <!-- Logo Primary -->
+        <div class="card">
+          <div class="preview-box">
+            <img src="assets/brand/logo.svg" alt="UniLend Horizontal Logo">
+          </div>
+          <div class="card-body">
+            <div class="card-title">UniLend Primary Logo</div>
+            <div class="card-meta"><span>SVG Vector</span><span>760 &times; 180</span><span>Light Mode</span></div>
+            <div class="card-desc">Horizontal brand lockup with U-infinity exchange mark and Algoma University tagline.</div>
+            <div class="card-actions">
+              <a href="assets/brand/logo.svg" download class="btn">Download SVG</a>
+              <button onclick="copySvg('assets/brand/logo.svg')">Copy Code</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Logo Dark -->
+        <div class="card">
+          <div class="preview-box dark-bg">
+            <img src="assets/brand/logo-white.svg" alt="UniLend Dark Mode Logo">
+          </div>
+          <div class="card-body">
+            <div class="card-title">UniLend Dark Mode Logo</div>
+            <div class="card-meta"><span>SVG Vector</span><span>760 &times; 180</span><span>Dark Mode</span></div>
+            <div class="card-desc">Optimized for dark mode headers, dark presentations, and night appearance.</div>
+            <div class="card-actions">
+              <a href="assets/brand/logo-white.svg" download class="btn">Download SVG</a>
+              <button onclick="copySvg('assets/brand/logo-white.svg')">Copy Code</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Standalone Mark -->
+        <div class="card">
+          <div class="preview-box">
+            <img src="assets/brand/logo-mark.svg" alt="UniLend Logo Mark" style="max-height: 120px;">
+          </div>
+          <div class="card-body">
+            <div class="card-title">UniLend Symbol Mark</div>
+            <div class="card-meta"><span>SVG Vector</span><span>512 &times; 512</span><span>High Res</span></div>
+            <div class="card-desc">The interlocking circular hands and arrow symbol representing peer lending on campus.</div>
+            <div class="card-actions">
+              <a href="assets/brand/logo-mark.svg" download class="btn">Download SVG</a>
+              <button onclick="copySvg('assets/brand/logo-mark.svg')">Copy Code</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Algoma Trust Badge -->
+        <div class="card">
+          <div class="preview-box">
+            <img src="assets/brand/algoma-verified-badge.svg" alt="Algoma Verified Badge">
+          </div>
+          <div class="card-body">
+            <div class="card-title">Verified Algoma Student Badge</div>
+            <div class="card-meta"><span>SVG Vector</span><span>320 &times; 90</span><span>Trust Seal</span></div>
+            <div class="card-desc">Displayed across onboarding and profiles to emphasize closed, safe campus network.</div>
+            <div class="card-actions">
+              <a href="assets/brand/algoma-verified-badge.svg" download class="btn">Download SVG</a>
+              <button onclick="copySvg('assets/brand/algoma-verified-badge.svg')">Copy Code</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Open Graph 1200x630 -->
+        <div class="card" style="grid-column: 1 / -1;">
+          <div class="preview-box" style="padding: 12px; min-height: 280px;">
+            <img src="assets/brand/og-image.png" alt="Open Graph Social Preview" style="max-height: 260px; width: auto; border-radius: 8px;">
+          </div>
+          <div class="card-body">
+            <div class="card-title">Social Share &amp; Open Graph Card</div>
+            <div class="card-meta"><span>PNG &amp; SVG</span><span>1200 &times; 630</span><span>LinkedIn / Twitter / Discord</span></div>
+            <div class="card-desc">Full marketing banner displaying UniLend tagline, Algoma student badge, statistics, and UI previews.</div>
+            <div class="card-actions">
+              <a href="assets/brand/og-image.png" download class="btn primary">Download PNG (1200x630)</a>
+              <a href="assets/brand/og-image.svg" download class="btn">Download SVG</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. ICONS & PWA -->
+    <section class="asset-group" data-group="icons">
+      <div class="section-title">📱 Web App, Favicon &amp; PWA Icons</div>
+      <p class="section-desc">Multi-resolution icons configured in W3C Web Manifest and iOS touch icons.</p>
+
+      <div class="grid">
+        <!-- Favicon ICO -->
+        <div class="card">
+          <div class="preview-box">
+            <img src="assets/icons/favicon-48x48.png" alt="Favicon ICO" style="width: 48px; height: 48px;">
+          </div>
+          <div class="card-body">
+            <div class="card-title">favicon.ico</div>
+            <div class="card-meta"><span>ICO</span><span>16/32/48 Multi</span><span>Browser Tab</span></div>
+            <div class="card-desc">Native multi-layer Windows and browser favicon file.</div>
+            <div class="card-actions">
+              <a href="favicon.ico" download class="btn">Download ICO</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Apple Touch Icon -->
+        <div class="card">
+          <div class="preview-box">
+            <img src="assets/icons/apple-touch-icon.png" alt="Apple Touch Icon" style="width: 90px; height: 90px; border-radius: 20px;">
+          </div>
+          <div class="card-body">
+            <div class="card-title">Apple Touch Icon</div>
+            <div class="card-meta"><span>PNG</span><span>180 &times; 180</span><span>iOS Homescreen</span></div>
+            <div class="card-desc">Used when a participant or student adds the prototype to their iPhone homescreen.</div>
+            <div class="card-actions">
+              <a href="assets/icons/apple-touch-icon.png" download class="btn">Download PNG</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Android 192 -->
+        <div class="card">
+          <div class="preview-box">
+            <img src="assets/icons/android-chrome-192x192.png" alt="Android 192 Icon" style="width: 96px; height: 96px;">
+          </div>
+          <div class="card-body">
+            <div class="card-title">Android Chrome 192</div>
+            <div class="card-meta"><span>PNG</span><span>192 &times; 192</span><span>PWA Standard</span></div>
+            <div class="card-desc">Standard Android splash and homescreen application icon.</div>
+            <div class="card-actions">
+              <a href="assets/icons/android-chrome-192x192.png" download class="btn">Download PNG</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Android 512 -->
+        <div class="card">
+          <div class="preview-box">
+            <img src="assets/icons/android-chrome-512x512.png" alt="Android 512 Icon" style="width: 96px; height: 96px;">
+          </div>
+          <div class="card-body">
+            <div class="card-title">Android Chrome 512</div>
+            <div class="card-meta"><span>PNG</span><span>512 &times; 512</span><span>High Res PWA</span></div>
+            <div class="card-desc">High-definition icon for app store previews and full-bleed loading screens.</div>
+            <div class="card-actions">
+              <a href="assets/icons/android-chrome-512x512.png" download class="btn">Download PNG</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Maskable 512 -->
+        <div class="card">
+          <div class="preview-box">
+            <img src="assets/icons/android-chrome-maskable-512x512.png" alt="Maskable 512 Icon" style="width: 96px; height: 96px; border-radius: 50%;">
+          </div>
+          <div class="card-body">
+            <div class="card-title">Maskable PWA 512</div>
+            <div class="card-meta"><span>PNG</span><span>512 &times; 512</span><span>Adaptive Circles</span></div>
+            <div class="card-desc">Includes 10% safe-zone margin so device OEMs can mask into circles, squircles, or teardrops.</div>
+            <div class="card-actions">
+              <a href="assets/icons/android-chrome-maskable-512x512.png" download class="btn">Download PNG</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Web App Manifest -->
+        <div class="card">
+          <div class="preview-box">
+            <div style="font-family: monospace; font-size: 0.85rem; background: var(--surface); padding: 12px; border-radius: 8px; border: 1px solid var(--line);">
+              {<br>&nbsp;&nbsp;"name": "UniLend",<br>&nbsp;&nbsp;"theme_color": "#0F5B4B"<br>}
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-title">manifest.webmanifest</div>
+            <div class="card-meta"><span>JSON</span><span>W3C Standard</span><span>PWA Install</span></div>
+            <div class="card-desc">Configures standalone display mode, orientation, scope, and branding colors.</div>
+            <div class="card-actions">
+              <a href="manifest.webmanifest" download class="btn">Download Manifest</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. ITEM ILLUSTRATIONS -->
+    <section class="asset-group" data-group="items">
+      <div class="section-title">📦 Item Catalog Illustrations</div>
+      <p class="section-desc">Custom, detailed illustrations representing every borrowable item in UniLend.</p>
+
+      <div class="grid">
+        <!-- Phone Charger -->
+        <div class="card">
+          <div class="preview-box">
+            <img src="assets/items/phone-charger.svg" alt="Phone charger">
+          </div>
+          <div class="card-body">
+            <div class="card-title">Phone Charger (2-in-1)</div>
+            <div class="card-meta"><span>Tech &amp; Chargers</span><span>Sam · 25 pts</span></div>
+            <div class="card-desc">Dual USB-C and Lightning coiled braided cable with 20W wall adapter plug.</div>
+            <div class="card-actions">
+              <a href="assets/items/phone-charger.svg" download class="btn">Download SVG</a>
+              <button onclick="copySvg('assets/items/phone-charger.svg')">Copy Code</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fast Charger -->
+        <div class="card">
+          <div class="preview-box">
+            <img src="assets/items/fast-charger.svg" alt="Fast charger">
+          </div>
+          <div class="card-body">
+            <div class="card-title">Fast Phone Charger (30W)</div>
+            <div class="card-meta"><span>Tech &amp; Chargers</span><span>Jordan · 25 pts</span></div>
+            <div class="card-desc">30W GaN fast charger cube with durable USB-C charging cable.</div>
+            <div class="card-actions">
+              <a href="assets/items/fast-charger.svg" download class="btn">Download SVG</a>
+              <button onclick="copySvg('assets/items/fast-charger.svg')">Copy Code</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Laptop Charger -->
+        <div class="card">
+          <div class="preview-box">
+            <img src="assets/items/laptop-charger.svg" alt="Laptop charger">
+          </div>
+          <div class="card-body">
+            <div class="card-title">Laptop Charger (65W USB-C)</div>
+            <div class="card-meta"><span>Tech &amp; Chargers</span><span>Mei · 25 pts</span></div>
+            <div class="card-desc">65W power supply brick with LED power status indicator and long lead.</div>
+            <div class="card-actions">
+              <a href="assets/items/laptop-charger.svg" download class="btn">Download SVG</a>
+              <button onclick="copySvg('assets/items/laptop-charger.svg')">Copy Code</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- HDMI Adapter -->
+        <div class="card">
+          <div class="preview-box">
+            <img src="assets/items/hdmi-adapter.svg" alt="HDMI Adapter">
+          </div>
+          <div class="card-body">
+            <div class="card-title">USB-C to HDMI Adapter</div>
+            <div class="card-meta"><span>Adapters</span><span>Noor · 15 pts</span></div>
+            <div class="card-desc">Space gray aluminum 4K 60Hz display adapter for presentations.</div>
+            <div class="card-actions">
+              <a href="assets/items/hdmi-adapter.svg" download class="btn">Download SVG</a>
+              <button onclick="copySvg('assets/items/hdmi-adapter.svg')">Copy Code</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Psychology Textbook -->
+        <div class="card">
+          <div class="preview-box">
+            <img src="assets/items/psychology-textbook.svg" alt="Psychology Textbook">
+          </div>
+          <div class="card-body">
+            <div class="card-title">Intro to Psychology Textbook</div>
+            <div class="card-meta"><span>Textbooks</span><span>Diego · 15 pts</span></div>
+            <div class="card-desc">Hardcover edition with ribbon bookmark and Algoma Library reserve sticker.</div>
+            <div class="card-actions">
+              <a href="assets/items/psychology-textbook.svg" download class="btn">Download SVG</a>
+              <button onclick="copySvg('assets/items/psychology-textbook.svg')">Copy Code</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lab Coat -->
+        <div class="card">
+          <div class="preview-box">
+            <img src="assets/items/lab-coat.svg" alt="Chemistry Lab Coat">
+          </div>
+          <div class="card-body">
+            <div class="card-title">Chemistry Lab Coat &amp; Goggles</div>
+            <div class="card-meta"><span>Lab Gear</span><span>Priya · 15 pts</span></div>
+            <div class="card-desc">Clean white medium coat with breast pocket pens and protective safety goggles.</div>
+            <div class="card-actions">
+              <a href="assets/items/lab-coat.svg" download class="btn">Download SVG</a>
+              <button onclick="copySvg('assets/items/lab-coat.svg')">Copy Code</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Compact Umbrella -->
+        <div class="card">
+          <div class="preview-box">
+            <img src="assets/items/umbrella.svg" alt="Compact umbrella">
+          </div>
+          <div class="card-body">
+            <div class="card-title">Compact Umbrella</div>
+            <div class="card-meta"><span>Everyday</span><span>Mei · 15 pts</span></div>
+            <div class="card-desc">Backpack-friendly folding umbrella with auto open/close button and strap.</div>
+            <div class="card-actions">
+              <a href="assets/items/umbrella.svg" download class="btn">Download SVG</a>
+              <button onclick="copySvg('assets/items/umbrella.svg')">Copy Code</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scientific Calculator -->
+        <div class="card">
+          <div class="preview-box">
+            <img src="assets/items/scientific-calculator.svg" alt="Scientific calculator">
+          </div>
+          <div class="card-body">
+            <div class="card-title">Scientific Calculator</div>
+            <div class="card-meta"><span>Tech &amp; Chargers</span><span>My Item · 25 pts</span></div>
+            <div class="card-desc">Algoma exam approved scientific calculator with dual-line natural textbook display.</div>
+            <div class="card-actions">
+              <a href="assets/items/scientific-calculator.svg" download class="btn">Download SVG</a>
+              <button onclick="copySvg('assets/items/scientific-calculator.svg')">Copy Code</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Spare Umbrella -->
+        <div class="card">
+          <div class="preview-box">
+            <img src="assets/items/spare-umbrella.svg" alt="Spare umbrella">
+          </div>
+          <div class="card-body">
+            <div class="card-title">Full Size Spare Umbrella</div>
+            <div class="card-meta"><span>Everyday</span><span>My Item · 15 pts</span></div>
+            <div class="card-desc">Full length walking umbrella with curved wooden handle and gold accents.</div>
+            <div class="card-actions">
+              <a href="assets/items/spare-umbrella.svg" download class="btn">Download SVG</a>
+              <button onclick="copySvg('assets/items/spare-umbrella.svg')">Copy Code</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. STUDENT AVATARS -->
+    <section class="asset-group" data-group="avatars">
+      <div class="section-title">👤 Student Community Avatars</div>
+      <p class="section-desc">Illustrated character avatars for participants, lenders, and leaderboard stars.</p>
+
+      <div class="grid">
+        <!-- Sam -->
+        <div class="card">
+          <div class="preview-box">
+            <img src="assets/avatars/avatar-sam.svg" alt="Sam avatar" style="max-height: 140px;">
+          </div>
+          <div class="card-body">
+            <div class="card-title">Sam (Top Lender)</div>
+            <div class="card-meta"><span>1,120 pts</span><span>Beanie Style</span></div>
+            <div class="card-desc">Algoma student lender for chargers and textbook study materials.</div>
+            <div class="card-actions">
+              <a href="assets/avatars/avatar-sam.svg" download class="btn">Download SVG</a>
+              <button onclick="copySvg('assets/avatars/avatar-sam.svg')">Copy Code</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Jordan -->
+        <div class="card">
+          <div class="preview-box">
+            <img src="assets/avatars/avatar-jordan.svg" alt="Jordan avatar" style="max-height: 140px;">
+          </div>
+          <div class="card-body">
+            <div class="card-title">Jordan</div>
+            <div class="card-meta"><span>Lender</span><span>Glasses &amp; Curls</span></div>
+            <div class="card-desc">Lends fast phone chargers at the Student Centre lounge.</div>
+            <div class="card-actions">
+              <a href="assets/avatars/avatar-jordan.svg" download class="btn">Download SVG</a>
+              <button onclick="copySvg('assets/avatars/avatar-jordan.svg')">Copy Code</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mei -->
+        <div class="card">
+          <div class="preview-box">
+            <img src="assets/avatars/avatar-mei.svg" alt="Mei avatar" style="max-height: 140px;">
+          </div>
+          <div class="card-body">
+            <div class="card-title">Mei</div>
+            <div class="card-meta"><span>985 pts</span><span>Headphones</span></div>
+            <div class="card-desc">Generous classmate offering laptop chargers and travel umbrellas.</div>
+            <div class="card-actions">
+              <a href="assets/avatars/avatar-mei.svg" download class="btn">Download SVG</a>
+              <button onclick="copySvg('assets/avatars/avatar-mei.svg')">Copy Code</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Noor -->
+        <div class="card">
+          <div class="preview-box">
+            <img src="assets/avatars/avatar-noor.svg" alt="Noor avatar" style="max-height: 140px;">
+          </div>
+          <div class="card-body">
+            <div class="card-title">Noor</div>
+            <div class="card-meta"><span>610 pts</span><span>Hijab Style</span></div>
+            <div class="card-desc">Kindness Wall contributor lending presentation adapters in the cafe.</div>
+            <div class="card-actions">
+              <a href="assets/avatars/avatar-noor.svg" download class="btn">Download SVG</a>
+              <button onclick="copySvg('assets/avatars/avatar-noor.svg')">Copy Code</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Diego -->
+        <div class="card">
+          <div class="preview-box">
+            <img src="assets/avatars/avatar-diego.svg" alt="Diego avatar" style="max-height: 140px;">
+          </div>
+          <div class="card-body">
+            <div class="card-title">Diego</div>
+            <div class="card-meta"><span>455 pts</span><span>Denim Style</span></div>
+            <div class="card-desc">Lends psychology textbooks at Wishart Library.</div>
+            <div class="card-actions">
+              <a href="assets/avatars/avatar-diego.svg" download class="btn">Download SVG</a>
+              <button onclick="copySvg('assets/avatars/avatar-diego.svg')">Copy Code</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Priya -->
+        <div class="card">
+          <div class="preview-box">
+            <img src="assets/avatars/avatar-priya.svg" alt="Priya avatar" style="max-height: 140px;">
+          </div>
+          <div class="card-body">
+            <div class="card-title">Priya</div>
+            <div class="card-meta"><span>730 pts</span><span>Lab Gear</span></div>
+            <div class="card-desc">Chemistry student lending lab coats and safety gear.</div>
+            <div class="card-actions">
+              <a href="assets/avatars/avatar-priya.svg" download class="btn">Download SVG</a>
+              <button onclick="copySvg('assets/avatars/avatar-priya.svg')">Copy Code</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Alex -->
+        <div class="card">
+          <div class="preview-box">
+            <img src="assets/avatars/avatar-alex.svg" alt="Alex avatar" style="max-height: 140px;">
+          </div>
+          <div class="card-body">
+            <div class="card-title">Alex</div>
+            <div class="card-meta"><span>Requester</span><span>Sporty Cap</span></div>
+            <div class="card-desc">Post open requests for presentation gear at the Student Centre.</div>
+            <div class="card-actions">
+              <a href="assets/avatars/avatar-alex.svg" download class="btn">Download SVG</a>
+              <button onclick="copySvg('assets/avatars/avatar-alex.svg')">Copy Code</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Default User -->
+        <div class="card">
+          <div class="preview-box">
+            <img src="assets/avatars/avatar-user.svg" alt="Default User" style="max-height: 140px;">
+          </div>
+          <div class="card-body">
+            <div class="card-title">Student Profile Default</div>
+            <div class="card-meta"><span>You</span><span>Algoma Spark</span></div>
+            <div class="card-desc">Default profile avatar for newly signed in Algoma students.</div>
+            <div class="card-actions">
+              <a href="assets/avatars/avatar-user.svg" download class="btn">Download SVG</a>
+              <button onclick="copySvg('assets/avatars/avatar-user.svg')">Copy Code</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. REWARDS & BADGES -->
+    <section class="asset-group" data-group="rewards">
+      <div class="section-title">🏆 Rewards, Perks &amp; Badges</div>
+      <p class="section-desc">Visual assets for Variant A recognition and Variant B monetary add-ons.</p>
+
+      <div class="grid wide">
+        <!-- Priority Access -->
+        <div class="card">
+          <div class="preview-box">
+            <img src="assets/rewards/reward-priority.svg" alt="Priority Access Badge" style="max-height: 160px;">
+          </div>
+          <div class="card-body">
+            <div class="card-title">24-Hour Priority Access Badge</div>
+            <div class="card-meta"><span>Variant A &amp; B</span><span>60 points</span><span>Speed Wings</span></div>
+            <div class="card-desc">Golden stopwatch emblem granting earliest visibility to newly listed scarce items.</div>
+            <div class="card-actions">
+              <a href="assets/rewards/reward-priority.svg" download class="btn">Download SVG</a>
+              <button onclick="copySvg('assets/rewards/reward-priority.svg')">Copy Code</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Featured Helper -->
+        <div class="card">
+          <div class="preview-box">
+            <img src="assets/rewards/reward-badge.svg" alt="Featured Helper Badge" style="max-height: 160px;">
+          </div>
+          <div class="card-body">
+            <div class="card-title">Featured Helper Badge</div>
+            <div class="card-meta"><span>Variant A &amp; B</span><span>40 points</span><span>Leaderboard Medal</span></div>
+            <div class="card-desc">Gold and emerald enamel medal displayed on the Kindness Wall and student profile.</div>
+            <div class="card-actions">
+              <a href="assets/rewards/reward-badge.svg" download class="btn">Download SVG</a>
+              <button onclick="copySvg('assets/rewards/reward-badge.svg')">Copy Code</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Donate Food Bank -->
+        <div class="card">
+          <div class="preview-box">
+            <img src="assets/rewards/reward-donate.svg" alt="Food Bank Donation" style="max-height: 160px;">
+          </div>
+          <div class="card-body">
+            <div class="card-title">Campus Food Bank Donation</div>
+            <div class="card-meta"><span>Variant A &amp; B</span><span>25 points</span><span>Giving Back</span></div>
+            <div class="card-desc">Two helping hands supporting a glowing heart and grain sprout.</div>
+            <div class="card-actions">
+              <a href="assets/rewards/reward-donate.svg" download class="btn">Download SVG</a>
+              <button onclick="copySvg('assets/rewards/reward-donate.svg')">Copy Code</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Coffee Voucher (Variant B) -->
+        <div class="card">
+          <div class="preview-box">
+            <img src="assets/rewards/reward-coffee.svg" alt="Campus Coffee Voucher">
+          </div>
+          <div class="card-body">
+            <div class="card-title">Campus Cafe Coffee Voucher</div>
+            <div class="card-meta"><span>Variant B Perk</span><span>50 points</span><span>Code: UL-CAFE-21</span></div>
+            <div class="card-desc">Perforated coupon redeemable for one free coffee or tea at the campus cafe.</div>
+            <div class="card-actions">
+              <a href="assets/rewards/reward-coffee.svg" download class="btn">Download SVG</a>
+              <button onclick="copySvg('assets/rewards/reward-coffee.svg')">Copy Code</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bookstore Pass (Variant B) -->
+        <div class="card">
+          <div class="preview-box">
+            <img src="assets/rewards/reward-bookstore.svg" alt="Bookstore Discount Pass">
+          </div>
+          <div class="card-body">
+            <div class="card-title">Bookstore 10% Discount Pass</div>
+            <div class="card-meta"><span>Variant B Perk</span><span>75 points</span><span>Code: UL-BOOK-10</span></div>
+            <div class="card-desc">Discount pass voucher for Algoma University campus bookstore textbooks.</div>
+            <div class="card-actions">
+              <a href="assets/rewards/reward-bookstore.svg" download class="btn">Download SVG</a>
+              <button onclick="copySvg('assets/rewards/reward-bookstore.svg')">Copy Code</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. CAMPUS ZONES -->
+    <section class="asset-group" data-group="zones">
+      <div class="section-title">📍 Campus Pickup Spots</div>
+      <p class="section-desc">Safe, public meeting locations on the Algoma University campus.</p>
+
+      <div class="grid wide">
+        <!-- Library Desk -->
+        <div class="card">
+          <div class="preview-box">
+            <img src="assets/zones/zone-library.svg" alt="Wishart Library">
+          </div>
+          <div class="card-body">
+            <div class="card-title">Wishart Library Front Desk</div>
+            <div class="card-meta"><span>2 min walk</span><span>Staffed until 9 PM</span></div>
+            <div class="card-desc">Staffed desk with check-in monitor, desk lamp, and book stacks.</div>
+            <div class="card-actions">
+              <a href="assets/zones/zone-library.svg" download class="btn">Download SVG</a>
+              <button onclick="copySvg('assets/zones/zone-library.svg')">Copy Code</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Student Centre -->
+        <div class="card">
+          <div class="preview-box">
+            <img src="assets/zones/zone-student-centre.svg" alt="Student Centre Lounge">
+          </div>
+          <div class="card-body">
+            <div class="card-title">Student Centre Lounge</div>
+            <div class="card-meta"><span>4 min walk</span><span>Busy &amp; Well Lit</span></div>
+            <div class="card-desc">Comfortable sofa and social study lounge area for quick gear handoffs.</div>
+            <div class="card-actions">
+              <a href="assets/zones/zone-student-centre.svg" download class="btn">Download SVG</a>
+              <button onclick="copySvg('assets/zones/zone-student-centre.svg')">Copy Code</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cafe -->
+        <div class="card">
+          <div class="preview-box">
+            <img src="assets/zones/zone-cafe.svg" alt="Campus Cafe">
+          </div>
+          <div class="card-body">
+            <div class="card-title">Campus Cafe Counter</div>
+            <div class="card-meta"><span>3 min walk</span><span>Open until 6 PM</span></div>
+            <div class="card-desc">Espresso machine and pastry display counter meeting spot.</div>
+            <div class="card-actions">
+              <a href="assets/zones/zone-cafe.svg" download class="btn">Download SVG</a>
+              <button onclick="copySvg('assets/zones/zone-cafe.svg')">Copy Code</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. APP STATES & FLOWS -->
+    <section class="asset-group" data-group="illustrations">
+      <div class="section-title">🎨 Flow &amp; State Graphics</div>
+      <p class="section-desc">Illustrations for hand-offs, QR scanning, offline status, and pay-it-forward chains.</p>
+
+      <div class="grid wide">
+        <!-- Scan QR -->
+        <div class="card">
+          <div class="preview-box">
+            <img src="assets/illustrations/scan-qr.svg" alt="QR Scanner Reticle">
+          </div>
+          <div class="card-body">
+            <div class="card-title">QR Code Scanning Flow</div>
+            <div class="card-meta"><span>Handoff &amp; Return</span><span>Laser Reticle</span></div>
+            <div class="card-desc">Phone frame scanning a QR code with green reticle corners and laser beam.</div>
+            <div class="card-actions">
+              <a href="assets/illustrations/scan-qr.svg" download class="btn">Download SVG</a>
+              <button onclick="copySvg('assets/illustrations/scan-qr.svg')">Copy Code</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Help Chain -->
+        <div class="card">
+          <div class="preview-box">
+            <img src="assets/illustrations/chain-impact.svg" alt="Help Chain Graphic">
+          </div>
+          <div class="card-body">
+            <div class="card-title">Pass-It-On Help Chain</div>
+            <div class="card-meta"><span>Community</span><span>4 People Connected</span></div>
+            <div class="card-desc">Visual chain illustrating how lending an item keeps helping the next student.</div>
+            <div class="card-actions">
+              <a href="assets/illustrations/chain-impact.svg" download class="btn">Download SVG</a>
+              <button onclick="copySvg('assets/illustrations/chain-impact.svg')">Copy Code</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Success Celebration -->
+        <div class="card">
+          <div class="preview-box">
+            <img src="assets/illustrations/success-celebration.svg" alt="Success Confetti">
+          </div>
+          <div class="card-body">
+            <div class="card-title">Success &amp; Points Confetti</div>
+            <div class="card-meta"><span>Completion</span><span>+25 Points</span></div>
+            <div class="card-desc">Celebratory burst when a student returns gear on time or completes a loan.</div>
+            <div class="card-actions">
+              <a href="assets/illustrations/success-celebration.svg" download class="btn">Download SVG</a>
+              <button onclick="copySvg('assets/illustrations/success-celebration.svg')">Copy Code</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Empty Search -->
+        <div class="card">
+          <div class="preview-box">
+            <img src="assets/illustrations/empty-search.svg" alt="Empty Search Result">
+          </div>
+          <div class="card-body">
+            <div class="card-title">Empty Search State</div>
+            <div class="card-meta"><span>Feed</span><span>Zero Results</span></div>
+            <div class="card-desc">Friendly magnifying glass encouraging the user to post an open request.</div>
+            <div class="card-actions">
+              <a href="assets/illustrations/empty-search.svg" download class="btn">Download SVG</a>
+              <button onclick="copySvg('assets/illustrations/empty-search.svg')">Copy Code</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Offline Cloud -->
+        <div class="card">
+          <div class="preview-box">
+            <img src="assets/illustrations/offline-status.svg" alt="Offline Status">
+          </div>
+          <div class="card-body">
+            <div class="card-title">Offline Resilient Cloud</div>
+            <div class="card-meta"><span>Service Worker</span><span>Local Cache</span></div>
+            <div class="card-desc">Illustrated cloud showing that UniLend works offline without losing progress.</div>
+            <div class="card-actions">
+              <a href="assets/illustrations/offline-status.svg" download class="btn">Download SVG</a>
+              <button onclick="copySvg('assets/illustrations/offline-status.svg')">Copy Code</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. BRAND COLOR PALETTE -->
+    <section>
+      <div class="section-title">🎨 UniLend Brand Color Palette</div>
+      <p class="section-desc">Calm, accessible, nature-inspired palette reflecting Algoma University's Northern Ontario campus.</p>
+
+      <div class="palette">
+        <div class="swatch">
+          <div class="swatch-color" style="background: #0F5B4B;"></div>
+          <div class="swatch-info"><strong>--brand</strong>#0F5B4B</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background: #0A4438;"></div>
+          <div class="swatch-info"><strong>--brand-strong</strong>#0A4438</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background: #9CCDBD;"></div>
+          <div class="swatch-info"><strong>--brand-mid</strong>#9CCDBD</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background: #E2F0EA;"></div>
+          <div class="swatch-info"><strong>--brand-soft</strong>#E2F0EA</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background: #9A4300;"></div>
+          <div class="swatch-info"><strong>--warm</strong>#9A4300</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background: #FCEEDF;"></div>
+          <div class="swatch-info"><strong>--warm-soft</strong>#FCEEDF</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background: #6F4E00;"></div>
+          <div class="swatch-info"><strong>--gold</strong>#6F4E00</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background: #FCF0CC;"></div>
+          <div class="swatch-info"><strong>--gold-soft</strong>#FCF0CC</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background: #14211D;"></div>
+          <div class="swatch-info"><strong>--ink</strong>#14211D</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background: #F7F6F2;"></div>
+          <div class="swatch-info"><strong>--bg (Light)</strong>#F7F6F2</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background: #0F1513;"></div>
+          <div class="swatch-info"><strong>--bg (Dark)</strong>#0F1513</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background: #B42318;"></div>
+          <div class="swatch-info"><strong>--danger</strong>#B42318</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast-msg">Copied SVG to clipboard!</div>
+
+  <script>
+    // Theme toggle
+    var toggleBtn = document.getElementById("themeToggle");
+    toggleBtn.addEventListener("click", function() {
+      var current = document.documentElement.getAttribute("data-theme") || "light";
+      var next = current === "light" ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", next);
+      try { localStorage.setItem("unilend.theme", next); } catch(e){}
+    });
+
+    // Restore user theme preference
+    try {
+      var saved = localStorage.getItem("unilend.theme");
+      if (saved) document.documentElement.setAttribute("data-theme", saved);
+    } catch(e){}
+
+    // Category filtering
+    var filterBtns = document.querySelectorAll(".filter-btn");
+    var groups = document.querySelectorAll(".asset-group");
+
+    filterBtns.forEach(function(btn) {
+      btn.addEventListener("click", function() {
+        filterBtns.forEach(function(b) { b.classList.remove("active"); });
+        btn.classList.add("active");
+        var val = btn.getAttribute("data-filter");
+        groups.forEach(function(g) {
+          if (val === "all" || g.getAttribute("data-group") === val) {
+            g.style.display = "block";
+          } else {
+            g.style.display = "none";
+          }
+        });
+      });
+    });
+
+    // Copy SVG code
+    function copySvg(path) {
+      fetch(path)
+        .then(function(res) { return res.text(); })
+        .then(function(text) {
+          navigator.clipboard.writeText(text).then(function() {
+            var toast = document.getElementById("toast");
+            toast.classList.add("show");
+            setTimeout(function() { toast.classList.remove("show"); }, 2200);
+          });
+        })
+        .catch(function(err) {
+          console.error("Failed to copy:", err);
+        });
+    }
+  </script>
+</body>
+</html>
+
