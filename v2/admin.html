@@ -19,7 +19,26 @@
 </head>
 <body style="background:var(--paper);">
 
-<div class="app-container" style="max-width:1100px;">
+<!-- Access Denied Lockdown Overlay (Shown for non-admins) -->
+<div id="admin-locked-gate" style="display:none; min-height:100vh; padding:40px 16px; align-items:center; justify-content:center;">
+  <div style="background:var(--card); border:2px solid var(--danger); border-radius:var(--radius); padding:32px 24px; max-width:480px; width:100%; text-align:center; box-shadow:0 10px 30px rgba(0,0,0,0.1);">
+    <div style="font-size:3rem; margin-bottom:12px;">🔒</div>
+    <h1 style="color:var(--danger); font-size:1.4rem; font-weight:800;">403 Forbidden: Admin Area Locked</h1>
+    <p style="margin:12px 0 16px; color:var(--soft); font-size:0.92rem; line-height:1.4;">
+      This console is restricted to Algoma University system administrators and test facilitators.
+    </p>
+    <div id="gate-current-status" style="background:rgba(160,36,28,0.08); padding:10px; border-radius:8px; font-size:0.85rem; color:var(--danger); font-weight:600; margin-bottom:20px;">
+      Logged in as: <span id="gate-user-email">None</span> (Role: Student - Insufficient Privileges)
+    </div>
+    <div style="display:flex; flex-direction:column; gap:10px;">
+      <button class="primary-btn" id="btn-auth-switch-admin" style="width:100%;">Switch to Admin (admin@algomau.ca)</button>
+      <a href="index.html" class="secondary-btn" style="text-decoration:none; text-align:center;">&larr; Return to Student App</a>
+    </div>
+  </div>
+</div>
+
+<!-- Authorized Admin App Container -->
+<div id="admin-app-container" class="app-container" style="max-width:1100px; display:none;">
 
   <!-- Admin Header -->
   <header class="app-header">
@@ -28,10 +47,12 @@
         <img src="assets/brand/logo-mark.svg" alt="Mark">
         <span class="brand-text">UniLend</span>
       </a>
-      <span class="admin-badge">Admin &bull; Facilitator</span>
+      <span class="admin-badge" id="admin-role-badge">Admin &bull; Facilitator</span>
     </div>
     <div style="display:flex; align-items:center; gap:10px;">
-      <a href="index.html" class="secondary-btn" style="min-height:36px; font-size:0.85rem; padding:0 12px; text-decoration:none;">&larr; Student App</a>
+      <span style="font-size:0.85rem; color:var(--soft); font-weight:600;" id="admin-user-display">admin@algomau.ca</span>
+      <button class="secondary-btn" id="btn-admin-signout" style="min-height:34px; font-size:0.8rem; padding:0 10px;">Sign Out</button>
+      <a href="index.html" class="primary-btn" style="min-height:34px; font-size:0.85rem; padding:0 12px; text-decoration:none;">&larr; Student View</a>
     </div>
   </header>
 
@@ -40,6 +61,7 @@
     <button class="admin-tab active" data-pane="dash">Dashboard</button>
     <button class="admin-tab" data-pane="scenarios">Scenario Templates</button>
     <button class="admin-tab" data-pane="partner">Partner Console (Wizard-of-Oz)</button>
+    <button class="admin-tab" data-pane="roles">Accounts &amp; RBAC</button>
     <button class="admin-tab" data-pane="study">Study Mode &amp; Logging</button>
   </nav>
 
@@ -62,8 +84,8 @@
           <div class="metric-val" id="met-chains">7</div>
         </div>
         <div class="metric-card">
-          <div style="font-size:0.85rem; color:var(--soft); font-weight:700;">Overdue Loans</div>
-          <div class="metric-val" style="color:var(--danger);" id="met-overdue">0</div>
+          <div style="font-size:0.85rem; color:var(--soft); font-weight:700;">Security Alerts (Audit)</div>
+          <div class="metric-val" style="color:var(--brand);" id="met-audit">0</div>
         </div>
       </div>
 
@@ -164,6 +186,45 @@
       </div>
     </div>
 
+    <!-- Accounts & Roles (RBAC Management) -->
+    <div id="pane-roles" class="admin-section" style="display:none;">
+      <h2 style="font-size:1.25rem; font-weight:800; margin-bottom:6px;">Role-Based Access Control (RBAC)</h2>
+      <p style="color:var(--soft); font-size:0.9rem; margin-bottom:16px;">Locked Admin API: Manage student accounts and assign elevated roles.</p>
+
+      <div style="background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:18px;">
+        <table style="width:100%; border-collapse:collapse; font-size:0.9rem;">
+          <thead>
+            <tr style="text-align:left; border-bottom:1px solid var(--line); color:var(--soft);">
+              <th style="padding:8px 0;">User Email</th>
+              <th>Role</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--line);">
+              <td style="padding:12px 0; font-weight:700;">admin@algomau.ca</td>
+              <td><span style="background:var(--brand); color:#FFF; font-size:0.75rem; padding:2px 8px; border-radius:4px; font-weight:700;">ADMIN</span></td>
+              <td>Active</td>
+              <td><span style="color:var(--soft); font-size:0.8rem;">Protected</span></td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--line);">
+              <td style="padding:12px 0; font-weight:700;">facilitator@algomau.ca</td>
+              <td><span style="background:#2C5E50; color:#FFF; font-size:0.75rem; padding:2px 8px; border-radius:4px; font-weight:700;">FACILITATOR</span></td>
+              <td>Active</td>
+              <td><button class="secondary-btn" style="min-height:30px; font-size:0.75rem; padding:0 8px;">Edit Role</button></td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--line);">
+              <td style="padding:12px 0; font-weight:700;">p01@algomau.ca</td>
+              <td><span style="background:var(--paper); color:var(--ink); font-size:0.75rem; padding:2px 8px; border-radius:4px; font-weight:700; border:1px solid var(--line);">STUDENT</span></td>
+              <td>Active</td>
+              <td><button class="secondary-btn" style="min-height:30px; font-size:0.75rem; padding:0 8px;">Promote</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
     <!-- Study Mode Pane -->
     <div id="pane-study" class="admin-section" style="display:none;">
       <h2 style="font-size:1.25rem; font-weight:800; margin-bottom:6px;">Study Configuration &amp; Logging</h2>
@@ -196,6 +257,41 @@
 
 <script type="module">
   import { api } from "./js/data/api.js";
+  import { auth } from "./js/data/auth.js";
+
+  // Security Gate Validation: Locked Admin Area
+  function enforceAdminSecurity() {
+    const user = auth.getUser();
+    const gate = document.getElementById("admin-locked-gate");
+    const app = document.getElementById("admin-app-container");
+
+    if (!user || !auth.isAdmin()) {
+      // 403 Forbidden: Lock down the admin console
+      gate.style.display = "flex";
+      app.style.display = "none";
+      document.getElementById("gate-user-email").textContent = user ? `${user.email} (Role: ${user.role})` : "Not signed in";
+      return false;
+    } else {
+      // Authorized admin or facilitator
+      gate.style.display = "none";
+      app.style.display = "flex";
+      document.getElementById("admin-user-display").textContent = user.email;
+      document.getElementById("admin-role-badge").textContent = user.role.toUpperCase();
+      return true;
+    }
+  }
+
+  auth.onAuthStateChanged(enforceAdminSecurity);
+
+  document.getElementById("btn-auth-switch-admin")?.addEventListener("click", () => {
+    auth.switchAccount("admin");
+    enforceAdminSecurity();
+  });
+
+  document.getElementById("btn-admin-signout")?.addEventListener("click", () => {
+    auth.signOut();
+    enforceAdminSecurity();
+  });
 
   // Tab Switching
   document.querySelectorAll(".admin-tab").forEach((btn) => {
@@ -269,4 +365,3 @@
 </script>
 </body>
 </html>
-

@@ -1,5 +1,6 @@
 // UniLend v2: Main Application Controller
 import { api } from "./data/api.js";
+import { auth } from "./data/auth.js";
 import { SPOTS, REWARDS_A, REWARDS_B } from "./data/scenarios.js";
 
 const AVATARS = [
@@ -18,7 +19,26 @@ function init() {
   bindCategories();
   bindListItemModal();
   bindAvatarPicker();
+  bindAuth();
 
+  // Listen to Auth changes
+  auth.onAuthStateChanged((user) => {
+    updateAuthUI(user);
+    if (user) {
+      api.state.user = {
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName,
+        avatar: user.avatar,
+        role: user.role,
+        points: user.points,
+        signedIn: true
+      };
+      api.notify();
+    }
+  });
+
+  // Listen to API store changes
   api.subscribe((state) => {
     renderHeader(state);
     renderFeed(state);
@@ -38,6 +58,98 @@ function init() {
   if (start && ["t1", "t2", "t3", "late"].includes(start)) {
     api.applyScenario(start);
   }
+}
+
+function updateAuthUI(user) {
+  const headerPoints = document.getElementById("header-points");
+  const avatarBtn = document.getElementById("avatar-btn");
+  const btnHeaderSignin = document.getElementById("btn-header-signin");
+  const headerAdminLink = document.getElementById("header-admin-link");
+  const profileAdminLink = document.getElementById("profile-admin-link");
+  const profileRoleBadge = document.getElementById("profile-role-badge");
+
+  if (!user) {
+    if (headerPoints) headerPoints.style.display = "none";
+    if (avatarBtn) avatarBtn.style.display = "none";
+    if (btnHeaderSignin) btnHeaderSignin.style.display = "block";
+    if (headerAdminLink) headerAdminLink.style.display = "none";
+    if (profileAdminLink) profileAdminLink.style.display = "none";
+    return;
+  }
+
+  if (headerPoints) headerPoints.style.display = "flex";
+  if (avatarBtn) avatarBtn.style.display = "flex";
+  if (btnHeaderSignin) btnHeaderSignin.style.display = "none";
+
+  const isAdminOrFacilitator = auth.isAdmin();
+  if (headerAdminLink) headerAdminLink.style.display = isAdminOrFacilitator ? "inline-block" : "none";
+  if (profileAdminLink) profileAdminLink.style.display = isAdminOrFacilitator ? "block" : "none";
+
+  if (profileRoleBadge) {
+    profileRoleBadge.textContent = user.role.toUpperCase();
+    if (user.role === "admin") {
+      profileRoleBadge.style.background = "var(--danger)";
+      profileRoleBadge.style.color = "#FFF";
+    } else if (user.role === "facilitator") {
+      profileRoleBadge.style.background = "#2C5E50";
+      profileRoleBadge.style.color = "#FFF";
+    } else {
+      profileRoleBadge.style.background = "rgba(11,79,67,0.1)";
+      profileRoleBadge.style.color = "var(--brand)";
+    }
+  }
+
+  const profileEmail = document.getElementById("profile-email");
+  if (profileEmail) profileEmail.textContent = user.email;
+}
+
+function bindAuth() {
+  const modal = document.getElementById("modal-auth");
+  const closeBtn = document.getElementById("close-auth-modal");
+  const form = document.getElementById("form-auth-login");
+  const errorBox = document.getElementById("auth-error-box");
+  const signinBtn = document.getElementById("btn-header-signin");
+  const signoutBtn = document.getElementById("btn-profile-signout");
+
+  const openModal = () => {
+    errorBox.style.display = "none";
+    modal.style.display = "flex";
+  };
+  const closeModal = () => { modal.style.display = "none"; };
+
+  signinBtn?.addEventListener("click", openModal);
+  closeBtn?.addEventListener("click", closeModal);
+  modal?.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
+
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    errorBox.style.display = "none";
+    const email = document.getElementById("auth-email-input").value;
+    const pass = document.getElementById("auth-pass-input").value;
+
+    try {
+      await auth.signInWithEmail(email, pass);
+      closeModal();
+      form.reset();
+    } catch (err) {
+      errorBox.textContent = err.message;
+      errorBox.style.display = "block";
+    }
+  });
+
+  signoutBtn?.addEventListener("click", () => {
+    auth.signOut();
+    openModal();
+  });
+
+  // Quick Account Switchers (Testing RBAC)
+  document.querySelectorAll(".btn-quick-switch, .btn-modal-switch").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const acc = btn.getAttribute("data-acc");
+      auth.switchAccount(acc);
+      closeModal();
+    });
+  });
 }
 
 function renderHeader(state) {
@@ -159,6 +271,10 @@ function renderItemDetail(itemId) {
   `;
 
   document.getElementById("btn-submit-request")?.addEventListener("click", () => {
+    if (!auth.isAuthenticated()) {
+      document.getElementById("modal-auth").style.display = "flex";
+      return;
+    }
     const spot = document.getElementById("req-pickup-spot").value;
     const ex = api.requestItem(item.id, spot, "Hi! Can I borrow this?");
     if (ex) {
@@ -403,7 +519,13 @@ function bindListItemModal() {
   const closeBtn = document.getElementById("close-list-modal");
   const form = document.getElementById("form-create-item");
 
-  openBtn.addEventListener("click", () => { modal.style.display = "flex"; });
+  openBtn.addEventListener("click", () => {
+    if (!auth.isAuthenticated()) {
+      document.getElementById("modal-auth").style.display = "flex";
+      return;
+    }
+    modal.style.display = "flex";
+  });
   closeBtn.addEventListener("click", () => { modal.style.display = "none"; });
   modal.addEventListener("click", (e) => { if (e.target === modal) modal.style.display = "none"; });
 
@@ -421,4 +543,3 @@ function bindListItemModal() {
 }
 
 document.addEventListener("DOMContentLoaded", init);
-

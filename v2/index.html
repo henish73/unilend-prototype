@@ -23,13 +23,21 @@
       <span class="brand-text">UniLend</span>
     </a>
     <div class="header-actions">
+      <!-- Admin console quick link (visible if admin) -->
+      <a href="admin.html" id="header-admin-link" class="admin-badge" style="display:none; text-decoration:none; padding:4px 8px; font-size:0.75rem;">Admin Console</a>
+
+      <!-- Points Pill -->
       <div class="points-pill" id="header-points">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
         <span id="user-points-val">40 pts</span>
       </div>
+
+      <!-- Avatar Button or Sign-In Trigger -->
       <button class="avatar-badge-btn" id="avatar-btn" aria-label="Open profile avatar picker">
         <img id="user-avatar-img" src="assets/avatars/avatar-user.svg" alt="Avatar">
       </button>
+
+      <button id="btn-header-signin" class="primary-btn" style="min-height:36px; font-size:0.85rem; padding:0 12px; display:none;">Sign In</button>
     </div>
   </header>
 
@@ -95,12 +103,24 @@
         
         <div style="background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:16px; display:flex; align-items:center; gap:16px;">
           <img id="profile-avatar-large" src="assets/avatars/avatar-user.svg" style="width:64px; height:64px; border-radius:50%;" alt="Avatar">
-          <div>
-            <div style="display:flex; align-items:center; gap:8px;">
+          <div style="flex:1;">
+            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
               <h2 style="font-size:1.2rem; font-weight:800;" id="profile-name">Student Participant</h2>
-              <span style="background:rgba(11,79,67,0.1); color:var(--brand); font-size:0.75rem; font-weight:700; padding:2px 6px; border-radius:4px;">Verified</span>
+              <span id="profile-role-badge" style="background:rgba(11,79,67,0.1); color:var(--brand); font-size:0.75rem; font-weight:700; padding:2px 6px; border-radius:4px;">Verified</span>
             </div>
-            <p style="color:var(--soft); font-size:0.85rem;">Algoma University &bull; COSC 2596</p>
+            <p style="color:var(--soft); font-size:0.85rem;" id="profile-email">student@algomau.ca</p>
+          </div>
+        </div>
+
+        <!-- Quick Account Switcher (Testing & Facilitation) -->
+        <div style="margin-top:16px; background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:14px;">
+          <h2 style="font-size:0.95rem; font-weight:800; margin-bottom:6px;">Switch Active Account (Auth RBAC)</h2>
+          <p style="color:var(--soft); font-size:0.82rem; margin-bottom:10px;">Select a profile to test student workflows vs locked admin access:</p>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <button class="secondary-btn btn-quick-switch" data-acc="student" style="font-size:0.82rem; min-height:36px; padding:0 8px;">Alex (Student)</button>
+            <button class="secondary-btn btn-quick-switch" data-acc="sam" style="font-size:0.82rem; min-height:36px; padding:0 8px;">Sam (Peer Lender)</button>
+            <button class="secondary-btn btn-quick-switch" data-acc="facilitator" style="font-size:0.82rem; min-height:36px; padding:0 8px; border-color:#2C5E50; color:#2C5E50;">Test Facilitator</button>
+            <button class="secondary-btn btn-quick-switch" data-acc="admin" style="font-size:0.82rem; min-height:36px; padding:0 8px; border-color:var(--danger); color:var(--danger);">Campus Admin</button>
           </div>
         </div>
 
@@ -112,7 +132,8 @@
         </div>
 
         <div style="margin-top:24px; display:flex; flex-direction:column; gap:10px;">
-          <a href="admin.html" class="secondary-btn" style="text-decoration:none; text-align:center;">Open Admin &amp; Facilitator Console</a>
+          <button id="btn-profile-signout" class="secondary-btn" style="color:var(--danger); border-color:var(--danger);">Sign Out of UniLend</button>
+          <a href="admin.html" id="profile-admin-link" class="secondary-btn" style="text-decoration:none; text-align:center;">Open Admin &amp; Facilitator Console</a>
           <a href="assets.html" class="secondary-btn" style="text-decoration:none; text-align:center;">View Visual Design System &amp; Assets</a>
         </div>
       </div>
@@ -152,6 +173,44 @@
     </button>
   </nav>
 
+</div>
+
+<!-- Modal: Algoma University Campus Sign-in -->
+<div id="modal-auth" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.65); z-index:250; align-items:center; justify-content:center; padding:16px;">
+  <div style="background:var(--card); width:100%; max-width:440px; border-radius:var(--radius); padding:24px; box-shadow:0 12px 32px rgba(0,0,0,0.2);">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <img src="assets/brand/logo-mark.svg" style="height:28px;" alt="Algoma Logo">
+        <h2 style="font-size:1.2rem; font-weight:800;">Algoma Student Sign-In</h2>
+      </div>
+      <button id="close-auth-modal" style="background:none; border:none; font-size:1.5rem; cursor:pointer;">&times;</button>
+    </div>
+    <p style="font-size:0.85rem; color:var(--soft); margin-bottom:14px;">Sign in with your official Algoma University email to access peer lending and pickup zones.</p>
+
+    <div id="auth-error-box" style="display:none; background:rgba(160,36,28,0.1); border:1px solid var(--danger); color:var(--danger); padding:8px 12px; border-radius:6px; font-size:0.82rem; font-weight:600; margin-bottom:12px;"></div>
+
+    <form id="form-auth-login" style="display:flex; flex-direction:column; gap:12px;">
+      <div>
+        <label style="font-size:0.85rem; font-weight:700; display:block; margin-bottom:4px;">Campus Email</label>
+        <input type="email" id="auth-email-input" required class="search-input" style="width:100%;" placeholder="username@algomau.ca">
+      </div>
+      <div>
+        <label style="font-size:0.85rem; font-weight:700; display:block; margin-bottom:4px;">Passcode / Password</label>
+        <input type="password" id="auth-pass-input" class="search-input" style="width:100%;" placeholder="••••••••">
+      </div>
+      <button type="submit" class="primary-btn" style="margin-top:6px;">Sign In with Algoma ID</button>
+    </form>
+
+    <div style="border-top:1px solid var(--line); margin-top:16px; padding-top:14px;">
+      <p style="font-size:0.78rem; font-weight:700; color:var(--soft); margin-bottom:8px;">One-Tap Sign-In for Testing:</p>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+        <button class="secondary-btn btn-modal-switch" data-acc="student" style="font-size:0.8rem; min-height:34px; padding:0 6px;">Student (P01)</button>
+        <button class="secondary-btn btn-modal-switch" data-acc="sam" style="font-size:0.8rem; min-height:34px; padding:0 6px;">Sam (Lender)</button>
+        <button class="secondary-btn btn-modal-switch" data-acc="facilitator" style="font-size:0.8rem; min-height:34px; padding:0 6px;">Facilitator</button>
+        <button class="secondary-btn btn-modal-switch" data-acc="admin" style="font-size:0.8rem; min-height:34px; padding:0 6px; color:var(--danger); border-color:var(--danger);">Admin</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Modal: List Item Flow -->
@@ -201,4 +260,3 @@
 <script type="module" src="js/app.js"></script>
 </body>
 </html>
-
