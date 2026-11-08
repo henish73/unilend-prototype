@@ -25,7 +25,7 @@ const INITIAL_CREDENTIALS = [
     points: 500,
     salt: "salt_algoma_admin_9823",
     // sha256("AlgomaAdmin2026!" + "salt_algoma_admin_9823")
-    hash: "6f5a3b2b8e217d83f60e9d6d8d6fbfcfdb4e56ea7ffc71c4c8d3d9e8c4e5e4fa"
+    hash: "43a0f9e4d7e8504db6b3a53fd9ba98d57eb433e5a10dcedf35870e1cf8f6a60e"
   },
   {
     uid: "usr_fac_01",
@@ -36,7 +36,7 @@ const INITIAL_CREDENTIALS = [
     points: 250,
     salt: "salt_algoma_fac_1123",
     // sha256("Facilitator2026!" + "salt_algoma_fac_1123")
-    hash: "f4277c0ee6e3a9dc7306263b652ee99995c64e03b22fb48633c70fc781d4e738"
+    hash: "28b3e6a0458197e8422378321a70ac687c5730cb91faf1070184ada7af3f7942"
   },
   {
     uid: "usr_student_p01",
@@ -47,7 +47,7 @@ const INITIAL_CREDENTIALS = [
     points: 40,
     salt: "salt_algoma_p01_8731",
     // sha256("StudentP01#2026" + "salt_algoma_p01_8731")
-    hash: "3e5898d02347fa8c2eeec68f20a9a1d9b3a3d58d9e2321477eaec3fb409b626e"
+    hash: "95875b90a13cef2772ec0a538a0265afa7f38cf78861a3a8e314fce3374c5531"
   },
   {
     uid: "usr_sam_lender",
@@ -58,7 +58,7 @@ const INITIAL_CREDENTIALS = [
     points: 120,
     salt: "salt_algoma_sam_4412",
     // sha256("SamLender#2026" + "salt_algoma_sam_4412")
-    hash: "a43875d9e50438ecf1559be3d5483a65239e943fe06159518be29d10c017bc4d"
+    hash: "335ef17fc665bb06bd2da787eee55ff08c5a86648915966e07db98157ef50352"
   }
 ];
 
